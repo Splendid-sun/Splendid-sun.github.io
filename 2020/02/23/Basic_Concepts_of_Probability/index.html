@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="Hello,David!">
 <meta property="og:description" content="归纳总结概率论重要的基本概念">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-09-24T10:03:07.609Z">
+<meta property="og:updated_time" content="2020-09-24T14:02:44.263Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Basic Concepts of Probability">
 <meta name="twitter:description" content="归纳总结概率论重要的基本概念">
@@ -454,7 +454,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-09-24 18:03:07" itemprop="dateModified" datetime="2020-09-24T18:03:07+08:00">2020-09-24</time>
+                <time title="修改时间：2020-09-24 22:02:44" itemprop="dateModified" datetime="2020-09-24T22:02:44+08:00">2020-09-24</time>
               
             
           </span>
@@ -661,7 +661,10 @@ f(x, y)=f_{X}(x) f_{Y}(y)</script><p>在平面上几乎处处成立</p>
 <p>当$(X, Y)$是离散型随机变量时，$X$和$Y$相互独立的条件等价于，对于$(X, Y)$的所有可能取的值$\left(x_{i}, y_{j}\right)$有</p>
 <script type="math/tex; mode=display">
 P\left\{X=x_{i}, Y=y_{j}\right\}=P\left\{X=x_{i}\right\} P\left\{Y=y_{j}\right\}</script><h2 id="5-两个随机变量的函数的分布"><a href="#5-两个随机变量的函数的分布" class="headerlink" title="5.两个随机变量的函数的分布"></a>5.两个随机变量的函数的分布</h2><p>（一）$Z=X+Y$的分布</p>
-<p>（二）$Z=\frac{Y}{X}$的分布、$Z=X Y$的分布<br>（三）$M=\max \{X, Y\}$及$N=\min \{X, Y\}$的分布</p>
+<p>若$X$和$Y$相互独立，设$(X, Y)$关于$X$，$Y$的边缘密度分别为$f_{X}(x)$，$f_{Y}(y)$，<br>有<strong>卷积公式</strong></p>
+<script type="math/tex; mode=display">
+f_{X+Y}(z)=\int_{-\infty}^{\infty} f_{X}(z-y) f_{Y}(y) \mathrm{d} y</script><script type="math/tex; mode=display">
+f_{X+Y}(z)=\int_{-\infty}^{\infty} f_{X}(x) f_{Y}(z-x) \mathrm{d} x</script><p>（二）$Z=\frac{Y}{X}$的分布、$Z=X Y$的分布<br>（三）$M=\max \{X, Y\}$及$N=\min \{X, Y\}$的分布</p>
 
       
     </div>
