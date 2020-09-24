@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="Hello,David!">
 <meta property="og:description" content="归纳总结概率论重要的基本概念">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-09-23T14:06:39.352Z">
+<meta property="og:updated_time" content="2020-09-24T10:03:07.609Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Basic Concepts of Probability">
 <meta name="twitter:description" content="归纳总结概率论重要的基本概念">
@@ -454,7 +454,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-09-23 22:06:39" itemprop="dateModified" datetime="2020-09-23T22:06:39+08:00">2020-09-23</time>
+                <time title="修改时间：2020-09-24 18:03:07" itemprop="dateModified" datetime="2020-09-24T18:03:07+08:00">2020-09-24</time>
               
             
           </span>
@@ -601,7 +601,7 @@ p_{i j} \geqslant 0, \quad \sum_{i=1}^{\infty} \sum_{j=1}^{\infty} p_{i j}=1</sc
 <script type="math/tex; mode=display">
 F(x, y)=\sum_{x_{i} \leqslant x} \sum_{y_{j} \leqslant y}p_{i j}</script><p>其中和式是对一切满足$x_{i} \leqslant x, y_{j} \leqslant y$的$i, j$来求和的</p>
 <hr>
-<p>与一维随机变量相似，对于二维随机变量$(X, Y)$的分布函数$F(x, y)$，如果存在非负函数$f(x, y)$使对于任意$x, y$有</p>
+<p>与一维随机变量相似，对于二维随机变量$(X, Y)$的分布函数$F(x, y)$，如果存在非负可积函数$f(x, y)$使对于任意$x, y$有</p>
 <script type="math/tex; mode=display">
 F(x, y)=\int_{-\infty}^{y} \int_{-\infty}^{x} f(u, v) \mathrm{d} u \mathrm{d} v</script><p>则称$(X, Y)$是<strong>连续型的二维随机变量</strong>，函数$f(x, y)$称为二维随机变量$(X, Y)$的<strong>概率密度</strong>，或称为随机变量$X$和$Y$的<strong>联合概率密度</strong><br>按定义，概率密度$f(x, y)$具有以下性质：<br>1，$f(x, y) \geqslant 0$<br>2，$\int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f(x, y) \mathrm{d} x \mathrm{d} y=F(\infty, \infty)=1$<br>3，设$G$是$x O y$平面上的区域，点$f(x, y)$落在$G$内的概率为</p>
 <script type="math/tex; mode=display">
@@ -635,6 +635,33 @@ F_{X}(x)=F(x, \infty)=\int_{-\infty}^{x}\left[\int_{-\infty}^{\infty} f(x, y) \m
 f_{X}(x)=\int_{-\infty}^{\infty} f(x, y) \mathrm{d} y</script><p>$Y$是一个连续型随机变量，其概率密度为</p>
 <script type="math/tex; mode=display">
 f_{Y}(y)=\int_{-\infty}^{\infty} f(x, y) \mathrm{d} x</script><p>分别称$f_{X}(x), f_{Y}(y)$为$(X, Y)$关于$X$和关于$Y$的<strong>边缘概率密度</strong></p>
+<h2 id="3-条件分布"><a href="#3-条件分布" class="headerlink" title="3.条件分布"></a>3.条件分布</h2><p><strong>定义</strong> 设$(X, Y)$是二维离散型随机变量，对于固定的$j$，若$P\left\{Y=y_{j}\right\}&gt;0$，则称</p>
+<script type="math/tex; mode=display">
+P\left\{X=x_{i} \mid Y=y_{j}\right\}=\frac{P\left\{X=x_{i}, Y=y_{j}\right\}}{P\left\{Y=y_{i}\right\}}=\frac{p_{i j}}{p._{j}}, i=1,2, \cdots</script><p>为在$Y=y_{j}$条件下随机变量$X$的<strong>条件分布律</strong></p>
+<p>同样，对于固定的$i$，若$P\left\{X=x_{i}\right\}&gt;0$，则称</p>
+<script type="math/tex; mode=display">
+P\left\{Y=y_{j} \mid X=x_{i}\right\}=\frac{P\left\{X=x_{i}, Y=y_{j}\right\}}{P\left\{X=x_{i}\right\}}=\frac{p_{i j}}{p_{i}.}, j=1,2, \cdots</script><p>为在$X=x_{i}$条件下随机变量$Y$的<strong>条件分布律</strong></p>
+<hr>
+<p><strong>定义</strong> 设二维随机变量$(X, Y)$的概率密度为$f(x, y)$，$(X, Y)$关于$Y$的边缘概率密度为$f_{Y}(y)$。若对于固定的y，$f_{Y}(y)&gt;0$，则称$\frac{f(x, y)}{f_{Y}(y)}$为在$Y=y$的条件下$X$的<strong>条件概率密度</strong>，记为</p>
+<script type="math/tex; mode=display">
+f_{X \mid Y}(x \mid y)=\frac{f(x, y)}{f_{Y}(y)}</script><p>称</p>
+<script type="math/tex; mode=display">
+F_{X \mid Y}(x \mid y)=P\{X \leqslant x \mid Y=y\}=\int_{-\infty}^{x} \frac{f(x, y)}{f_{Y}(y)} \mathrm{d} x</script><p>为在$Y=y$的条件下$X$的条件分布函数</p>
+<p>类似地，可以定义</p>
+<script type="math/tex; mode=display">
+f_{Y \mid X}(y \mid x)=\frac{f(x, y)}{f_{X}(x)}</script><script type="math/tex; mode=display">
+F_{Y \mid X}(y \mid x)=\int_{-\infty}^{y} \frac{f(x, y)}{f_{X}(x)} \mathrm{d} y</script><h2 id="4-相互独立的随机变量"><a href="#4-相互独立的随机变量" class="headerlink" title="4.相互独立的随机变量"></a>4.相互独立的随机变量</h2><p>设$F(x, y)$及$F_{X}(x), F_{Y}(y)$分别是二维随机变量$(X, Y)$的分布函数及边缘分布函数，若对于所有$x, y$有</p>
+<script type="math/tex; mode=display">
+P\{X \leqslant x, Y \leqslant y\}=P\{X \leqslant x\} P\{Y \leqslant y\}</script><p>即</p>
+<script type="math/tex; mode=display">
+F(x, y)=F_{X}(x) F_{Y}(y)</script><p>则称随机变量$X$和$Y$是<strong>相互独立</strong>的</p>
+<p>设$(X, Y)$是连续型随机变量，$f(x, y), f_{X}(x), f_{Y}(y)$分别是$(X, Y)$的概率密度和边缘概率密度，则$X$和$Y$相互独立的条件等价于：等式</p>
+<script type="math/tex; mode=display">
+f(x, y)=f_{X}(x) f_{Y}(y)</script><p>在平面上几乎处处成立</p>
+<p>当$(X, Y)$是离散型随机变量时，$X$和$Y$相互独立的条件等价于，对于$(X, Y)$的所有可能取的值$\left(x_{i}, y_{j}\right)$有</p>
+<script type="math/tex; mode=display">
+P\left\{X=x_{i}, Y=y_{j}\right\}=P\left\{X=x_{i}\right\} P\left\{Y=y_{j}\right\}</script><h2 id="5-两个随机变量的函数的分布"><a href="#5-两个随机变量的函数的分布" class="headerlink" title="5.两个随机变量的函数的分布"></a>5.两个随机变量的函数的分布</h2><p>（一）$Z=X+Y$的分布</p>
+<p>（二）$Z=\frac{Y}{X}$的分布、$Z=X Y$的分布<br>（三）$M=\max \{X, Y\}$及$N=\min \{X, Y\}$的分布</p>
 
       
     </div>
@@ -866,7 +893,7 @@ f_{Y}(y)=\int_{-\infty}^{\infty} f(x, y) \mathrm{d} x</script><p>分别称$f_{X}
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第一章-概率论的基本概念"><span class="nav-number">1.</span> <span class="nav-text">第一章 概率论的基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-随机试验"><span class="nav-number">1.1.</span> <span class="nav-text">1.随机试验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-样本空间、随机事件"><span class="nav-number">1.2.</span> <span class="nav-text">2.样本空间、随机事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-频率与概率"><span class="nav-number">1.3.</span> <span class="nav-text">3.频率与概率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-独立性"><span class="nav-number">1.4.</span> <span class="nav-text">4.独立性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二章-随机变量及其分布"><span class="nav-number">2.</span> <span class="nav-text">第二章 随机变量及其分布</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-随机变量"><span class="nav-number">2.1.</span> <span class="nav-text">1.随机变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-离散型随机变量及其分布律"><span class="nav-number">2.2.</span> <span class="nav-text">2.离散型随机变量及其分布律</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-随机变量的分布函数"><span class="nav-number">2.3.</span> <span class="nav-text">3.随机变量的分布函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-连续型随机变量及其概率密度"><span class="nav-number">2.4.</span> <span class="nav-text">4.连续型随机变量及其概率密度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-随机变量的函数的分布"><span class="nav-number">2.5.</span> <span class="nav-text">5.随机变量的函数的分布</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第三章-多维随机变量及其分布"><span class="nav-number">3.</span> <span class="nav-text">第三章 多维随机变量及其分布</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-二维随机变量"><span class="nav-number">3.1.</span> <span class="nav-text">1.二维随机变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-边缘分布"><span class="nav-number">3.2.</span> <span class="nav-text">2.边缘分布</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第一章-概率论的基本概念"><span class="nav-number">1.</span> <span class="nav-text">第一章 概率论的基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-随机试验"><span class="nav-number">1.1.</span> <span class="nav-text">1.随机试验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-样本空间、随机事件"><span class="nav-number">1.2.</span> <span class="nav-text">2.样本空间、随机事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-频率与概率"><span class="nav-number">1.3.</span> <span class="nav-text">3.频率与概率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-独立性"><span class="nav-number">1.4.</span> <span class="nav-text">4.独立性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二章-随机变量及其分布"><span class="nav-number">2.</span> <span class="nav-text">第二章 随机变量及其分布</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-随机变量"><span class="nav-number">2.1.</span> <span class="nav-text">1.随机变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-离散型随机变量及其分布律"><span class="nav-number">2.2.</span> <span class="nav-text">2.离散型随机变量及其分布律</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-随机变量的分布函数"><span class="nav-number">2.3.</span> <span class="nav-text">3.随机变量的分布函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-连续型随机变量及其概率密度"><span class="nav-number">2.4.</span> <span class="nav-text">4.连续型随机变量及其概率密度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-随机变量的函数的分布"><span class="nav-number">2.5.</span> <span class="nav-text">5.随机变量的函数的分布</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第三章-多维随机变量及其分布"><span class="nav-number">3.</span> <span class="nav-text">第三章 多维随机变量及其分布</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-二维随机变量"><span class="nav-number">3.1.</span> <span class="nav-text">1.二维随机变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-边缘分布"><span class="nav-number">3.2.</span> <span class="nav-text">2.边缘分布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-条件分布"><span class="nav-number">3.3.</span> <span class="nav-text">3.条件分布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-相互独立的随机变量"><span class="nav-number">3.4.</span> <span class="nav-text">4.相互独立的随机变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-两个随机变量的函数的分布"><span class="nav-number">3.5.</span> <span class="nav-text">5.两个随机变量的函数的分布</span></a></li></ol></li></ol></div>
             
 
           </div>
