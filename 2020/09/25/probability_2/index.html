@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="Hello,David!">
 <meta property="og:description" content="归纳总结概率论：期望 方差 协方差的定义和性质">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-10-02T05:35:37.579Z">
+<meta property="og:updated_time" content="2020-10-03T07:10:55.938Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="期望 方差 协方差">
 <meta name="twitter:description" content="归纳总结概率论：期望 方差 协方差的定义和性质">
@@ -454,7 +454,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-10-02 13:35:37" itemprop="dateModified" datetime="2020-10-02T13:35:37+08:00">2020-10-02</time>
+                <time title="修改时间：2020-10-03 15:10:55" itemprop="dateModified" datetime="2020-10-03T15:10:55+08:00">2020-10-03</time>
               
             
           </span>
@@ -500,7 +500,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">2.2k</span>
+                <span title="本文字数">3k</span>
               
 
               
@@ -514,7 +514,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">2 分钟</span>
+                <span title="阅读时长">3 分钟</span>
               
             </div>
           
@@ -572,13 +572,34 @@ D(X)=\sum_{k=1}^{\infty}\left[x_{k}-E(X)\right]^{2} p_{k}</script><p>其中$P\le
 <p>对于连续型随机变量，有</p>
 <script type="math/tex; mode=display">
 D(X)=\int_{-\infty}^{\infty}[x-E(X)]^{2} f(x) \mathrm{d} x</script><p>其中$f(x)$是$X$的概率密度</p>
+<hr>
 <p>随机变量$X$的方差可按下列公式计算</p>
 <script type="math/tex; mode=display">
 D(X)=E\left(X^{2}\right)-[E(X)]^{2}</script><p>证明：由数学期望的性质，得</p>
 <script type="math/tex; mode=display">
 D(X)=E\left\{[X-E(X)]^{2}\right\}=E\left\{X^{2}-2 X E(X)+[E(X)]^{2}\right\}</script><script type="math/tex; mode=display">
 =E\left(X^{2}\right)-2 E(X) E(X)+[E(X)]^{2}</script><script type="math/tex; mode=display">
-=E\left(X^{2}\right)-[E(X)]^{2}</script>
+=E\left(X^{2}\right)-[E(X)]^{2}</script><hr>
+<p><strong>标准化变量</strong> 设随机变量$X$具有数学期望$E(X)=\mu$，方差$D(X)=\sigma^{2} \neq 0$，记</p>
+<script type="math/tex; mode=display">
+X^{*}=\frac{X-\mu}{\sigma}</script><p>则</p>
+<script type="math/tex; mode=display">
+E\left(X^{*}\right)=\frac{1}{\sigma} E(X-\mu)=\frac{1}{\sigma}[E(X)-\mu]=0</script><script type="math/tex; mode=display">
+D\left(X^{*}\right)=E\left(X^{* 2}\right)-\left[E\left(X^{*}\right)\right]^{2}=E\left[\left(\frac{X-\mu}{\sigma}\right)^{2}\right]</script><script type="math/tex; mode=display">
+=\frac{1}{\sigma^{2}} E\left[(X-\mu)^{2}\right]=\frac{\sigma^{2}}{\sigma^{2}}=1</script><p>即$X^{*}=\frac{X-\mu}{\sigma}$的数学期望为0，方差为1，$X^{*}$称为$X$的 <strong>标准化变量</strong></p>
+<hr>
+<p>方差的重要性质</p>
+<p>1，设$C$是常数，则$D(C)=0$<br>2，设$X$是随机变量，$C$是常数，则有</p>
+<script type="math/tex; mode=display">
+D(C X)=C^{2} D(X), \quad D(X+C)=D(X)</script><p>3，设$X$，$Y$是两个随机变量，则有</p>
+<script type="math/tex; mode=display">
+D(X+Y)=D(X)+D(Y)+2 E\{(X-E(X))(Y-E(Y))\}</script><p>4，$D(X)=0$的充要条件是$X$以概率1取常数$E(X)$，即</p>
+<script type="math/tex; mode=display">
+P\{X=E(X)\}=1</script><h2 id="3-切比雪夫（Chebyshev）不等式"><a href="#3-切比雪夫（Chebyshev）不等式" class="headerlink" title="3.切比雪夫（Chebyshev）不等式"></a>3.切比雪夫（Chebyshev）不等式</h2><p>设随机变量$X$具有数学期望$E(X)=\mu$，方差$D(X)=\sigma^{2}$，则对于任意正数$\varepsilon$，不等式</p>
+<script type="math/tex; mode=display">
+P\{|X-\mu| \geqslant \varepsilon\} \leqslant \frac{\sigma^{2}}{\varepsilon^{2}}</script><p>成立，这一不等式称为<strong>切比雪夫（Chebyshev）不等式</strong><br>切比雪夫不等式也可以写成如下的形式：</p>
+<script type="math/tex; mode=display">
+P\{|X-\mu|<\varepsilon\} \geqslant 1-\frac{\sigma^{2}}{\varepsilon^{2}}</script>
       
     </div>
 
@@ -809,7 +830,7 @@ D(X)=E\left\{[X-E(X)]^{2}\right\}=E\left\{X^{2}-2 X E(X)+[E(X)]^{2}\right\}</scr
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-数学期望"><span class="nav-number">1.</span> <span class="nav-text">1.数学期望</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-方差"><span class="nav-number">2.</span> <span class="nav-text">2.方差</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-数学期望"><span class="nav-number">1.</span> <span class="nav-text">1.数学期望</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-方差"><span class="nav-number">2.</span> <span class="nav-text">2.方差</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-切比雪夫（Chebyshev）不等式"><span class="nav-number">3.</span> <span class="nav-text">3.切比雪夫（Chebyshev）不等式</span></a></li></ol></div>
             
 
           </div>
@@ -842,7 +863,7 @@ D(X)=E\left\{[X-E(X)]^{2}\right\}=E\left\{X^{2}-2 X E(X)+[E(X)]^{2}\right\}</scr
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">81k</span>
+    <span title="站点总字数">82k</span>
   
 
   
@@ -851,7 +872,7 @@ D(X)=E\left\{[X-E(X)]^{2}\right\}=E\left\{X^{2}-2 X E(X)+[E(X)]^{2}\right\}</scr
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">1:14</span>
+    <span title="站点阅读时长">1:15</span>
   
 </div>
 
