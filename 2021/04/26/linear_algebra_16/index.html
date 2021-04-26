@@ -96,16 +96,20 @@
 
 
 
-  <meta name="description" content="Blog my daily study on machine learning, mathematics &amp; computer science etc.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hello,David!">
-<meta property="og:url" content="https://splendid-sun.github.io/archives/2020/02/index.html">
+  <meta name="description" content="清华大学线性代数（2）课程第六讲：伪逆 参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常推荐！">
+<meta name="keywords" content="线性代数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线性代数（16）：伪逆（pseudo inverse）">
+<meta property="og:url" content="https://splendid-sun.github.io/2021/04/26/linear_algebra_16/index.html">
 <meta property="og:site_name" content="Hello,David!">
-<meta property="og:description" content="Blog my daily study on machine learning, mathematics &amp; computer science etc.">
+<meta property="og:description" content="清华大学线性代数（2）课程第六讲：伪逆 参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常推荐！">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://cdn.mathpix.com/snip/images/POUtW2JcVaIekHBRDVg_HKzTRd3vpp5QSOVUJBkLoDo.original.fullsize.png">
+<meta property="og:updated_time" content="2021-04-26T16:46:23.003Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello,David!">
-<meta name="twitter:description" content="Blog my daily study on machine learning, mathematics &amp; computer science etc.">
+<meta name="twitter:title" content="线性代数（16）：伪逆（pseudo inverse）">
+<meta name="twitter:description" content="清华大学线性代数（2）课程第六讲：伪逆 参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常推荐！">
+<meta name="twitter:image" content="https://cdn.mathpix.com/snip/images/POUtW2JcVaIekHBRDVg_HKzTRd3vpp5QSOVUJBkLoDo.original.fullsize.png">
 
 
 
@@ -113,7 +117,7 @@
 
   
   
-  <link rel="canonical" href="https://splendid-sun.github.io/archives/2020/02/">
+  <link rel="canonical" href="https://splendid-sun.github.io/2021/04/26/linear_algebra_16/">
 
 
 
@@ -123,7 +127,7 @@
   };
 </script>
 
-  <title>归档 | Hello,David!</title>
+  <title>线性代数（16）：伪逆（pseudo inverse） | Hello,David!</title>
   
 
 
@@ -171,7 +175,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
     <a href="https://github.com/Splendid-sun" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
 
@@ -265,7 +269,7 @@
         
         
           
-          <li class="menu-item menu-item-archives menu-item-active">
+          <li class="menu-item menu-item-archives">
 
     
     
@@ -370,212 +374,309 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2021/04/26/linear_algebra_16/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+      <meta itemprop="image" content="/uploads/Pythagoras.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">线性代数（16）：伪逆（pseudo inverse）
+
+              
+            
+          </h1>
         
+
+        <div class="post-meta">
+
+            
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2021-04-26 10:32:50" itemprop="dateCreated datePublished" datetime="2021-04-26T10:32:50+08:00">2021-04-26</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-04-27 00:46:23" itemprop="dateModified" datetime="2021-04-27T00:46:23+08:00">2021-04-27</time>
+              
+            
+          </span>
+
           
-        
-        嗯..! 目前共计 23 篇日志。 继续努力。
-      </span>
-      
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/线性代数/" itemprop="url" rel="index"><span itemprop="name">线性代数</span></a></span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2020">2020</h1>
-          </div>
-        
-        
 
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2020/02/23/Basic_Concepts_of_Probability/" itemprop="url">
+          
             
-              <span itemprop="name">Basic Concepts of Probability</span>
             
-          </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-02-23T17:32:50+08:00" content="2020-02-23">
-          02-23
-        </time>
-      </div>
+          
+          
 
-    </header>
-  </article>
+          
 
+          
+            <div class="post-symbolscount">
+              
 
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">5.3k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">5 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2020/02/23/linear_algebra_14/" itemprop="url">
-            
-              <span itemprop="name">线性代数（14）：奇异值分解（Singular Value Decomposition）</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-02-23T17:32:50+08:00" content="2020-02-23">
-          02-23
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2020/02/04/legendre_polynomial/" itemprop="url">
-            
-              <span itemprop="name">勒让德多项式（legendre polynomials）</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-02-04T12:36:16+08:00" content="2020-02-04">
-          02-04
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <p>清华大学线性代数（2）课程第六讲：伪逆</p>
+<p>参考资料:<br>清华大学数学科学系-线性代数-马辉<br>《工程数学 <strong>线性代数</strong> 第六版》 同济大学数学系 高等教育出版社<br>Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常<strong>推荐</strong>！</p>
+<a id="more"></a>
+<p><strong>问题</strong>：对$m \times n$的矩阵$A$，定义其伪逆（pseudoinverse）$A^{\dagger}$，使得当$A$为n阶可逆矩阵时，有$A^{\dagger}=A^{-1}$。</p>
+<p><strong>思路</strong>：设$m \times n$实矩阵$A=U \Sigma V^{T}  \quad(S V D)$，其中$U, V$分别为$m$阶，$n$阶正交阵；$\Sigma$为$m \times n$矩阵，前$r=r(A)$个“对角元”为$A$的奇异值$\sigma_{1} \geq \cdots \geq \sigma_{r}&gt;0$<br>即：</p>
+<script type="math/tex; mode=display">
+\begin{array}{l}
+A \mathbf{v}_{j}=\sigma_{j} \mathbf{u}_{j} \quad(1 \leq j \leq r) \\
+A \mathbf{v}_{j}=\mathbf{0} \quad(r+1 \leq j \leq n)
+\end{array}</script><p>若$A$可逆，则$A^{-1} \mathbf{u}_{j}=\frac{1}{\sigma_{j}} \mathbf{v}_{j} \quad(1 \leq j \leq r=m=n)$<br>对$A_{m \times n}$，令</p>
+<script type="math/tex; mode=display">
+A^{\dagger}\left(\begin{array}{lllll}
+\mathbf{u}_{1} & \cdots & \mathbf{u}_{r} \mathbf{u}_{r+1} & \cdots & \mathbf{u}_{m}
+\end{array}\right)=\left(\begin{array}{llll}
+\mathbf{v}_{1} & \cdots & \mathbf{v}_{r} \mathbf{v}_{r+1} & \cdots & \mathbf{v}_{n}
+\end{array}\right)\left(\begin{array}{cccc}
+\frac{1}{\sigma_{1}} & & & \\
+& \ddots & & \\
+& & & &
+\end{array}\right)</script><p>即：</p>
+<script type="math/tex; mode=display">
+\begin{array}{l}
+A^{\dagger} \mathbf{u}_{j}=\frac{1}{\sigma_{j}} \mathbf{v}_{j} \quad(1 \leq j \leq r) \\
+A^{\dagger} \mathbf{u}_{j}=\mathbf{0} \quad(r+1 \leq j \leq m)
+\end{array}</script><h2 id="跟据奇异值分解SVD有伪逆定义：-A-n-times-m-dagger-V-Sigma-dagger-U-T"><a href="#跟据奇异值分解SVD有伪逆定义：-A-n-times-m-dagger-V-Sigma-dagger-U-T" class="headerlink" title="跟据奇异值分解SVD有伪逆定义：$A_{n \times m}^{\dagger}:=V \Sigma^{\dagger} U^{T}$"></a>跟据奇异值分解SVD有伪逆定义：$A_{n \times m}^{\dagger}:=V \Sigma^{\dagger} U^{T}$</h2><p>伪逆的性质：<br>（1）若$A$可逆，则$r=m=n$，则</p>
+<script type="math/tex; mode=display">
+A^{-1}=\left(U \Sigma V^{T}\right)^{-1}=V \Sigma^{-1} U^{T}=A^{\dagger}</script><p>（2）</p>
+<script type="math/tex; mode=display">
+A A^{\dagger}=\left(U \Sigma V^{T}\right)\left(V \Sigma^{+} U^{T}\right)=U \Sigma \Sigma^{+} U^{T}=U\left(\begin{array}{cc}
+I_{r} & 0 \\
+0 & 0
+\end{array}\right)_{m \times m} U^{T}</script><p>$\bullet$ 可以明显看出$A A^{\dagger}$是<strong>对称矩阵</strong>：$\left(A A^{\dagger}\right)^{T}=A A^{\dagger}$</p>
+<p>$\bullet$ $A A^{\dagger}=\mathbf{u}_{1} \mathbf{u}_{1}^{T}+\cdots+\mathbf{u}_{r} \mathbf{u}_{r}^{T}$，也可以看出$A A^{\dagger}$为r个秩一投影矩阵之和。$\mathbf{u}_{1}$到$\mathbf{u}_{r}$为$A$的列空间的标准正交基。<br>所以$A A^{\dagger}$为$\mathbb{R}^{m}$到$C(A)$的正交投影矩阵，有</p>
+<script type="math/tex; mode=display">
+\left(\left.A A^{\dagger}\right|_{C(A)}=i d,\left.A A^{\dagger}\right|_{N\left(A^{T}\right)}=0\right)</script><p>（id为恒同变换）</p>
+<p>（3）</p>
+<script type="math/tex; mode=display">
+A^{\dagger} A=\left(V \Sigma^{\dagger} U^{T}\right)\left(U \Sigma V^{T}\right)=V \Sigma^{\dagger} \Sigma V^{T}=V\left(\begin{array}{cc}
+I_{r} & 0 \\
+0 & 0
+\end{array}\right)_{n \times n} V^{T}</script><p>$\bullet$ 可以明显看出$A^{\dagger} A$是<strong>对称矩阵</strong>，$\left(A^{\dagger} A\right)^{T}=A^{\dagger} A$</p>
+<p>$\bullet$ $A^{\dagger} A=\mathbf{v}_{1} \mathbf{v}_{1}^{T}+\cdots+\mathbf{v}_{r} \mathbf{v}_{r}^{T}$，也可以看出$A^{\dagger} A$为r个秩一投影矩阵之和。$\mathbf{v}_{1}$到$\mathbf{v}_{r}$为$A$的行空间的标准正交基。所以$A^{\dagger} A$为$\mathbb{R}^{n}$到$C\left(A^{T}\right)$的正交投影矩阵。</p>
+<script type="math/tex; mode=display">
+\left(\left.A^{\dagger} A\right|_{C\left(A^{T}\right)}=i d,\left.A^{\dagger} A\right|_{N(A)}=0\right)</script><h2 id="左逆和右逆"><a href="#左逆和右逆" class="headerlink" title="左逆和右逆"></a>左逆和右逆</h2><p>若$r=n$，（$A$列满秩），则$A^{\dagger} A=V V^{T}=I_{n}$，称$A^{\dagger}$为$A$的<strong>左逆</strong>。</p>
+<p>若$r=m$，（$A$行满秩），则$A A^{\dagger}=U U^{T}=I_{m}$，称$A^{\dagger}$为$A$的<strong>右逆</strong>。</p>
+<p>若$r=m=n$，（$A$满秩），则$A A^{\dagger}=A^{\dagger} A=I, A^{\dagger}=A^{-1}$，则称$A^{\dagger}$为$A$的<strong>双边逆</strong>。</p>
+<h2 id="Moore-Penrose伪逆"><a href="#Moore-Penrose伪逆" class="headerlink" title="Moore-Penrose伪逆"></a>Moore-Penrose伪逆</h2><p>Eliakim Hastings Moore（1862-1932），美国数学家，二十世纪初美国数学奠基人</p>
+<p>Roger Penrose（1931- ）英国著名数学物理学家，1988Wolf奖得主，与Stephen Hawking合作证明了广义相对论奇点存在性</p>
+<p>对于$m \times n$矩阵$A$，Moore意义下的伪逆满足</p>
+<script type="math/tex; mode=display">
+A X=P_{C(A)}, \quad X A=P_{C(X)}</script><p>的$n \times m$矩阵$X$，$P_{V}$表示到空间$V$的正交投影矩阵</p>
+<p>1955年，英国剑桥大学博士研究生Penrose给出了伪逆的如下定义：<br>设$A$为$m \times n$实矩阵，若$n \times m$矩阵$X$满足如下方程组：</p>
+<script type="math/tex; mode=display">
+\begin{array}{l}
+A X A=A \\
+X A X=X \\
+(A X)^{T}=A X \\
+(X A)^{T}=X A
+\end{array}</script><p>则称$X$为矩阵$A$的Penrose伪逆</p>
+<p><strong>命题</strong>：给定任一$m \times n$实矩阵$A$，$A$的伪逆$A^{\dagger}$是满足Penrose伪逆要求的唯一$n \times m$矩阵</p>
+<p><strong>证明</strong>：<br>存在性：由$A^{\dagger}=V \Sigma^{\dagger} U^{T}$，$A=U \Sigma V^{T}$容易验证出$A^{\dagger}$满足Penrose方程组。<br>唯一性：若$X$和$Y$均为矩阵$A$的Penrose伪逆，则可以证明$X=Y$</p>
+<h2 id="最小二乘法"><a href="#最小二乘法" class="headerlink" title="最小二乘法"></a>最小二乘法</h2><p>之前我们学习最小二乘法，当方程$A \mathbf{x}=\mathbf{b}$无解时求解方程的最佳近似解。<br>根据normal equation：$A^{T} A \widehat{\mathbf{x}}=A^{T} \mathbf{b}$。因为$r\left(A^{T} A\right)=r(A)=n$。当$r(A)=n$（当$A$列满秩），则$A^{T} A$可逆。在这种情况下，有唯一最小二乘解：$\widehat{\mathbf{x}}=\left(A^{T} A\right)^{-1} A^{T} \mathbf{b}$。</p>
+<p>但是当$r(A)&lt;n$，（A列相关）时，有$r\left(A^{T} A\right)=r(A)&lt;n$，normal equation的解不唯一。</p>
+<p><strong>命题</strong>：$\mathbf{x}^{\dagger}:=A^{\dagger} \mathbf{b}$为一个最小二乘解</p>
+<p><strong>证明</strong>：$A^{T} \mathbf{b}-A^{T} A \mathbf{x}^{\dagger}=A^{T}\left(\mathbf{b}-A \mathbf{x}^{\dagger}\right)=A^{T}\left(\mathbf{b}-A A^{\dagger} \mathbf{b}\right)$<br>由于$A A^{\dagger}$ 为 $\mathbb{R}^{m}$到$C(A)$的正交投影矩阵，故$\mathbf{b}-A A^{\dagger} \mathbf{b} \in N\left(A^{T}\right)$，于是有$A^{T} \mathbf{b}-A^{T} A \mathbf{x}^{+}=A^{T}\left(\mathbf{b}-A A^{+} \mathbf{b}\right)=\mathbf{0}$，得证。</p>
+<p><strong>命题</strong>：在$A \mathbf{x}=\mathbf{b}$的所有最小二乘解中，$\mathbf{x}^{\dagger}$的长度最小，称$\mathbf{x}^{\dagger}=A^{\dagger} \mathbf{b}$为$A \mathbf{x}=\mathbf{b}$的最佳最小二乘解。</p>
+<p><strong>证明</strong>：<br>设$\widehat{\mathbf{x}}$也是$A^{T} A \widehat{\mathbf{x}}=A^{T} \mathbf{b}$的一个解，即一个最小二乘解，于是</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+A^{T} A \widehat{\mathbf{x}}=A^{T} \mathbf{b} \\
+A^{T} A \mathbf{x}^{\dagger}=A^{T} \mathbf{b}
+\end{aligned} \Rightarrow A^{T} A\left(\widehat{\mathbf{x}}-\mathbf{x}^{\dagger}\right)=\mathbf{0} \Rightarrow \widehat{\mathbf{x}}-\mathbf{x}^{\dagger} \in N\left(A^{T} A\right)=N(A)</script><p>而$\mathbf{x}^{\dagger}=A^{\dagger} \mathbf{b} \in C\left(A^{T}\right)$，故$\mathbf{x}^{\dagger} \perp \widehat{\mathbf{x}}-\mathbf{x}^{\dagger}$，有$\mid \widehat{\mathbf{x}}\left|^{2}=\right|\left(\widehat{\mathbf{x}}-\mathbf{x}^{\dagger}\right)+\mathbf{x}^{\dagger}\left|^{2}=\right| \widehat{\mathbf{x}}-\mathbf{x}^{\dagger}\left|^{2}+\right| \mathbf{x}^{\dagger}\left|^{2} \geq\right| \mathbf{x}^{\dagger} |^{2}$，即$\mathbf{x}^{\dagger}$是长度最小的最小二乘解。<br>空间关系如下图所示：<br><img src="https://cdn.mathpix.com/snip/images/POUtW2JcVaIekHBRDVg_HKzTRd3vpp5QSOVUJBkLoDo.original.fullsize.png" alt></p>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2020/02/04/fourier_series/" itemprop="url">
-            
-              <span itemprop="name">傅立叶分析专题：傅立叶级数和傅立叶变换</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2020-02-04T10:53:38+08:00" content="2020-02-04">
-          02-04
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/线性代数/" rel="tag"># 线性代数</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/04/08/linear_algebra_15/" rel="next" title="线性代数（15）：线性空间与线性变换">
+                <i class="fa fa-chevron-left"></i> 线性代数（15）：线性空间与线性变换
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -595,8 +696,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -718,6 +828,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#跟据奇异值分解SVD有伪逆定义：-A-n-times-m-dagger-V-Sigma-dagger-U-T"><span class="nav-number">1.</span> <span class="nav-text">跟据奇异值分解SVD有伪逆定义：$A_{n \times m}^{\dagger}:=V \Sigma^{\dagger} U^{T}$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#左逆和右逆"><span class="nav-number">2.</span> <span class="nav-text">左逆和右逆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Moore-Penrose伪逆"><span class="nav-number">3.</span> <span class="nav-text">Moore-Penrose伪逆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最小二乘法"><span class="nav-number">4.</span> <span class="nav-text">最小二乘法</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -863,6 +990,10 @@
 
 
   
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
 
   
 
@@ -878,6 +1009,8 @@
 
   
 
+
+  
 
 
   
@@ -1215,6 +1348,46 @@
   
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
   
 
 
