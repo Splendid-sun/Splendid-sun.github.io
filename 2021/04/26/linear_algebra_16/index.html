@@ -105,7 +105,7 @@
 <meta property="og:description" content="清华大学线性代数（2）课程第六讲：伪逆 参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常推荐！">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://cdn.mathpix.com/snip/images/POUtW2JcVaIekHBRDVg_HKzTRd3vpp5QSOVUJBkLoDo.original.fullsize.png">
-<meta property="og:updated_time" content="2021-04-26T16:46:23.003Z">
+<meta property="og:updated_time" content="2021-04-26T16:59:50.221Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="线性代数（16）：伪逆（pseudo inverse）">
 <meta name="twitter:description" content="清华大学线性代数（2）课程第六讲：伪逆 参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常推荐！">
@@ -456,7 +456,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2021-04-27 00:46:23" itemprop="dateModified" datetime="2021-04-27T00:46:23+08:00">2021-04-27</time>
+                <time title="修改时间：2021-04-27 00:59:50" itemprop="dateModified" datetime="2021-04-27T00:59:50+08:00">2021-04-27</time>
               
             
           </span>
@@ -607,7 +607,9 @@ X A X=X \\
 \begin{aligned}
 A^{T} A \widehat{\mathbf{x}}=A^{T} \mathbf{b} \\
 A^{T} A \mathbf{x}^{\dagger}=A^{T} \mathbf{b}
-\end{aligned} \Rightarrow A^{T} A\left(\widehat{\mathbf{x}}-\mathbf{x}^{\dagger}\right)=\mathbf{0} \Rightarrow \widehat{\mathbf{x}}-\mathbf{x}^{\dagger} \in N\left(A^{T} A\right)=N(A)</script><p>而$\mathbf{x}^{\dagger}=A^{\dagger} \mathbf{b} \in C\left(A^{T}\right)$，故$\mathbf{x}^{\dagger} \perp \widehat{\mathbf{x}}-\mathbf{x}^{\dagger}$，有$\mid \widehat{\mathbf{x}}\left|^{2}=\right|\left(\widehat{\mathbf{x}}-\mathbf{x}^{\dagger}\right)+\mathbf{x}^{\dagger}\left|^{2}=\right| \widehat{\mathbf{x}}-\mathbf{x}^{\dagger}\left|^{2}+\right| \mathbf{x}^{\dagger}\left|^{2} \geq\right| \mathbf{x}^{\dagger} |^{2}$，即$\mathbf{x}^{\dagger}$是长度最小的最小二乘解。<br>空间关系如下图所示：<br><img src="https://cdn.mathpix.com/snip/images/POUtW2JcVaIekHBRDVg_HKzTRd3vpp5QSOVUJBkLoDo.original.fullsize.png" alt></p>
+\end{aligned} \Rightarrow A^{T} A\left(\widehat{\mathbf{x}}-\mathbf{x}^{\dagger}\right)=\mathbf{0} \Rightarrow \widehat{\mathbf{x}}-\mathbf{x}^{\dagger} \in N\left(A^{T} A\right)=N(A)</script><p>而$\mathbf{x}^{\dagger}=A^{\dagger} \mathbf{b} \in C\left(A^{T}\right)$，故$\mathbf{x}^{\dagger} \perp \widehat{\mathbf{x}}-\mathbf{x}^{\dagger}$，有</p>
+<script type="math/tex; mode=display">
+\|\widehat{\mathbf{x}}\|^{2}=\|\left(\widehat{\mathbf{x}}-\mathbf{x}^{\dagger}\right)+\mathbf{x}^{\dagger}\|^{2}=\|\widehat{\mathbf{x}}-\mathbf{x}^{\dagger}\|^{2}+\|\mathbf{x}^{\dagger}\|^{2} \geq\| \mathbf{x}^{\dagger} \|^{2}</script><p>即$\mathbf{x}^{\dagger}$是长度最小的最小二乘解。<br>$\mathbf{x}^{\dagger}=A^{\dagger} \mathbf{b}$空间关系如下图所示：<br><img src="https://cdn.mathpix.com/snip/images/POUtW2JcVaIekHBRDVg_HKzTRd3vpp5QSOVUJBkLoDo.original.fullsize.png" alt></p>
 
       
     </div>
