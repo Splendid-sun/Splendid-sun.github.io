@@ -99,15 +99,15 @@
   <meta name="description" content="清华大学线性代数（2）课程第六讲：伪逆 参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常推荐！">
 <meta name="keywords" content="线性代数">
 <meta property="og:type" content="article">
-<meta property="og:title" content="线性代数（16）：伪逆（pseudo inverse）">
+<meta property="og:title" content="线性代数（16）：伪逆（pseudoinverse）">
 <meta property="og:url" content="https://splendid-sun.github.io/2021/04/26/linear_algebra_16/index.html">
 <meta property="og:site_name" content="Hello,David!">
 <meta property="og:description" content="清华大学线性代数（2）课程第六讲：伪逆 参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常推荐！">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://cdn.mathpix.com/snip/images/POUtW2JcVaIekHBRDVg_HKzTRd3vpp5QSOVUJBkLoDo.original.fullsize.png">
-<meta property="og:updated_time" content="2021-04-26T16:59:50.221Z">
+<meta property="og:updated_time" content="2021-04-27T04:43:45.436Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="线性代数（16）：伪逆（pseudo inverse）">
+<meta name="twitter:title" content="线性代数（16）：伪逆（pseudoinverse）">
 <meta name="twitter:description" content="清华大学线性代数（2）课程第六讲：伪逆 参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常推荐！">
 <meta name="twitter:image" content="https://cdn.mathpix.com/snip/images/POUtW2JcVaIekHBRDVg_HKzTRd3vpp5QSOVUJBkLoDo.original.fullsize.png">
 
@@ -127,7 +127,7 @@
   };
 </script>
 
-  <title>线性代数（16）：伪逆（pseudo inverse） | Hello,David!</title>
+  <title>线性代数（16）：伪逆（pseudoinverse） | Hello,David!</title>
   
 
 
@@ -411,7 +411,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">线性代数（16）：伪逆（pseudo inverse）
+          <h1 class="post-title" itemprop="name headline">线性代数（16）：伪逆（pseudoinverse）
 
               
             
@@ -456,7 +456,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2021-04-27 00:59:50" itemprop="dateModified" datetime="2021-04-27T00:59:50+08:00">2021-04-27</time>
+                <time title="修改时间：2021-04-27 12:43:45" itemprop="dateModified" datetime="2021-04-27T12:43:45+08:00">2021-04-27</time>
               
             
           </span>
@@ -554,13 +554,14 @@ A^{\dagger}\left(\begin{array}{lllll}
 \end{array}\right)\left(\begin{array}{cccc}
 \frac{1}{\sigma_{1}} & & & \\
 & \ddots & & \\
-& & & &
-\end{array}\right)</script><p>即：</p>
+& & \frac{1}{\sigma_{r}} & \\
+& & & 0
+\end{array}\right)_{n \times m}</script><p>即：</p>
 <script type="math/tex; mode=display">
 \begin{array}{l}
 A^{\dagger} \mathbf{u}_{j}=\frac{1}{\sigma_{j}} \mathbf{v}_{j} \quad(1 \leq j \leq r) \\
 A^{\dagger} \mathbf{u}_{j}=\mathbf{0} \quad(r+1 \leq j \leq m)
-\end{array}</script><h2 id="跟据奇异值分解SVD有伪逆定义：-A-n-times-m-dagger-V-Sigma-dagger-U-T"><a href="#跟据奇异值分解SVD有伪逆定义：-A-n-times-m-dagger-V-Sigma-dagger-U-T" class="headerlink" title="跟据奇异值分解SVD有伪逆定义：$A_{n \times m}^{\dagger}:=V \Sigma^{\dagger} U^{T}$"></a>跟据奇异值分解SVD有伪逆定义：$A_{n \times m}^{\dagger}:=V \Sigma^{\dagger} U^{T}$</h2><p>伪逆的性质：<br>（1）若$A$可逆，则$r=m=n$，则</p>
+\end{array}</script><h2 id="跟据奇异值分解SVD，有伪逆定义：-A-n-times-m-dagger-V-Sigma-dagger-U-T"><a href="#跟据奇异值分解SVD，有伪逆定义：-A-n-times-m-dagger-V-Sigma-dagger-U-T" class="headerlink" title="跟据奇异值分解SVD，有伪逆定义：$A_{n \times m}^{\dagger}:=V \Sigma^{\dagger} U^{T}$"></a>跟据奇异值分解SVD，有伪逆定义：$A_{n \times m}^{\dagger}:=V \Sigma^{\dagger} U^{T}$</h2><p>伪逆的性质：<br>（1）若$A$可逆，则$r=m=n$，则</p>
 <script type="math/tex; mode=display">
 A^{-1}=\left(U \Sigma V^{T}\right)^{-1}=V \Sigma^{-1} U^{T}=A^{\dagger}</script><p>（2）</p>
 <script type="math/tex; mode=display">
@@ -841,7 +842,7 @@ A^{T} A \mathbf{x}^{\dagger}=A^{T} \mathbf{b}
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#跟据奇异值分解SVD有伪逆定义：-A-n-times-m-dagger-V-Sigma-dagger-U-T"><span class="nav-number">1.</span> <span class="nav-text">跟据奇异值分解SVD有伪逆定义：$A_{n \times m}^{\dagger}:=V \Sigma^{\dagger} U^{T}$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#左逆和右逆"><span class="nav-number">2.</span> <span class="nav-text">左逆和右逆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Moore-Penrose伪逆"><span class="nav-number">3.</span> <span class="nav-text">Moore-Penrose伪逆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最小二乘法"><span class="nav-number">4.</span> <span class="nav-text">最小二乘法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#跟据奇异值分解SVD，有伪逆定义：-A-n-times-m-dagger-V-Sigma-dagger-U-T"><span class="nav-number">1.</span> <span class="nav-text">跟据奇异值分解SVD，有伪逆定义：$A_{n \times m}^{\dagger}:=V \Sigma^{\dagger} U^{T}$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#左逆和右逆"><span class="nav-number">2.</span> <span class="nav-text">左逆和右逆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Moore-Penrose伪逆"><span class="nav-number">3.</span> <span class="nav-text">Moore-Penrose伪逆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最小二乘法"><span class="nav-number">4.</span> <span class="nav-text">最小二乘法</span></a></li></ol></div>
             
 
           </div>
