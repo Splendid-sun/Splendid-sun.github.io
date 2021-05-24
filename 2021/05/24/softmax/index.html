@@ -96,16 +96,18 @@
 
 
 
-  <meta name="description" content="Blog my daily study on machine learning, mathematics &amp; computer science etc.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hello,David!">
-<meta property="og:url" content="https://splendid-sun.github.io/archives/2019/page/2/index.html">
+  <meta name="description" content="参考：https://blog.csdn.net/weixin_43217928/article/details/104772424">
+<meta name="keywords" content="深度学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="softmax反向传播">
+<meta property="og:url" content="https://splendid-sun.github.io/2021/05/24/softmax/index.html">
 <meta property="og:site_name" content="Hello,David!">
-<meta property="og:description" content="Blog my daily study on machine learning, mathematics &amp; computer science etc.">
+<meta property="og:description" content="参考：https://blog.csdn.net/weixin_43217928/article/details/104772424">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-05-24T12:52:06.346Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello,David!">
-<meta name="twitter:description" content="Blog my daily study on machine learning, mathematics &amp; computer science etc.">
+<meta name="twitter:title" content="softmax反向传播">
+<meta name="twitter:description" content="参考：https://blog.csdn.net/weixin_43217928/article/details/104772424">
 
 
 
@@ -113,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="https://splendid-sun.github.io/archives/2019/page/2/">
+  <link rel="canonical" href="https://splendid-sun.github.io/2021/05/24/softmax/">
 
 
 
@@ -123,7 +125,7 @@
   };
 </script>
 
-  <title>归档 | Hello,David!</title>
+  <title>softmax反向传播 | Hello,David!</title>
   
 
 
@@ -171,7 +173,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
     <a href="https://github.com/Splendid-sun" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
 
@@ -265,7 +267,7 @@
         
         
           
-          <li class="menu-item menu-item-archives menu-item-active">
+          <li class="menu-item menu-item-archives">
 
     
     
@@ -370,286 +372,291 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2021/05/24/softmax/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+      <meta itemprop="image" content="/uploads/Pythagoras.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">softmax反向传播
+
+              
+            
+          </h1>
         
+
+        <div class="post-meta">
+
+            
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2021-05-24 17:32:04 / 修改时间：20:52:06" itemprop="dateCreated datePublished" datetime="2021-05-24T17:32:04+08:00">2021-05-24</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
           
-        
-        嗯..! 目前共计 24 篇日志。 继续努力。
-      </span>
-      
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/深度学习/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a></span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2019">2019</h1>
-          </div>
-        
-        
 
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/04/13/linear_algebra_4/" itemprop="url">
+          
             
-              <span itemprop="name">线性代数（4）：矩阵乘法的性质，方幂和转置</span>
             
-          </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-04-13T13:05:12+08:00" content="2019-04-13">
-          04-13
-        </time>
-      </div>
+          
+          
 
-    </header>
-  </article>
+          
 
+          
+            <div class="post-symbolscount">
+              
 
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">4.1k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">4 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/04/11/linear_algebra_3/" itemprop="url">
-            
-              <span itemprop="name">线性代数（3）：高斯消元法</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-04-11T20:35:26+08:00" content="2019-04-11">
-          04-11
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/04/08/linear_algebra_2/" itemprop="url">
-            
-              <span itemprop="name">线性代数（2）：矩阵与线性方程组</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-04-08T19:48:57+08:00" content="2019-04-08">
-          04-08
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <p>参考：<a href="https://blog.csdn.net/weixin_43217928/article/details/104772424" target="_blank" rel="noopener">https://blog.csdn.net/weixin_43217928/article/details/104772424</a></p>
+<a id="more"></a>
+<h1 id="softmax的反向传播梯度计算推导"><a href="#softmax的反向传播梯度计算推导" class="headerlink" title="softmax的反向传播梯度计算推导"></a>softmax的反向传播梯度计算推导</h1><p>对于深度学习多分类问题，神经网络最后一层常用softmax处理多项分布（multinomial distribution）。</p>
+<p>假设最后一层有n个神经元，就是n个类别：</p>
+<p><strong>输入</strong> 输出层神经元：$Z=\left[z_{1}, z_{2}, \ldots, z_{n}\right]$<br><strong>分类标签</strong>：$Y=\left[y_{1}, y_{2}, \ldots, y_{n}\right]$ （Y是one-hot标签，只有一个$y_{i}$值为1，其他为0）<br><strong>输出</strong>：$\mathrm{A}=\operatorname{softmax}(\mathrm{Z})=\left[\hat{y}_{1}, \hat{y}_{2}, \ldots, \hat{y}_{n}\right]$，$\hat{y}_{i}$为预测的每个类别的概率。</p>
+<p>对于n分类问题，softmax的式子为：</p>
+<script type="math/tex; mode=display">
+\hat{y}_{i}=\frac{e^{z_{i}}}{\sum_{j=1}^{n} e^{z_{j}}}</script><p>损失函数采用交叉熵，交叉熵损失函数式子为：</p>
+<script type="math/tex; mode=display">
+L=-\sum_{i=1}^{n} y_{i} l n \hat{y}_{i}</script><p><strong>交叉熵</strong>：用来衡量在给定真实分布下，使用非真实分布所指定的策略消除系统不确定性所需付出努力的大小。交叉熵越低，预测的分布就与真实分布越接近，最低的交叉熵就是使用了真实分布所计算出来的信息熵，此时$y_{i} = \hat{y}_{i}$。此时交叉熵等于信息熵，这就是为什么在机器学习分类算法中，总是最小化交叉熵，因为交叉熵越低，算法策略越接近最优策略，算法的非真实分布越接近真实分布。</p>
+<h2 id="反向传播梯度计算推导过程"><a href="#反向传播梯度计算推导过程" class="headerlink" title="反向传播梯度计算推导过程"></a>反向传播梯度计算推导过程</h2><h2 id="结论：向量形式为-frac-partial-L-partial-Z-hat-Y-Y"><a href="#结论：向量形式为-frac-partial-L-partial-Z-hat-Y-Y" class="headerlink" title="结论：向量形式为$\frac{\partial L}{\partial Z}=\hat Y-Y$"></a>结论：向量形式为$\frac{\partial L}{\partial Z}=\hat Y-Y$</h2><p>证明：<br>在这里我们假设，第k个神经元为正确标签，即$Y=\left[y_{1}, y_{2}, \ldots, y_{n}\right]$中$y_{k}=1$，其他$y_{i}$都是0。</p>
+<p>首先求L对A的导数</p>
+<script type="math/tex; mode=display">
+\frac{\partial L}{\partial \hat{y}_{i}}=\frac{\partial-\sum_{i=1}^{n} y_{i} l n \hat{y}_{i}}{\partial \hat{y}_{i}}=-\frac{y_{i}}{\hat{y}_{i}}</script><p>再求L对Z的导数：</p>
+<script type="math/tex; mode=display">
+\frac{\partial L}{\partial z_{i}}=\sum_{j=1}^{n} \frac{\partial L}{\partial \hat{y}_{j}} \cdot \frac{\partial \hat{y}_{j}}{\partial z_{i}}=\sum_{j=1}^{n}-\frac{y_{j}}{\hat{y}_{j}} \cdot \frac{\partial \hat{y}_{j}}{\partial z_{i}}</script><p>因为$y_{k}=1$, 其他 $y_{i}$ 都为0，因此只有$\frac{\partial L}{\partial a_{k}}$不为0，其他都为0。进一步化简：</p>
+<script type="math/tex; mode=display">
+\frac{\partial L}{\partial z_{i}}=\frac{\partial L}{\partial \hat{y}_{k}} \cdot \frac{\partial \hat{y}_{k}}{\partial z_{i}}</script><p>由此可见，接下来我们重点就是求$\frac{\partial \hat{y}_{k}}{\partial z_{i}}$了。对于$\frac{\partial \hat{y}_{k}}{\partial z_{i}}$的求解，要分两种情况：<br>若$i=k$</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\frac{\partial \hat{y}_{k}}{\partial z_{i}}=\frac{\partial \hat{y}_{k}}{\partial z_{k}}=\frac{\partial\left(\frac{e^{z_{k}}}{\sum_{j=1}^{n} e^{z_{j}}}\right)}{\partial z_{k}}=& \frac{e^{z_{k}}\left(\sum_{j=1}^{n} e^{z_{j}}\right)-\left(e^{z_{k}}\right)^{2}}{\left(\sum_{j=1}^{n} e^{z_{j}}\right)^{2}}=\frac{e^{z_{k}}}{\sum_{j=1}^{n} e^{z_{j}}}-\left(\frac{e^{z_{k}}}{\sum_{j=1}^{n} e^{z_{j}}}\right)^{2} \\
+&=\hat{y}_{k}-\hat{y}_{k}^{2}=\hat{y}_{k}\left(1-\hat{y}_{k}\right)
+\end{aligned}</script><p>若$i \neq k$</p>
+<script type="math/tex; mode=display">
+\frac{\partial \hat{y}_{k}}{\partial z_{i}}=\frac{\partial\left(\frac{e^{z_{k}}}{\sum_{j=1}^{n} e^{z_{j}}}\right)}{\partial z_{i}}=\frac{-e^{z_{k}} \cdot e^{z_{i}}}{\left(\sum_{j=1}^{n} e^{z_{j}}\right)^{2}}=-\frac{e^{z_{k}}}{\sum_{j=1}^{n} e^{z_{j}}} \cdot \frac{e^{z_{i}}}{\sum_{j=1}^{n} e^{z_{j}}}</script><script type="math/tex; mode=display">
+=-\hat{y}_{k} \hat{y}_{i}</script><p>结合我们求出的$\frac{\partial L}{\partial \hat{y}_{i}}$和$\frac{\partial \hat{y}_{i}}{\partial z_{j}}$，写出L对整个Z的导数，我们可以得到</p>
+<script type="math/tex; mode=display">
+\frac{\partial L}{\partial Z}=\left[\begin{array}{c}
+\frac{\partial L}{\partial z_{1}} \\
+\cdots \\
+\frac{\partial L}{\partial z_{k}} \\
+\ldots \\
+\frac{\partial L}{\partial z_{n}}
+\end{array}\right]=\left[\begin{array}{cc}
+\sum_{i=1}^{n} \frac{\partial L}{\partial \hat{y}_{i}} \cdot \frac{\partial \hat{y}_{i}}{\partial z_{1}} \\
+\cdots \\
+\sum_{i=1}^{n} \frac{\partial L}{\partial \hat{y}_{i}} \cdot \frac{\partial \hat{y}_{i}}{\partial z_{k}} \\
+\cdots \\
+\sum_{i=1}^{n} \frac{\partial L}{\partial \hat{y}_{i}} \cdot \frac{\partial \hat{y}_{i}}{\partial z_{n}}
+\end{array}\right]=\left[\begin{array}{c}
+\frac{\partial L}{\partial \hat{y}_{k}} \cdot \frac{\partial \hat{y}_{k}}{\partial z_{1}} \\
+\cdots \\
+\frac{\partial L}{\partial \hat{y}_{k}} \cdot \frac{\partial \hat{y}_{k}}{\partial z_{k}} \\
+\ldots \\
+\frac{\partial L}{\partial \hat{y}_{k}} \cdot \frac{\partial \hat{y}_{k}}{\partial z_{n}}
+\end{array}\right]=\left[\begin{array}{c}
+-\frac{1}{\hat{y}_{k}} \cdot\left(-\hat{y}_{k} \hat{y}_{1}\right) \\
+\cdots \\
+-\frac{1}{\hat{y}_{k}} \cdot \hat{y}_{k}\left(1-\hat{y}_{k}\right) \\
+\cdots \\
+-\frac{1}{\hat{y}_{k}} \cdot\left(-\hat{y}_{k} \hat{y}_{n}\right)
+\end{array}\right]=\left[\begin{array}{c}
+\hat{y}_{1} \\
+\ldots \\
+\hat{y}_{k}-1 \\
+\ldots \\
+\hat{y}_{n}
+\end{array}\right]</script><p>我们知道$y_{k}=1$, 除了 $y_{k}$ 其他 $y_{i}$ 都等于0，因此上式可以进一步写为：</p>
+<script type="math/tex; mode=display">
+\frac{\partial L}{\partial Z}=\left[\begin{array}{c}
+\hat{y}_{1} -y_{1} \\
+\cdots \\
+\hat{y}_{k}-y_{k} \\
+\ldots \\
+\hat{y}_{n}-y_{n}
+\end{array}\right]=\hat Y-Y</script><p>证毕～</p>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/04/03/linear_algebra_1/" itemprop="url">
-            
-              <span itemprop="name">线性代数（1）：向量及其运算</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-04-03T12:39:27+08:00" content="2019-04-03">
-          04-03
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/04/02/Hexo/" itemprop="url">
-            
-              <span itemprop="name">如何使用Hexo博客框架搭建个人博客</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-04-02T14:25:47+08:00" content="2019-04-02">
-          04-02
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-          <a class="post-title-link" href="/2019/04/01/hello-world/" itemprop="url">
-            
-              <span itemprop="name">Hello World格式参考文件</span>
-            
-          </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-04-01T22:10:21+08:00" content="2019-04-01">
-          04-01
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/深度学习/" rel="tag"># 深度学习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/04/26/linear_algebra_16/" rel="next" title="线性代数（16）：伪逆（pseudoinverse）">
+                <i class="fa fa-chevron-left"></i> 线性代数（16）：伪逆（pseudoinverse）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/archives/2019/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/archives/2019/">1</a><span class="page-number current">2</span>
-  </nav>
+  </article>
 
 
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -669,8 +676,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -796,6 +812,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#softmax的反向传播梯度计算推导"><span class="nav-number">1.</span> <span class="nav-text">softmax的反向传播梯度计算推导</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#反向传播梯度计算推导过程"><span class="nav-number">1.1.</span> <span class="nav-text">反向传播梯度计算推导过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论：向量形式为-frac-partial-L-partial-Z-hat-Y-Y"><span class="nav-number">1.2.</span> <span class="nav-text">结论：向量形式为$\frac{\partial L}{\partial Z}=\hat Y-Y$</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -941,6 +974,10 @@
 
 
   
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
 
   
 
@@ -956,6 +993,8 @@
 
   
 
+
+  
 
 
   
@@ -1293,6 +1332,46 @@
   
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+  
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') { next = next.nextSibling }
+        if (next && next.nodeName.toLowerCase() === 'br') { next.parentNode.removeChild(next) }
+      }
+    });
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      document.getElementById(all[i].inputID + '-Frame').parentNode.className += ' has-jax';
+    }
+  });
+</script>
+<script src="//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
   
 
 
