@@ -104,13 +104,13 @@
 <meta property="og:site_name" content="Hello,David!">
 <meta property="og:description" content="参考资料:  吴恩达CS229 机器学习">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/SVM/截屏2021-07-12%20下午12.20.05.png">
-<meta property="og:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/SVM/截屏2021-07-12%20下午3.53.05.png">
-<meta property="og:updated_time" content="2021-07-12T10:12:50.842Z">
+<meta property="og:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/SVM/截屏2021-07-12%20下午12.20.05.png?raw=true">
+<meta property="og:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/SVM/截屏2021-07-12%20下午3.53.05.png?raw=true">
+<meta property="og:updated_time" content="2021-07-12T10:19:33.004Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SMO算法">
 <meta name="twitter:description" content="参考资料:  吴恩达CS229 机器学习">
-<meta name="twitter:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/SVM/截屏2021-07-12%20下午12.20.05.png">
+<meta name="twitter:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/SVM/截屏2021-07-12%20下午12.20.05.png?raw=true">
 
 
 
@@ -440,7 +440,7 @@
                 
               
 
-              <time title="创建时间：2021-07-12 16:22:07 / 修改时间：18:12:50" itemprop="dateCreated datePublished" datetime="2021-07-12T16:22:07+08:00">2021-07-12</time>
+              <time title="创建时间：2021-07-12 16:22:07 / 修改时间：18:19:33" itemprop="dateCreated datePublished" datetime="2021-07-12T16:22:07+08:00">2021-07-12</time>
             
 
             
@@ -530,7 +530,7 @@
 <h2 id="1-Coordinate-ascent"><a href="#1-Coordinate-ascent" class="headerlink" title="1.Coordinate ascent"></a>1.Coordinate ascent</h2><p>为解决SVM的对偶问题，John Platt提出了SMO(顺序最小优化)算法。为了引出SMO算法，让我们先讨论coordinate ascent algorithm（坐标上升算法）。</p>
 <p>我们已经学过两种优化算法，gradient ascent和Newton’ method。我们现在学习的新算法叫做coordinate ascent。考虑一个无约束优化问题：</p>
 <script type="math/tex; mode=display">\max _{\alpha} W\left(\alpha_{1}, \alpha_{2}, \ldots, \alpha_{m}\right)</script><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Loop until convergence: &#123;</span><br><span class="line">    For i = <span class="number">1</span>,...,m, &#123;</span><br><span class="line">        αi := argmax_&#123;αˆi&#125; W(α<span class="number">1</span>,...,αi−<span class="number">1</span>,αˆi,αi+<span class="number">1</span>,...,αm).</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>最内层的循环每次只更新一个参数，来最大化 $W\left(\alpha_{1}, \alpha_{2}, \ldots, \alpha_{m}\right)$ ，不停循环，直到收敛。<br>coordinate ascent的实际运行效果如图所示：<br><img src="https://github.com/Splendid-sun/Hexo-photo/blob/master/SVM/截屏2021-07-12%20下午12.20.05.png" alt="avatar"></p>
+<p>最内层的循环每次只更新一个参数，来最大化 $W\left(\alpha_{1}, \alpha_{2}, \ldots, \alpha_{m}\right)$ ，不停循环，直到收敛。<br>coordinate ascent的实际运行效果如图所示：<br><img src="https://github.com/Splendid-sun/Hexo-photo/blob/master/SVM/截屏2021-07-12%20下午12.20.05.png?raw=true" alt="avatar"></p>
 <h2 id="2-SMO"><a href="#2-SMO" class="headerlink" title="2. SMO"></a>2. SMO</h2><p>在支持向量机的课程中，加入 $\ell_{1} \text{ norm regularization} $ 后的dual optimization problem为：</p>
 <script type="math/tex; mode=display">\begin{aligned} \max _{\alpha} \quad& W(\alpha)=\sum_{i=1}^{m} \alpha_{i}-\frac{1}{2} \sum_{i, j=1}^{m} y^{(i)} y^{(j)} \alpha_{i} \alpha_{j}\left\langle x^{(i)}, x^{(j)}\right\rangle . \\ \text { s.t. } \quad & 0 \leq \alpha_{i} \leq C, \quad i=1, \ldots, m \\ & \sum_{i=1}^{m} \alpha_{i} y^{(i)}=0 \end{aligned}</script><p>由于约束 $\sum_{i=1}^{m} \alpha_{i} y^{(i)}=0$ 的存在，让我们以优化 $\alpha_{1}$ 为例。因为，</p>
 <script type="math/tex; mode=display">\alpha_{1} y^{(1)}=-\sum_{i=2}^{m} \alpha_{i} y^{(i)}</script><p>等式两边同时乘以 $y^{(1)}$ ，因为 $y^{(1)} \in\{-1,1\}, \Rightarrow \left(y^{(1)}\right)^{2}=1$</p>
@@ -546,7 +546,7 @@
 <p>让我们先以更新 $\alpha_{1},\alpha_{2}$ 为例，保持 $\alpha_{3}, \ldots, \alpha_{m}$ 不变。根据约束 $\sum_{i=1}^{m} \alpha_{i} y^{(i)}=0$ 。我们有：</p>
 <script type="math/tex; mode=display">\alpha_{1} y^{(1)}+\alpha_{2} y^{(2)}=-\sum_{i=3}^{m} \alpha_{i} y^{(i)}=\zeta</script><p>上式等式右手边是常数 $\zeta$ ，因为 $\alpha_{3}, \ldots, \alpha_{m}$ 不变。</p>
 <p>根据加入 $\ell_{1} \text{ norm regularization} $ KKT对偶条件 $0 \leq \alpha_{i} \leq C$ 。以及 $\alpha_{1} y^{(1)}+\alpha_{2} y^{(2)}=\zeta$</p>
-<p><img src="https://github.com/Splendid-sun/Hexo-photo/blob/master/SVM/截屏2021-07-12%20下午3.53.05.png" alt="avatar"></p>
+<p><img src="https://github.com/Splendid-sun/Hexo-photo/blob/master/SVM/截屏2021-07-12%20下午3.53.05.png?raw=true" alt="avatar"></p>
 <p>这是一种box constraints， $\alpha_{1},\alpha_{2}$ 既要在 $[0, C] \times[0, C]$ 这个方形区域内，也要在 $\alpha_{1} y^{(1)}+\alpha_{2} y^{(2)}=\zeta$ 这条直线上。根据 $\alpha_{1} y^{(1)}+\alpha_{2} y^{(2)}=\zeta$ ，我们有：</p>
 <script type="math/tex; mode=display">\alpha_{1}=\left(\zeta-\alpha_{2} y^{(2)}\right) y^{(1)} \\</script><p>把这个代入 $W(\alpha)$ ， $W$ 是一个凸函数：</p>
 <script type="math/tex; mode=display">W\left(\alpha_{1}, \alpha_{2}, \ldots, \alpha_{m}\right)=W\left(\left(\zeta-\alpha_{2} y^{(2)}\right) y^{(1)}, \alpha_{2}, \ldots, \alpha_{m}\right)</script><p>上式是一个关于 $\alpha_{2}$ 的一元二次函数： $a \alpha_{2}^{2}+b \alpha_{2}+c$ 。这就是一个简单的初中就学过的二次函数求极值的问题。求出 $\alpha_{2}^{n e w}$ 之后，再代回等式 $\alpha_{1}=\left(\zeta-\alpha_{2} y^{(2)}\right) y^{(1)}$ 就求出 $\alpha_{1}^{n e w}$ 。</p>
