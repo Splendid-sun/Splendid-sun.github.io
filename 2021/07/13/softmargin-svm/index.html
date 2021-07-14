@@ -96,21 +96,20 @@
 
 
 
-  <meta name="description" content="参考资料:  吴恩达CS229 机器学习">
+  <meta name="description" content="吴恩达机器学习CS229 支持向量机">
 <meta name="keywords" content="支持向量机">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SMO算法">
-<meta property="og:url" content="https://splendid-sun.github.io/2021/07/12/svm/index.html">
+<meta property="og:title" content="soft-margin SVM">
+<meta property="og:url" content="https://splendid-sun.github.io/2021/07/13/softmargin-svm/index.html">
 <meta property="og:site_name" content="Hello,David!">
-<meta property="og:description" content="参考资料:  吴恩达CS229 机器学习">
+<meta property="og:description" content="吴恩达机器学习CS229 支持向量机">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/SVM/截屏2021-07-12%20下午12.20.05.png?raw=true">
-<meta property="og:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/SVM/截屏2021-07-12%20下午3.53.05.png?raw=true">
-<meta property="og:updated_time" content="2021-07-12T10:19:33.004Z">
+<meta property="og:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/SVM/soft_margin_svm.png?raw=true">
+<meta property="og:updated_time" content="2021-07-14T08:38:06.465Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SMO算法">
-<meta name="twitter:description" content="参考资料:  吴恩达CS229 机器学习">
-<meta name="twitter:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/SVM/截屏2021-07-12%20下午12.20.05.png?raw=true">
+<meta name="twitter:title" content="soft-margin SVM">
+<meta name="twitter:description" content="吴恩达机器学习CS229 支持向量机">
+<meta name="twitter:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/SVM/soft_margin_svm.png?raw=true">
 
 
 
@@ -118,7 +117,7 @@
 
   
   
-  <link rel="canonical" href="https://splendid-sun.github.io/2021/07/12/svm/">
+  <link rel="canonical" href="https://splendid-sun.github.io/2021/07/13/softmargin-svm/">
 
 
 
@@ -128,7 +127,7 @@
   };
 </script>
 
-  <title>SMO算法 | Hello,David!</title>
+  <title>soft-margin SVM | Hello,David!</title>
   
 
 
@@ -395,7 +394,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2021/07/12/svm/">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2021/07/13/softmargin-svm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="David">
@@ -412,7 +411,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">SMO算法
+          <h1 class="post-title" itemprop="name headline">soft-margin SVM
 
               
             
@@ -440,12 +439,24 @@
                 
               
 
-              <time title="创建时间：2021-07-12 16:22:07 / 修改时间：18:19:33" itemprop="dateCreated datePublished" datetime="2021-07-12T16:22:07+08:00">2021-07-12</time>
+              <time title="创建时间：2021-07-13 00:00:00" itemprop="dateCreated datePublished" datetime="2021-07-13T00:00:00+08:00">2021-07-13</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-07-14 16:38:06" itemprop="dateModified" datetime="2021-07-14T16:38:06+08:00">2021-07-14</time>
               
             
           </span>
@@ -491,7 +502,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">2.8k</span>
+                <span title="本文字数">6.7k</span>
               
 
               
@@ -505,7 +516,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">3 分钟</span>
+                <span title="阅读时长">6 分钟</span>
               
             </div>
           
@@ -525,31 +536,42 @@
       
 
       
-        <p>参考资料:  吴恩达CS229 机器学习</p>
+        <p>吴恩达机器学习CS229 支持向量机</p>
 <a id="more"></a>
-<h2 id="1-Coordinate-ascent"><a href="#1-Coordinate-ascent" class="headerlink" title="1.Coordinate ascent"></a>1.Coordinate ascent</h2><p>为解决SVM的对偶问题，John Platt提出了SMO(顺序最小优化)算法。为了引出SMO算法，让我们先讨论coordinate ascent algorithm（坐标上升算法）。</p>
-<p>我们已经学过两种优化算法，gradient ascent和Newton’ method。我们现在学习的新算法叫做coordinate ascent。考虑一个无约束优化问题：</p>
-<script type="math/tex; mode=display">\max _{\alpha} W\left(\alpha_{1}, \alpha_{2}, \ldots, \alpha_{m}\right)</script><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Loop until convergence: &#123;</span><br><span class="line">    For i = <span class="number">1</span>,...,m, &#123;</span><br><span class="line">        αi := argmax_&#123;αˆi&#125; W(α<span class="number">1</span>,...,αi−<span class="number">1</span>,αˆi,αi+<span class="number">1</span>,...,αm).</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>最内层的循环每次只更新一个参数，来最大化 $W\left(\alpha_{1}, \alpha_{2}, \ldots, \alpha_{m}\right)$ ，不停循环，直到收敛。<br>coordinate ascent的实际运行效果如图所示：<br><img src="https://github.com/Splendid-sun/Hexo-photo/blob/master/SVM/截屏2021-07-12%20下午12.20.05.png?raw=true" alt="avatar"></p>
-<h2 id="2-SMO"><a href="#2-SMO" class="headerlink" title="2. SMO"></a>2. SMO</h2><p>在支持向量机的课程中，加入 $\ell_{1} \text{ norm regularization} $ 后的dual optimization problem为：</p>
-<script type="math/tex; mode=display">\begin{aligned} \max _{\alpha} \quad& W(\alpha)=\sum_{i=1}^{m} \alpha_{i}-\frac{1}{2} \sum_{i, j=1}^{m} y^{(i)} y^{(j)} \alpha_{i} \alpha_{j}\left\langle x^{(i)}, x^{(j)}\right\rangle . \\ \text { s.t. } \quad & 0 \leq \alpha_{i} \leq C, \quad i=1, \ldots, m \\ & \sum_{i=1}^{m} \alpha_{i} y^{(i)}=0 \end{aligned}</script><p>由于约束 $\sum_{i=1}^{m} \alpha_{i} y^{(i)}=0$ 的存在，让我们以优化 $\alpha_{1}$ 为例。因为，</p>
-<script type="math/tex; mode=display">\alpha_{1} y^{(1)}=-\sum_{i=2}^{m} \alpha_{i} y^{(i)}</script><p>等式两边同时乘以 $y^{(1)}$ ，因为 $y^{(1)} \in\{-1,1\}, \Rightarrow \left(y^{(1)}\right)^{2}=1$</p>
-<script type="math/tex; mode=display">\alpha_{1}=-y^{(1)} \sum_{i=2}^{m} \alpha_{i} y^{(i)}</script><p>所以，如果保持 $\alpha_{2}, \ldots, \alpha_{m}$ 不变， $\alpha_{1}$ 是不可能变动的。所以我们只能同时更新至少两个变量，才能满足约束条件 $\sum_{i=1}^{m} \alpha_{i} y^{(i)}=0$ 。这就是SMO算法：</p>
-<pre><code>Repeat till convergence {
-    1. Select some pair αi and αj to update next (using a heuristic that tries to
-       pick the two that will allow us to make the biggest progress towards the 
-       global maximum).
-    2. Reoptimize W(α) with respect to αi and αj, while holding all the other αk’s
-       (k != i, j) fixed.
-}
-</code></pre><p>SMO sequential minimal optimization，minimal代表什么含义呢？就是在一次更新中，选择最小数量的参数 $\alpha_{i}$ 去更新。</p>
-<p>让我们先以更新 $\alpha_{1},\alpha_{2}$ 为例，保持 $\alpha_{3}, \ldots, \alpha_{m}$ 不变。根据约束 $\sum_{i=1}^{m} \alpha_{i} y^{(i)}=0$ 。我们有：</p>
-<script type="math/tex; mode=display">\alpha_{1} y^{(1)}+\alpha_{2} y^{(2)}=-\sum_{i=3}^{m} \alpha_{i} y^{(i)}=\zeta</script><p>上式等式右手边是常数 $\zeta$ ，因为 $\alpha_{3}, \ldots, \alpha_{m}$ 不变。</p>
-<p>根据加入 $\ell_{1} \text{ norm regularization} $ KKT对偶条件 $0 \leq \alpha_{i} \leq C$ 。以及 $\alpha_{1} y^{(1)}+\alpha_{2} y^{(2)}=\zeta$</p>
-<p><img src="https://github.com/Splendid-sun/Hexo-photo/blob/master/SVM/截屏2021-07-12%20下午3.53.05.png?raw=true" alt="avatar"></p>
-<p>这是一种box constraints， $\alpha_{1},\alpha_{2}$ 既要在 $[0, C] \times[0, C]$ 这个方形区域内，也要在 $\alpha_{1} y^{(1)}+\alpha_{2} y^{(2)}=\zeta$ 这条直线上。根据 $\alpha_{1} y^{(1)}+\alpha_{2} y^{(2)}=\zeta$ ，我们有：</p>
-<script type="math/tex; mode=display">\alpha_{1}=\left(\zeta-\alpha_{2} y^{(2)}\right) y^{(1)} \\</script><p>把这个代入 $W(\alpha)$ ， $W$ 是一个凸函数：</p>
-<script type="math/tex; mode=display">W\left(\alpha_{1}, \alpha_{2}, \ldots, \alpha_{m}\right)=W\left(\left(\zeta-\alpha_{2} y^{(2)}\right) y^{(1)}, \alpha_{2}, \ldots, \alpha_{m}\right)</script><p>上式是一个关于 $\alpha_{2}$ 的一元二次函数： $a \alpha_{2}^{2}+b \alpha_{2}+c$ 。这就是一个简单的初中就学过的二次函数求极值的问题。求出 $\alpha_{2}^{n e w}$ 之后，再代回等式 $\alpha_{1}=\left(\zeta-\alpha_{2} y^{(2)}\right) y^{(1)}$ 就求出 $\alpha_{1}^{n e w}$ 。</p>
+<p>在吴恩达CS229机器学习课程中，对加入 $\ell_{1} \text{ norm regularization}$ 的dual problem只给出结果而没有给出过程推导细节。本人对下面dual problem，给出推导细节：</p>
+<script type="math/tex; mode=display">\begin{array}{ll} \max _{\alpha} & W(\alpha)=\sum_{i=1}^{m} \alpha_{i}-\frac{1}{2} \sum_{i, j=1}^{m} y^{(i)} y^{(j)} \alpha_{i} \alpha_{j}\left\langle x^{(i)}, x^{(j)}\right\rangle \\ \text { s.t. } & 0 \leq \alpha_{i} \leq C, \quad i=1, \ldots, m \\ & \sum_{i=1}^{m} \alpha_{i} y^{(i)}=0 \end{array}</script><p>首先对于一个training set，一般是线性不可分的，还有一些异常值点outlier。考虑到（1）线性不可分，（2）还有异常值点带来的负面影响，我们允许支持向量机对训练集某些样本点，如 $(x^{(i)}, y^{(i)})$ 的geometric margin有一定误差 $\xi_{i}$ 。下图解释下 $\xi_{i}$ 的几何意义。</p>
+<p><img src="https://github.com/Splendid-sun/Hexo-photo/blob/master/SVM/soft_margin_svm.png?raw=true" alt="soft_margin"></p>
+<p>上图中，左上角的⭕️就是一个异常值点outlier，我们想降低这个异常值点给我们的支持向量机带来的负面影响。虚线是理想的decision boundary，能合适地正确分类⭕️和❌。由于受到了异常值点的影响，虚线变到了实线所在位置。如何减少左上角这个异常值带来的的负面影响？对每个点我们加入误差 $\xi_{i}$ ，它代表的意义就是图中红线的长度，就是一个functional margin &lt;= 1的点的functional margin： $\hat{\gamma}^{(i)}$ ，这个 $\hat{\gamma}^{(i)}$ 可以小于1，也可以小于0（被错误分类）。（functional margin和geometric margin的意义见吴恩达课程讲解）。</p>
+<p>对于正确分类的点（除了支持向量），其 $\hat{\gamma}^{(i)}&gt;1,  \xi_{i} = 0$</p>
+<p>对于支持向量，其 $\hat{\gamma}^{(i)}=1,  \xi_{i} = 0$</p>
+<p>对于异常值点，正确分类了，但是 $\hat{\gamma}^{(i)}&lt;1,  0&lt;\xi_{i}&lt;1$</p>
+<p>对于被错误分类的点，其 $\hat{\gamma}^{(i)}<0, \xi_{i}>1$</0,></p>
+<p>对每个样本点加入了误差 $\xi_{i}$ 后，我们就可以处理线性不可分的数据和降低异常值带来的负面影响。我们现在有：</p>
+<script type="math/tex; mode=display">\begin{array}{rlr} \underset{w, b, \xi}{\operatorname{minimize}} & \frac{1}{2}\|w\|^{2}+C \sum_{i=1}^{m} \xi_{i} & \\ \text { subject to } & y^{(i)}\left(w^{T} x^{(i)}+b\right) \geq 1-\xi_{i}, & i=1, \ldots, m, \\ & \xi_{i} \geq 0, & i=1, \ldots, m \end{array}</script><p>$C$ 控制着 $\frac{1}{2}|w|^{2}$ 和 $\sum_{i=1}^{m} \xi_{i}$ 的相对权重，一方面我们希望 $\frac{1}{2}|w|^{2}$ 越小越好，对应着支持向量的geometric margin越大越好。另一方面，我们能够容忍一定程度的误差 $\sum_{i=1}^{m} \xi_{i}$ ，但是这个误差尽管可以存在，但是也是越小越好。就像一个跷跷板，跷跷板的两端需要一个平衡。二者都要兼顾，雨露均沾，不能只顾一个，冷落了另一个。</p>
+<p>我们把上面的优化问题，写出标准形式，并应用拉格朗日乘子法：</p>
+<script type="math/tex; mode=display">\begin{array}{rlr} \underset{w, b, \xi}{\operatorname{minimize}} & \frac{1}{2}\|w\|^{2}+C \sum_{i=1}^{m} \xi_{i} & \\ \text { subject to } & 1-\xi_{i}-y^{(i)}\left(w^{T} x^{(i)}+b\right) \leq 0, & i=1, \ldots, m, \\ & -\xi_{i} \leq 0, & i=1, \ldots, m . \end{array}</script><p>在不等式约束条件下，我们有拉格朗日函数generalized Lagrangian：</p>
+<p>$\mathcal{L}(w, b, \xi, \alpha, \beta)=\frac{1}{2}|w|^{2}+C \sum_{i=1}^{m} \xi_{i}+\sum_{i=1}^{m} \alpha_{i}\left(1-\xi_{i}-y^{(i)}\left(w^{T} x^{(i)}+b\right)\right)-\sum_{i=1}^{m} \beta_{i} \xi_{i}$</p>
+<p>注意，上面这个拉格朗日函数中，参数 $(w, b, \xi)$ 就相当于拉格朗日乘子法里面的 $x$ ， $(\alpha, \beta)$ 相当于拉格朗日乘子 $\lambda$ 。</p>
+<p>给出这个问题的primal and dual optimization problems:</p>
+<script type="math/tex; mode=display">\begin{array}{rlrlr} \max _{\alpha, \beta: \alpha_{i} \geq 0, \beta_{i} \geq 0} & \theta_{D}(\alpha, \beta) & \text { where } \theta_{D}(\alpha, \beta):=\min _{w, b, \xi} & \mathcal{L}(w, b, \xi, \alpha, \beta), & & \text { (SVM-D) } \\ \min _{w, b, \xi} & \theta_{P}(w, b, \xi) & \text { where } \theta_{P}(w, b, \xi):=\max _{\alpha, \beta: \alpha_{i} \geq 0, \beta_{i} \geq 0} & \mathcal{L}(w, b, \xi, \alpha, \beta) . & & (\text { SVM-P }) \end{array}</script><p>上面是拉格朗日对偶，不懂需要看CS229支持向量机部分对它的的讲解。</p>
+<h2 id="1-Eliminating-the-primal-variables"><a href="#1-Eliminating-the-primal-variables" class="headerlink" title="1 Eliminating the primal variables"></a>1 Eliminating the primal variables</h2><p>为了通过对偶dual问题来求解原始primal问题，我们计算 $\theta_{D}(\alpha, \beta)$ ：</p>
+<script type="math/tex; mode=display">\theta_{D}(\alpha, \beta)=\min _{w, b, \xi} \quad \mathcal{L}(w, b, \xi, \alpha, \beta)</script><p>这是一个无约束优化问题 。上面的拉格朗日函数 $\mathcal{L}(w, b, \xi, \alpha, \beta)$ 是可微的differentiable。根据拉格朗日对偶，对于固定的 $(\alpha, \beta)$ ，假设我们找到了 $(\hat{w}, \hat{b}, \hat{\xi})$ 最小化拉格朗日函数，一定有必要条件：拉格朗日函数对参数 $(w, b, \xi)$ 的梯度和偏导数为0向量或0。</p>
+<script type="math/tex; mode=display">\begin{aligned} &\nabla_{w} \mathcal{L}(\hat{w}, \hat{b}, \hat{\xi}, \alpha, \beta)=\hat{w}-\sum_{i=1}^{m} \alpha_{i} y^{(i)} x^{(i)}=0 \\ &\frac{\partial}{\partial b} \mathcal{L}(\hat{w}, \hat{b}, \hat{\xi}, \alpha, \beta)=-\sum_{i=1}^{m} \alpha_{i} y^{(i)}=0 \\ &\frac{\partial}{\partial \xi_{i}} \mathcal{L}(\hat{w}, \hat{b}, \hat{\xi}, \alpha, \beta)=C-\alpha_{i}-\beta_{i}=0 \end{aligned}</script><p>把 $-\sum_{i=1}^{m} \alpha_{i} y^{(i)}=0$ 和 $C-\alpha_{i}-\beta_{i}=0$ 代回拉格朗日函数：</p>
+<p>$\begin{aligned} \theta_{D}(\alpha, \beta) &amp;=\mathcal{L}(\hat{w}, \hat{b}, \hat{\xi}) \ &amp;=\frac{1}{2}|\hat{w}|^{2}+C \sum_{i=1}^{m} \hat{\xi}_{i}+\sum_{i=1}^{m} \alpha_{i}\left(1-\hat{\xi}_{i}-y^{(i)}\left(\hat{w}^{T} x^{(i)}+\hat{b}\right)\right)-\sum_{i=1}^{m} \beta_{i} \hat{\xi}_{i} \ &amp;=\frac{1}{2}|\hat{w}|^{2}+C \sum_{i=1}^{m} \hat{\xi}_{i}+\sum_{i=1}^{m} \alpha_{i}\left(1-\hat{\xi}_{i}-y^{(i)}\left(\hat{w}^{T} x^{(i)}\right)\right)-\sum_{i=1}^{m} \beta_{i} \hat{\xi}_{i} \ &amp;=\frac{1}{2}|\hat{w}|^{2}+\sum_{i=1}^{m} \alpha_{i}\left(1-y^{(i)}\left(\hat{w}^{T} x^{(i)}\right)\right) \end{aligned}$</p>
+<p>稍微解释下上面的推导过程，第一个等式就是对固定的 $(\alpha, \beta)$ 找到最佳解 $(\hat{w}, \hat{b}, \hat{\xi})$ ，第二个等式就是generalized Lagrangian拉格朗日函数的定义，第三和第四个等式就是分别把 $-\sum_{i=1}^{m} \alpha_{i} y^{(i)}=0$ 和 $C-\alpha_{i}-\beta_{i}=0$ 代入。</p>
+<p>再代入 $\hat{w}=\sum_{i=1}^{m} \alpha_{i} y^{(i)} x^{(i)}$ ，有</p>
+<script type="math/tex; mode=display">\begin{aligned} \frac{1}{2}\|\hat{w}\|^{2}+\sum_{i=1}^{m} \alpha_{i}\left(1-y^{(i)}\left(\hat{w}^{T} x^{(i)}\right)\right) &=\sum_{i=1}^{m} \alpha_{i}+\frac{1}{2}\|\hat{w}\|^{2}-\hat{w}^{T} \sum_{i=1}^{m} \alpha_{i} y^{(i)} x^{(i)} \\ &=\sum_{i=1}^{m} \alpha_{i}+\frac{1}{2}\|\hat{w}\|^{2}-\|\hat{w}\|^{2} \\ &=\sum_{i=1}^{m} \alpha_{i}-\frac{1}{2}\|\hat{w}\|^{2} \\ &=\sum_{i=1}^{m} \alpha_{i}-\frac{1}{2} \sum_{i=1}^{m} \sum_{j=1}^{m} \alpha_{i} \alpha_{i} y^{(i)} y^{(j)}\left\langle x^{(i)}, x^{(j)}\right\rangle  \end{aligned}</script><p>至此，我们通过 $-\sum_{i=1}^{m} \alpha_{i} y^{(i)}=0$ 和 $C-\alpha_{i}-\beta_{i}=0$ 和 $\hat{w}=\sum_{i=1}^{m} \alpha_{i} y^{(i)} x^{(i)}$ ，在拉格朗日函数中用dual variables $(\alpha, \beta)$ 替代了primal variables $(w, b, \xi)$ 。我们的对偶问题化简为：</p>
+<script type="math/tex; mode=display">\begin{aligned} \underset{\alpha, \beta}{\operatorname{maximize}} & \sum_{i=1}^{m} \alpha_{i}-\frac{1}{2} \sum_{i=1}^{m} \sum_{j=1}^{m} \alpha_{i} \alpha_{i} y^{(i)} y^{(j)}\left\langle x^{(i)}, x^{(j)}\right\rangle \\ \text {s.t. } & \alpha_{i} \geq 0, \\ & \beta_{i} \geq 0, \\ & \alpha_{i}+\beta_{i}=C, \\ & \sum_{i=1}^{m} \alpha_{i} y^{(i)}=0 \end{aligned}</script><h2 id="2-KKT-complementary-KKT互补条件"><a href="#2-KKT-complementary-KKT互补条件" class="headerlink" title="2. KKT complementary KKT互补条件"></a>2. KKT complementary KKT互补条件</h2><p>满足KKT条件，我们有对偶问题的解等于原始问题的解。</p>
+<p>KKT complementarity需要对于任意原始最优解 $\left(w^{*}, b^{*}, \xi^{*}\right)$ 和对偶最优解 $\left(\alpha^{*}, \beta^{*}\right)$ ，有：</p>
+<script type="math/tex; mode=display">\begin{aligned} \alpha_{i}^{*}\left(1-\xi_{i}^{*}-y^{(i)}\left(w^{* T} x^{(i)}+b^{*}\right)\right) &=0 \\ \beta_{i}^{*} \xi_{i}^{*} &=0 \end{aligned}</script><p>对于支持向量，异常值和分类错误的点有 $\alpha_{i}&gt;0$ ，根据KKT complementarity：</p>
+<script type="math/tex; mode=display">\alpha_{i}^{* }\left(1-\xi_{i}^{* }-y^{(i)}\left(w^{ * T} x^{(i)}+b^{* }\right)\right)=0</script><p>有 </p>
+<script type="math/tex; mode=display">1-\xi_{i}^{ * }-y^{(i)}\left(w^{ * T} x^{(i)}+b^{ * }\right)=0</script><script type="math/tex; mode=display">1-\xi_{i}^{ * }=y^{(i)}\left(w^{* T} x^{(i)}+b^{* }\right)\leq1</script><p>因为 $\xi^{*} \geq 0$ 。</p>
+<p>而其他大多数样本点的 $\alpha_{i}=0$ ，有 $y^{(i)}\left(w^{T} x^{(i)}+b\right) \geq 1-\xi_{i}$ （primal constraint）。</p>
+<p>最后，因为 $\beta_{i}^{*}&gt;0$ 等价于 $\alpha_{i}^{*}&lt;C\left(\text { since } \alpha^{*}+\beta_{i}^{*}=C\right)$ 。我们可以将KKT条件总结如下:</p>
+<script type="math/tex; mode=display">\begin{array}{r} \alpha_{i}^{*}=0 \Rightarrow y^{(i)}\left(w^{* T} x^{(i)}+b^{*}\right) \geq 1 \\ 0<\alpha_{i}^{*}<C \Rightarrow y^{(i)}\left(w^{* T} x^{(i)}+b^{*}\right)=1 \\ \alpha_{i}^{*}=C \Rightarrow y^{(i)}\left(w^{* T} x^{(i)}+b^{*}\right) \leq 1 \end{array}</script><h2 id="3-化简"><a href="#3-化简" class="headerlink" title="3. 化简"></a>3. 化简</h2><p>我们观察到两个约束条件： $\beta_{i} \geq 0 \quad  \alpha_{i}+\beta_{i}=C$</p>
+<p>等价于单一约束条件： $\alpha_{i} \leq C$</p>
+<p>我们解决如下优化问题：</p>
+<script type="math/tex; mode=display">\begin{array}{ll} \underset{\alpha, \beta}{\operatorname{maximize}} & \sum_{i=1}^{m} \alpha_{i}-\frac{1}{2} \sum_{i=1}^{m} \sum_{j=1}^{m} \alpha_{i} \alpha_{i} y^{(i)} y^{(j)}\left\langle x^{(i)}, x^{(j)}\right\rangle \\ \text { subject to } & 0 \leq \alpha_{i} \leq C, \\ & \sum_{i=1}^{m} \alpha_{i} y^{(i)}=0 \end{array}</script><p>然后设 $\beta_{i}=C-\alpha_{i}$ ，那么 $(\alpha, \beta)$ 将是上述对偶问题的最优解。以上对偶优化问题就是CS229课程中吴恩达推导出的加入 $$ 后的最终形式，只是比没加入 $\ell_{1} \text{ norm regularization}$ 之前多出一个 $\alpha_{i} \leq C$ 。</p>
 
       
     </div>
@@ -586,8 +608,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2021/05/24/softmax/" rel="next" title="softmax反向传播">
-                <i class="fa fa-chevron-left"></i> softmax反向传播
+              <a href="/2021/07/12/svm/" rel="next" title="SMO算法">
+                <i class="fa fa-chevron-left"></i> SMO算法
               </a>
             
           </div>
@@ -595,10 +617,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2021/07/13/softmargin-svm/" rel="prev" title="soft-margin SVM">
-                soft-margin SVM <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -793,7 +811,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Coordinate-ascent"><span class="nav-number">1.</span> <span class="nav-text">1.Coordinate ascent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-SMO"><span class="nav-number">2.</span> <span class="nav-text">2. SMO</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Eliminating-the-primal-variables"><span class="nav-number">1.</span> <span class="nav-text">1 Eliminating the primal variables</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-KKT-complementary-KKT互补条件"><span class="nav-number">2.</span> <span class="nav-text">2. KKT complementary KKT互补条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-化简"><span class="nav-number">3.</span> <span class="nav-text">3. 化简</span></a></li></ol></div>
             
 
           </div>
