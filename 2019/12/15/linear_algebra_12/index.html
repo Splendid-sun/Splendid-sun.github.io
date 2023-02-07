@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"splendid-sun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="清华大学线性代数课程第19，20，21，22讲：方阵的特征值与特征向量，方阵的对角化 参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常推荐！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线性代数（12）：方阵的特征值与特征向量，方阵的对角化">
+<meta property="og:url" content="https://splendid-sun.github.io/2019/12/15/linear_algebra_12/index.html">
+<meta property="og:site_name" content="Hello,David!">
+<meta property="og:description" content="清华大学线性代数课程第19，20，21，22讲：方阵的特征值与特征向量，方阵的对角化 参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常推荐！">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-12-15T04:30:18.000Z">
+<meta property="article:modified_time" content="2021-10-11T01:02:26.000Z">
+<meta property="article:author" content="David">
+<meta property="article:tag" content="线性代数">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://splendid-sun.github.io/2019/12/15/linear_algebra_12/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>线性代数（12）：方阵的特征值与特征向量，方阵的对角化 | Hello,David!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello,David!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">There is geometry in the humming of the strings, there is music in the spacing of the spheres.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2019/12/15/linear_algebra_12/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          线性代数（12）：方阵的特征值与特征向量，方阵的对角化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-15 12:30:18" itemprop="dateCreated datePublished" datetime="2019-12-15T12:30:18+08:00">2019-12-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-10-11 09:02:26" itemprop="dateModified" datetime="2021-10-11T09:02:26+08:00">2021-10-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" itemprop="url" rel="index"><span itemprop="name">线性代数</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>清华大学线性代数课程第19，20，21，22讲：方阵的特征值与特征向量，方阵的对角化</p>
+<p>参考资料:<br>清华大学数学科学系-线性代数-马辉<br>《工程数学 <strong>线性代数</strong> 第六版》 同济大学数学系 高等教育出版社<br>Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常<strong>推荐</strong>！</p>
+<span id="more"></span>
+<h2 id="1-方阵的特征值与特征向量"><a href="#1-方阵的特征值与特征向量" class="headerlink" title="1. 方阵的特征值与特征向量"></a>1. 方阵的特征值与特征向量</h2><p>定义：设$A$是n阶矩阵，如果数$\lambda$和n维<strong>非零</strong>列向量$x$使关系式</p>
+<script type="math/tex; mode=display">
+A \mathbf{x}=\lambda \mathbf{x}</script><p>成立，那么，这样的数$\lambda$称为矩阵$A$的<strong>特征值</strong>（eigenvalue）,非零向量$x$称为$A$的对应于特征值$\lambda$的<strong>特征向量</strong>（eigenvector），上式也可以写成</p>
+<script type="math/tex; mode=display">
+(A-\lambda E) \mathbf{x}=0</script><p>这是n个未知数n个方程的齐次线性方程组，它有非零解的充分必要条件是系数行列式</p>
+<script type="math/tex; mode=display">
+|A-\lambda E|=0</script><p>即</p>
+<script type="math/tex; mode=display">
+\left|\begin{array}{cccc}{a_{11}-\lambda} & {a_{12}} & {\cdots} & {a_{1 n}} \\ {a_{21}} & {a_{22}-\lambda} & {\cdots} & {a_{2 n}} \\ {\vdots} & {\vdots} & {} & {\vdots} \\ {a_{n 1}} & {a_{n 2}} & {\cdots} & {a_{n n}-\lambda}\end{array}\right|=0</script><p>上式是以$\lambda$为未知数的一元n次方程，称为矩阵$A$的<strong>特征方程</strong>（characteristic equation），其左端$|A-\lambda E|$是$\lambda$的n次多项式，记作$f(\lambda)$，称为矩阵$A$的<strong>特征多项式</strong>（characteristic polynomial）。显然，$A$的特征值就是特征方程的解。根据代数的基本定理，特征方程在复数范围内恒有解，其个数为方程的次数（重根按重数计算），因此，n阶矩阵$A$在复数范围内有n个特征值。<br>设n阶矩阵$A=\left(a<em>{i j}\right)$的特征值为$\lambda</em>{1}, \lambda<em>{2}, \cdots, \lambda</em>{n}$，不难证明<br>$\text { (i) } \lambda<em>{1}+\lambda</em>{2}+\cdots+\lambda<em>{n}=a</em>{11}+a<em>{22}+\cdots+a</em>{n n}$<br>$\text { (ii) } \lambda<em>{1} \lambda</em>{2} \cdots \lambda<em>{n}=|A|$<br>由$(\text { ii })$可知$A$是可逆矩阵的充分必要条件是它的n个特征值全不为零，若矩阵$A$不可逆，则$A$有零特征值。<br>设$\lambda=\lambda</em>{i}$为矩阵$A$的一个特征值，则由方程</p>
+<script type="math/tex; mode=display">
+\left(A-\lambda_{i} E\right) \mathbf{x}=0</script><p>可求得非零解$\mathbf{x}=p<em>{i}$，那么$\mathbf{p}</em>{i}$便是$A$的对应于特征值$\lambda<em>{i}$的特征向量。若$\lambda</em>{i}$为实数，则$\mathbf{p}<em>{i}$可以取实向量；若$\lambda</em>{i}$为复数，则$\mathbf{p}<em>{i}$为复向量。<br>显然，若$\mathbf{p}</em>{i}$是矩阵$A$的对应于特征值$\lambda<em>{i}$的特征向量，则$k p</em>{i}\quad(k \neq 0)$也是对应于$\lambda_{i}$的特征向量</p>
+<p><strong>特征空间</strong>（eigenspace）是具有相同特征值的特征向量与一个同维数的零向量的集合</p>
+<hr>
+<p>特征值的性质：设$\lambda$是方阵$A$的特征值，则<br>（1）$\lambda^{2}$是$A^{2}$的特征值<br>（2）当$\mathbf{A}$可逆时，$\frac{1}{\lambda}$是$A^{-1}$的特征值<br>证明：因为$\lambda$是方阵$A$的特征值，故有$p \neq 0$使得$A p=\lambda p$，于是<br>（1）因为$A^{2} p=A(A p)=A(\lambda p)=\lambda(A p)=\lambda^{2} p$，所以$\lambda^{2}$是$A^{2}$的特征值。<br>（2）当$A$可逆时，由$A p=\lambda p$，有$p=\lambda A^{-1} p$，因$p \neq 0$，知$\lambda \neq 0$，故</p>
+<script type="math/tex; mode=display">
+A^{-1} p=\frac{1}{\lambda} p</script><p>所以$\frac{1}{\lambda}$是$A^{-1}$的特征值。</p>
+<p>以此类推，不难证明：若$\lambda$是方阵$A$的特征值，则$\lambda^{k}$是$A^{k}$的特征值；$\varphi(\lambda)$是$\varphi(A)$的特征值（其中$\varphi(\lambda)=a<em>{0}+a</em>{1} \lambda+\cdots+a<em>{m} \lambda^{m}$是$\lambda$的多项式，$\varphi(A)=a</em>{0} E+a<em>{1} A+\cdots+a</em>{m} A^{m}$是矩阵$A$的多项式）。这是特征值的一个重要性质。</p>
+<hr>
+<p>投影矩阵$P=A\left(A^{T} A\right)^{-1} A^{T}$的特征值为0或1，从几何角度理解，特征向量为经过投影后方向不变的向量，只有A的列空间和A的左零空间里面的向量投影后方向不变，其中C(A)空间里面的向量投影后大小方向不变，特征值为1，$N(A^{T})$空间里面的向量经过投影后为零向量，特征值为0。</p>
+<p>反射矩阵的特征值为1，-1。设$\mathbf{u} \in \mathbb{R}^{n},|\mathbf{u}|=1$，则$R=I_{n}-2 \mathbf{u} \mathbf{u}^{T}$为关于与$\mathbf{u}$正交的超平面的反射矩阵。从几何角度理解，$\forall \mathbf{v} \in \mathbb{R}^{n}$，若$\mathbf{v} \perp \mathbf{u}$，则$R \mathbf{v}=\mathbf{v}$。若$\mathbf{v} / / \mathbf{u}$，则$R \mathbf{v}=-\mathbf{v}$</p>
+<p>由于，投影矩阵和反射矩阵都是对称矩阵，所以他们不同特征值对应的特征空间正交。</p>
+<hr>
+<p>定理：设$\lambda<em>{1}, \lambda</em>{2}, \cdots, \lambda<em>{m}$是方阵$A$的m个特征值，$p</em>{1}, p<em>{2}, \cdots, p</em>{m}$依次是与之对应的特征向量，如果$\lambda<em>{1}, \lambda</em>{2}, \cdots, \lambda<em>{m}$各不相等，则$p</em>{1}, p<em>{2}, \cdots, p</em>{m}$线性无关。</p>
+<p>推论：设$\lambda<em>{1}$和$\lambda</em>{2}$是方阵$A$的两不同的特征值，$\xi<em>{1}, \xi</em>{2}, \cdots, \xi<em>{s}$和$\eta</em>{1}, \eta<em>{2}, \cdots, \eta</em>{t}$分别是对应于$\lambda<em>{1}$和$\lambda</em>{2}$的线性无关的特征向量，则$\xi<em>{1}, \xi</em>{2}, \cdots, \xi<em>{s}, \eta</em>{1}, \eta<em>{2}, \cdots, \eta</em>{t}$线性无关。</p>
+<h2 id="2-相似矩阵"><a href="#2-相似矩阵" class="headerlink" title="2.相似矩阵"></a>2.相似矩阵</h2><p>定义：设$A, B$都是n阶矩阵，若有可逆矩阵$P$使</p>
+<script type="math/tex; mode=display">
+\mathbf{P}^{-1} \mathbf{A} \mathbf{P}=\mathbf{B}</script><p>则称$B$是$A$的<strong>相似矩阵</strong>，或说矩阵$A$和$B$相似，对$A$进行运算$\mathbf{P}^{-1} \mathbf{A} \mathbf{P}$称为对$A$进行<strong>相似变换</strong>，可逆矩阵$P$称为把$A$变成$B$的相似变换矩阵。</p>
+<p>定理：若n阶矩阵$A$与$B$相似，则$A$与$B$的特征多项式相同，从而$A$与$B$的特征值亦相同<br>推论：若n阶矩阵$A$与对角矩阵</p>
+<script type="math/tex; mode=display">
+\mathbf{\Lambda}=\left(\begin{array}{cccc}{\lambda_{1}} \\ {} & {\lambda_{2}} \\ {} & {} & {\ddots} \\ {} & {} & {} & {\lambda_{n}}\end{array}\right)</script><p>相似，则$\lambda<em>{1}, \lambda</em>{2}, \cdots, \lambda_{n}$即是$A$的n个特征值。</p>
+<p>因为若$A=P B P^{-1}$，则有$A^{k}=P B^{k} P^{-1}$，有A的多项式$\varphi(\mathbf{A})=\mathbf{P} \varphi(\mathbf{B}) \mathbf{P}^{-1}$。特别地，若有可逆矩阵$P$使$P^{-1} A P=\Lambda$为对角矩阵，即若$A$相似于对角矩阵$\mathbf{\Lambda}$，则</p>
+<script type="math/tex; mode=display">
+A^{k}=P \Lambda^{k} P^{-1}, \varphi(A)=P \varphi(\Lambda) P^{-1}</script><p>而对角矩阵的方幂是便于计算的。</p>
+<hr>
+<p>定理：n阶矩阵$A$与对角矩阵相似（即$A$能对角化）的充分必要条件是$A$有n个线性无关的特征向量<br>推论：如果n阶矩阵$A$的n个特征值互不相等，则$A$与对角矩阵相似。</p>
+<hr>
+<h3 id="特征值的代数重数和几何重数"><a href="#特征值的代数重数和几何重数" class="headerlink" title="特征值的代数重数和几何重数"></a>特征值的代数重数和几何重数</h3><p>定义：设$\operatorname{det}(A-\lambda I)=\left(\lambda<em>{1}-\lambda\right)^{n</em>{1}} \cdots\left(\lambda<em>{k}-\lambda\right)^{n</em>{k}}$，其中$\lambda<em>{i} \neq \lambda</em>{j}(i \neq j)$。称$n<em>{i}$为特征值$\lambda</em>{i}$的<strong>代数重数</strong>（algebraic multiplicity）,记作$A M\left(\lambda<em>{i}\right)=n</em>{i}$。称$\operatorname{dim} N\left(A-\lambda<em>{i} I\right)$为特征值$\lambda</em>{i}$的<strong>几何重数</strong>（geometric multiplicity），记作$G M\left(\lambda<em>{i}\right)=\operatorname{dim} N\left(A-\lambda</em>{i} I\right)$。</p>
+<p>一般地，$G M(\lambda) \leq A M(\lambda)$，特征值的几何重数小于等于代数重数</p>
+<p>定理：复方阵$A$可对角化$\Longleftrightarrow$对任意的特征值$\lambda<em>{i}, G M\left(\lambda</em>{i}\right)=A M\left(\lambda<em>{i}\right)$<br>因为：$\sum</em>{i=1}^{k} A M\left(\lambda<em>{i}\right)=n$。若$\forall i, G M\left(\lambda</em>{i}\right)=A M\left(\lambda<em>{i}\right)$，则$G M\left(\lambda</em>{1}\right)+\cdots+G M\left(\lambda_{k}\right)=n$，故$A$有n个线性无关的特征向量，从而$A$可以对角化。</p>
+<p>可以看到，使$A$对角化的相似变换矩阵不是唯一的，一个特征向量乘以非零常数后仍是属于同一特征值的特征向量，所以若用任意非零常数乘以相似变换矩阵的各列，则得一个新的使$A$对角化的矩阵。而对于重特征值则有更大的自由度。同一特征值的不同特征向量的任意线性组合得到的不同线性无关特征向量都可以充当相似变换矩阵各列。</p>
+<hr>
+<h3 id="Jordan-标准形"><a href="#Jordan-标准形" class="headerlink" title="Jordan 标准形"></a>Jordan 标准形</h3><p>1个n阶Jordan块，形如</p>
+<script type="math/tex; mode=display">
+\left(\begin{array}{cccc}
+{\lambda_{0}} & {1} & {} & {} \\
+{} & {\ddots} & {\ddots} & {} \\
+{} & {} & {\ddots} & {1} \\
+{} & {} & {} & {\lambda_{0}}
+\end{array}\right)_{n \times n}</script><p>1个1阶Jordan块，形如</p>
+<script type="math/tex; mode=display">
+\left(\lambda_{0}\right)_{1 \times 1}</script><hr>
+<p>n阶Jordan块$J<em>{\lambda</em>{0}, n}=\left(\begin{array}{ccccc}<br>{\lambda<em>{0}} &amp; {1} &amp; {} &amp; {} &amp; {} \<br>{} &amp; {\ddots} &amp; {\ddots} &amp; {} \<br>{} &amp; {} &amp; {\ddots} &amp; {1} \<br>{} &amp; {} &amp; {} &amp; {\lambda</em>{0}}<br>\end{array}\right)<em>{n \times n}$的性质<br>（1）只有一个n重特征值$\lambda</em>{0}$，只有一个线性无关的特征向量。代数重数为n，几何重数为1<br>（2）$\left(J<em>{\lambda</em>{0}, n}-\lambda<em>{0} I</em>{n}\right)^{n}=0$，$J<em>{\lambda</em>{0}, n}-\lambda<em>{0} I</em>{n}=N$为幂零矩阵。<br>（3）$J<em>{\lambda</em>{0}, n}$与$J<em>{\lambda</em>{0}, n}^{T}$相似，某些教材定义的Jordan块上面的1写到对角线下方，与1在对角线上方本质上是一致的，因为二者是相似的。</p>
+<p>定理：设矩阵$A$有$s$个线性无关的特征向量，则存在可逆矩阵$P$，使得</p>
+<script type="math/tex; mode=display">
+P^{-1} A P=\left(\begin{array}{cccc}
+{J_{1}} & {} & {} & {} \\
+{} & {J_{2}} & {} & {} \\
+{} & {} & {\ddots} & {} \\
+{} & {} & {} & {J_{s}}
+\end{array}\right)=: J</script><p>其中</p>
+<script type="math/tex; mode=display">
+J_{i}=\left(\begin{array}{cccc}
+{\lambda_{i}} & {1} & {} & {} \\
+{} & {\lambda_{i}} & {\ddots} & {} \\
+{} & {} & {\ddots} & {1} \\
+{} & {} & {} & {\lambda_{i}}
+\end{array}\right) \quad(i=1, \cdots, s)</script><p>$J$称为矩阵$A$的Jordan标准形，若不计Jordan块的次序，则Jordan标准形唯一。<br>注：（1）Jordan标准形中Jordan块的个数等于矩阵$A$中线性无关的特征向量的个数<br>（2）若$s=n$，则$J$是对角阵，$A$可对角化</p>
+<hr>
+<h2 id="3-特征值在差分方程和微分方程中的应用"><a href="#3-特征值在差分方程和微分方程中的应用" class="headerlink" title="3. 特征值在差分方程和微分方程中的应用"></a>3. 特征值在差分方程和微分方程中的应用</h2><h3 id="特征值在差分方程中的应用"><a href="#特征值在差分方程中的应用" class="headerlink" title="特征值在差分方程中的应用"></a>特征值在差分方程中的应用</h3><p>设矩阵$A$可对角化，即存在可逆矩阵$S$，使得$S^{-1} A S=\Lambda$为对角阵，则$A=S \Lambda S^{-1}$，于是$A^{k}=S \Lambda^{k} S^{-1}$。<br>对于差分方程$\mathbf{u}<em>{k+1}=A \mathbf{u}</em>{k}$，解为</p>
+<script type="math/tex; mode=display">
+\mathbf{u}_{k}=A^{k} \mathbf{u}_{0}=S \Lambda^{k} S^{-1} \mathbf{u}_{0}</script><script type="math/tex; mode=display">
+=c_{1} \lambda_{1}^{k} \mathbf{x}_{1}+\cdots+c_{n} \lambda_{n}^{k} \mathbf{x}_{n}</script><p>其中</p>
+<script type="math/tex; mode=display">
+\mathbf{u}_{0}=c_{1} \mathbf{x}_{1}+\cdots+c_{n} \mathbf{x}_{n}, A \mathbf{x}_{i}=\lambda_{i} \mathbf{x}_{i}(1 \leq i \leq n)</script><h3 id="特征值在微分方程中的应用"><a href="#特征值在微分方程中的应用" class="headerlink" title="特征值在微分方程中的应用"></a>特征值在微分方程中的应用</h3><p>问题：设关于t的向量值可导函数</p>
+<script type="math/tex; mode=display">
+\mathbf{u}=\mathbf{u}(t)=\left(\begin{array}{c}{u_{1}(t)} \\ {\vdots} \\ {u_{n}(t)}\end{array}\right)</script><p>满足</p>
+<script type="math/tex; mode=display">
+\frac{d \mathbf{u}}{d t}=A \mathbf{u}</script><p>其中$A=\left(a_{i j}\right)$为n阶常数矩阵，求解$\mathbf{u}=\mathbf{u}(t)$</p>
+<p>当$A$不是对角矩阵时，这个问题是耦合的，每个分量的导数都和其他分量有关，问题不易解决。当$A$为对角矩阵时，这个问题是解耦的。若</p>
+<script type="math/tex; mode=display">
+A=\left(\begin{array}{ccc}{\lambda_{1}} & {} & {} \\ {} & {\ddots} & {} \\ {} & {} & {\lambda_{n}}\end{array}\right)</script><p>为对角矩阵，则</p>
+<script type="math/tex; mode=display">
+\frac{d \mathbf{u}}{d t}=\left(\begin{array}{ccc}{\lambda_{1}} & {} & {} \\ {} & {\ddots} & {} \\ {} & {} & {\lambda_{n}}\end{array}\right) \mathbf{u}</script><script type="math/tex; mode=display">
+\Longleftrightarrow \frac{d u_{i}}{d t}=\lambda_{i} u_{i}(1 \leq i \leq n)</script><script type="math/tex; mode=display">
+\Longleftrightarrow \mathbf{u}=\mathbf{u}(t)=\left(\begin{array}{c}{e^{\lambda_{1} t} c_{1}} \\ {\vdots} \\ {e^{\lambda_{n} t} c_{n}}\end{array}\right), c_{i}=\mathrm{const}</script><p>我们看到，当$A$是对角矩阵时，每个分量的导数只与自身有关，这样的方程组称为“解耦的”（uncoupled）</p>
+<p>那么问题来了，如果对于一般的矩阵$A$，如何求解$\frac{d \mathbf{u}}{d t}=A \mathbf{u}$。</p>
+<p>（1）$A$可以对角化的情形<br>一般的，若$A=S \Lambda S^{-1}$可对角化</p>
+<script type="math/tex; mode=display">
+\frac{d \mathbf{u}}{d t}=A \mathbf{u}=S \Lambda S^{-1} \mathbf{u} \Longleftrightarrow \frac{d\left(S^{-1} \mathbf{u}\right)}{d t}=\Lambda\left(S^{-1} \mathbf{u}\right)</script><script type="math/tex; mode=display">
+\Longrightarrow S^{-1} \mathbf{u}=\left(\begin{array}{c}{e^{\lambda_{1} t} c_{1}} \\ {\vdots} \\ {e^{\lambda_{n} t} c_{n}}\end{array}\right)</script><script type="math/tex; mode=display">
+\Longrightarrow \mathbf{u}(t)=c_{1} e^{\lambda_{1} t} \mathbf{x}_{1}+\cdots+c_{n} e^{\lambda_{n} t} \mathbf{x}_{n}</script><script type="math/tex; mode=display">
+\mathbf{u}(0)=c_{1} \mathbf{x}_{1}+\cdots+c_{n} \mathbf{x}_{n}</script><p>（1）$A$不可对角化的情形</p>
+<p>首先定义矩阵的指数函数：<br>对于普通的指数函数，由泰勒展开有：</p>
+<script type="math/tex; mode=display">
+e^{x}=1+x+\frac{x^{2}}{2 !}+\cdots+\frac{x^{n}}{n !}+\cdots</script><p>设$A$为n阶矩阵，定义</p>
+<script type="math/tex; mode=display">
+e^{A t}=I+A t+\frac{(A t)^{2}}{2 !}+\cdots+\frac{(A t)^{n}}{n !}+\cdots</script><p>对它关于t求导</p>
+<script type="math/tex; mode=display">
+\Longrightarrow \frac{d}{d t}\left(e^{A t}\right)=A+A^{2} t+\frac{A^{3} t^{2}}{2 !}+\cdots</script><script type="math/tex; mode=display">
+=A\left(I+A t+\frac{(A t)^{2}}{2 !}+\cdots\right)=A e^{A t}</script><p>⚠️$\mathbf{u}(t)=e^{A t} \mathbf{u}(0)$总是方程$\frac{d \mathbf{u}}{d t}=A \mathbf{u}$的解</p>
+<p>矩阵的指数函数的性质：<br>（1）若</p>
+<script type="math/tex; mode=display">
+\Lambda=\left(\begin{array}{ccc}{\lambda_{1}} & {} & {} \\ {} & {\ddots} & {} \\ {} & {} & {\lambda_{n}}\end{array}\right)</script><p>则</p>
+<script type="math/tex; mode=display">
+e^{\Lambda t}=\left(\begin{array}{ccc}{e^{\lambda_{1} t}} & {} & {} \\ {} & {\ddots} & {} \\ {} & {} & {e^{\lambda_{n} t}}\end{array}\right)</script><p>证明：按矩阵的指数函数定义展开即得。<br>（2）若$A B=B A$，即$A$ $B$可交换，则$e^{A+B}=e^{A} \cdot e^{B}$<br>（3）若存在可逆阵$P$，使得$A=P B P^{-1}$，则$e^{A t}=P e^{B t} P^{-1}$</p>
+<p>利用矩阵的指数函数的性质，回到$\frac{d \mathbf{u}}{d t}=A \mathbf{u}$的问题<br>若$A$可对角化，即存在可逆矩阵$S$，使$S^{-1} A S=\Lambda$为对角矩阵，即有$A=S \Lambda S^{-1}$。因为对于方程$\frac{d \mathbf{u}}{d t}=A \mathbf{u}$总有解</p>
+<script type="math/tex; mode=display">
+\mathbf{u}(t)=e^{A t} \mathbf{u}(0)=S e^{\Lambda t} S^{-1} \mathbf{u}(0)</script><script type="math/tex; mode=display">
+=\left(\mathrm{x}_{1}, \cdots, \mathrm{x}_{n}\right)\left(\begin{array}{ccc}{e^{\lambda_{1} t}} & {} & {} \\ {} & {\ddots} & {} \\ {} & {} & {e^{\lambda_{n} t}}\end{array}\right)\left(\begin{array}{c}{c_{1}} \\ {\vdots} \\ {c_{n}}\end{array}\right)</script><script type="math/tex; mode=display">
+=c_{1} e^{\lambda_{1} t} \mathbf{x}_{1}+\cdots+c_{n} e^{\lambda_{n} t} \mathbf{x}_{n}</script><p>其中$S^{-1} \mathbf{u}(0)=\mathbf{c}$，即$\mathbf{u}(0)=S \mathbf{c}=c<em>{1} \mathbf{x}</em>{1}+\cdots+c<em>{n} \mathbf{x}</em>{n}$</p>
+<p>若$A$不能对角化，如何求解呢？<br>对任何方阵$A$，总存在可逆矩阵$P$，有$P^{-1} A P=\Lambda+N$，<strong>即方阵A可以相似变换为一个对角矩阵$\Lambda$和一个幂零矩阵$N$的和</strong>，而且对角矩阵$\Lambda$和幂零矩阵$N$是可交换的。即$A=P (\Lambda+N) P^{-1}$<br>因为方程$\frac{d \mathbf{u}}{d t}=A \mathbf{u}$总有解$\mathbf{u}(t)=e^{A t} \mathbf{u}(0)=P e^{(\Lambda+N)t} P^{-1} \mathbf{u}(0)=P e^{\Lambda t} e^{N t} P^{-1} \mathbf{u}(0)$。其中$e^{\Lambda t}$按照矩阵的指数函数的性质，有</p>
+<script type="math/tex; mode=display">
+e^{\Lambda t}=\left(\begin{array}{ccc}{e^{\lambda_{1} t}} & {} & {} \\ {} & {\ddots} & {} \\ {} & {} & {e^{\lambda_{n} t}}\end{array}\right)</script><p>而$N$是幂零矩阵，$e^{N t}$按矩阵的指数函数定义展开，计算结果必为有限个项，高次幂的项都为零。</p>
+<h3 id="微分方程-frac-d-mathbf-u-d-t-A-mathbf-u-的稳定性"><a href="#微分方程-frac-d-mathbf-u-d-t-A-mathbf-u-的稳定性" class="headerlink" title="微分方程$\frac{d \mathbf{u}}{d t}=A \mathbf{u}$的稳定性"></a>微分方程$\frac{d \mathbf{u}}{d t}=A \mathbf{u}$的稳定性</h3><p>和差分方程一样，$t \rightarrow \infty$时，决定解$\mathbf{u}(t)$状态的是$A$的特征值。若$A$可对角化，则$\frac{d \mathbf{u}}{d t}=A \mathbf{u}$有通解：</p>
+<script type="math/tex; mode=display">
+\mathbf{u}(t)=c_{1} e^{\lambda_{1} t} \mathbf{x}_{1}+\cdots+c_{n} e^{\lambda_{n} t} \mathbf{x}_{n}</script><p>（1）若所有$R e \lambda_{i}&lt;0$，则$e^{A t} \rightarrow 0$，解是稳定的。</p>
+<p>（2）若所有$Re \lambda_{i} \leq 0$，则$e^{A t}$有界，解是中性稳定的。</p>
+<p>（3）若至少有一个特征值满足$Re \lambda&gt;0$，则$e^{A t}$无界，解是不稳定的。<br>（Re是一个数学符号，表示取一个复数的实部）</p>
+<h2 id="4-实对称矩阵"><a href="#4-实对称矩阵" class="headerlink" title="4.实对称矩阵"></a>4.实对称矩阵</h2><p>若矩阵$A$满足$A^{T}=A$，则称$A$为是<strong>对称矩阵</strong>。实对称矩阵应用广泛，理论丰富、优美。</p>
+<p>定理：实对称矩阵的特征值都是实数<br>证明：设实对称矩阵$A$有$A \mathbf{x}=\lambda \mathbf{x}, \mathbf{x} \neq \mathbf{0}$。则</p>
+<script type="math/tex; mode=display">
+\left.\begin{array}{l}{\overline{\mathbf{x}}^{T} A \mathbf{x}=\lambda \overline{\mathbf{x}}^{T} \mathbf{x}} \\ {\overline{\mathbf{x}}^{T} A \mathbf{x}=\overline{\mathbf{x}}^{T} \bar{A}^{T} \mathbf{x}=(\overline{A \mathbf{x}})^{T} \mathbf{x}=\bar{\lambda} \overline{\mathbf{x}}^{T} \mathbf{x},}\end{array}\right\} \Longrightarrow(\lambda-\bar{\lambda}) \overline{\mathbf{x}}^{T} \mathbf{x}=0</script><p>因为$\mathrm{x} \neq 0, \overline{\mathrm{x}}^{T} \mathrm{x}&gt;0$，故$\bar{\lambda}=\lambda$，即$\lambda$为实数。</p>
+<hr>
+<p>定理：实对称矩阵的属于不同特征值的特征向量相互正交<br>证明：设$\lambda$和$\mu$是实对称矩阵$A$的两互异特征值（由前面定理$\lambda, \mu$是实数），$\mathbf{X}, \mathbf{Y}$是相应的特征向量，即$A \mathbf{x}=\lambda \mathbf{x}, A \mathbf{y}=\mu \mathbf{y}$。于是有</p>
+<script type="math/tex; mode=display">
+\left.\begin{array}{l}{\mathbf{y}^{T} A \mathbf{x}=\lambda \mathbf{y}^{T} \mathbf{x}} \\ {\mathbf{y}^{T} A \mathbf{x}=\mathbf{y}^{T} A^{T} \mathbf{x}=(A \mathbf{y})^{T} \mathbf{x}=\mu \mathbf{y}^{T} \mathbf{x},}\end{array}\right\} \Longrightarrow(\lambda-\mu) \mathbf{y}^{T} \mathbf{x}=0</script><p>而$\lambda \neq \mu$，故$\mathbf{y}^{T} \mathbf{x}=0$</p>
+<hr>
+<p>定理：设$A$为n阶对称矩阵，则必有正交矩阵$P$，使得$P^{-1} A P=P^{\mathrm{T}} A P=\Lambda$，其中$\mathbf{\Lambda}$是以$A$的n个特征值为对角元的对角矩阵。</p>
+<hr>
+<p>由前面定理可知，对任何实对称矩阵$A$，有$Q^{T} A Q=\Lambda$，其中$Q=\left(\mathbf{q}<em>{1}, \cdots, \mathbf{q}</em>{n}\right)$为正交矩阵，$\Lambda=\operatorname{diag}\left(\lambda<em>{1}, \cdots, \lambda</em>{n}\right), A \mathbf{q}<em>{i}=\lambda</em>{i} \mathbf{q}_{i}$，于是</p>
+<script type="math/tex; mode=display">
+A=Q \Lambda Q^{T}=\left(\mathbf{q}_{1}, \cdots, \mathbf{q}_{n}\right)\left(\begin{array}{ccc}{\lambda_{1}} & {} & {} \\ {} & {\ddots} & {} \\ {} & {} & {\lambda_{n}}\end{array}\right)\left(\begin{array}{c}{\mathbf{q}_{1}^{T}} \\ {\vdots} \\ {\mathbf{q}_{n}^{T}}\end{array}\right)</script><p>即有<strong>特征分解</strong>（eigen decomposition）：又称为<strong>谱分解</strong>（Spectral decomposition）</p>
+<script type="math/tex; mode=display">
+A=\lambda_{1} \mathbf{q}_{1} \mathbf{q}_{1}^{T}+\cdots+\lambda_{n} \mathbf{q}_{n} \mathbf{q}_{n}^{T}</script><p>注记：$P<em>{j}:=\mathbf{q}</em>{j} \mathbf{q}<em>{j}^{T}$为到由特征向量$\mathbf{q}</em>{j}$张成的一维空间的投影矩阵。任意实对称矩阵可以表示为秩1投影矩阵的和。</p>
+<hr>
+<p>定理：实对称矩阵的正特征值数与正主元数相同（惯性定理）</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" rel="tag"># 线性代数</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/08/linear_algebra_11/" rel="prev" title="线性代数（11）：方阵的行列式及其性质">
+      <i class="fa fa-chevron-left"></i> 线性代数（11）：方阵的行列式及其性质
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/24/Fibonacci/" rel="next" title="斐波那契数列的通项公式">
+      斐波那契数列的通项公式 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%96%B9%E9%98%B5%E7%9A%84%E7%89%B9%E5%BE%81%E5%80%BC%E4%B8%8E%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F"><span class="nav-number">1.</span> <span class="nav-text">1. 方阵的特征值与特征向量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%9B%B8%E4%BC%BC%E7%9F%A9%E9%98%B5"><span class="nav-number">2.</span> <span class="nav-text">2.相似矩阵</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%80%BC%E7%9A%84%E4%BB%A3%E6%95%B0%E9%87%8D%E6%95%B0%E5%92%8C%E5%87%A0%E4%BD%95%E9%87%8D%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">特征值的代数重数和几何重数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Jordan-%E6%A0%87%E5%87%86%E5%BD%A2"><span class="nav-number">2.2.</span> <span class="nav-text">Jordan 标准形</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%89%B9%E5%BE%81%E5%80%BC%E5%9C%A8%E5%B7%AE%E5%88%86%E6%96%B9%E7%A8%8B%E5%92%8C%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">3. 特征值在差分方程和微分方程中的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%80%BC%E5%9C%A8%E5%B7%AE%E5%88%86%E6%96%B9%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">3.1.</span> <span class="nav-text">特征值在差分方程中的应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%80%BC%E5%9C%A8%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">3.2.</span> <span class="nav-text">特征值在微分方程中的应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AE%E5%88%86%E6%96%B9%E7%A8%8B-frac-d-mathbf-u-d-t-A-mathbf-u-%E7%9A%84%E7%A8%B3%E5%AE%9A%E6%80%A7"><span class="nav-number">3.3.</span> <span class="nav-text">微分方程$\frac{d \mathbf{u}}{d t}&#x3D;A \mathbf{u}$的稳定性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%AE%9E%E5%AF%B9%E7%A7%B0%E7%9F%A9%E9%98%B5"><span class="nav-number">4.</span> <span class="nav-text">4.实对称矩阵</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">David</p>
+  <div class="site-description" itemprop="description">Blog my daily study on machine learning, mathematics & computer science etc.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">180k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:44</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

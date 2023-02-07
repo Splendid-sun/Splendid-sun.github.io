@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"splendid-sun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="GloVe: Global Vectors for Word Representation">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GloVe">
+<meta property="og:url" content="https://splendid-sun.github.io/2023/01/25/GloVe/index.html">
+<meta property="og:site_name" content="Hello,David!">
+<meta property="og:description" content="GloVe: Global Vectors for Word Representation">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/GloVe/weight_function.png?raw=true">
+<meta property="article:published_time" content="2023-01-25T07:31:56.000Z">
+<meta property="article:modified_time" content="2023-01-27T05:52:02.000Z">
+<meta property="article:author" content="David">
+<meta property="article:tag" content="CS224n">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/GloVe/weight_function.png?raw=true">
+
+<link rel="canonical" href="https://splendid-sun.github.io/2023/01/25/GloVe/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>GloVe | Hello,David!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello,David!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">There is geometry in the humming of the strings, there is music in the spacing of the spheres.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2023/01/25/GloVe/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GloVe
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-01-25 15:31:56" itemprop="dateCreated datePublished" datetime="2023-01-25T15:31:56+08:00">2023-01-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-01-27 13:52:02" itemprop="dateModified" datetime="2023-01-27T13:52:02+08:00">2023-01-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CS224n/" itemprop="url" rel="index"><span itemprop="name">CS224n</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a target="_blank" rel="noopener" href="https://nlp.stanford.edu/pubs/glove.pdf">GloVe: Global Vectors for Word Representation</a></p>
+<span id="more"></span>
+<p>GloVe (Global Vectors)名称由来：因为这个模型捕获了语料库全局统计信息</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>做自然语言处理的时候很多时候会用的Word Embedding，目前常用的方法是word2vec算法训练词向量。不过训练词向量的方法有很多，今天介绍GloVe算法。</p>
+<p>模型输入：语料库 corpus</p>
+<p>模型输出：每个词的表示向量</p>
+<h2 id="基本思想"><a href="#基本思想" class="headerlink" title="基本思想"></a>基本思想</h2><p>要讲GloVe模型的思想方法，我们先介绍两个其他方法：</p>
+<p>一个是基于奇异值分解（SVD）的LSA算法，该方法对word-word矩阵进行奇异值分解。此处使用的是全局统计特征。</p>
+<p>另一个方法是word2vec算法，该算法可以分为skip-gram 和 continuous bag-of-words（CBOW）两类,但都是基于局部滑动窗口计算的。即，该方法利用了局部的上下文特征（local context）</p>
+<p>LSA和word2vec作为两大类方法的代表，一个是利用了全局特征的矩阵分解方法，一个是利用局部上下文的方法。</p>
+<p>GloVe模型就是将这两中特征合并到一起的，即使用了语料库的全局统计（overall statistics）特征，也使用了局部的上下文特征（即滑动窗口）。为了做到这一点GloVe模型引入了Co-occurrence Probabilities Matrix。</p>
+<p>notation:<br>$X$: co-occurrence matrix<br>$X<em>{i j}$: 语料库中出现在word i上下文中word j的次数<br>$X_i=\sum_k X</em>{i k}$，出现在word i上下文中所有的word的次数<br>$P<em>{i j}=P(j \mid i)=\frac{X</em>{i j}}{X_i}$，word j出现在word i上下文的概率<br>由以上概念引申出共现概率矩阵（Co-occurrence Probabilities matrix）</p>
+<script type="math/tex; mode=display">
+\begin{array}{l|cccc}
+\text { Probability and Ratio } & k=\text { solid } & k=\text { gas } & k=\text { water } & k=\text { fashion } \\
+\hline P(k \mid \text { ice }) & 1.9 \times 10^{-4} & 6.6 \times 10^{-5} & 3.0 \times 10^{-3} & 1.7 \times 10^{-5} \\
+P(k \mid \text { steam }) & 2.2 \times 10^{-5} & 7.8 \times 10^{-4} & 2.2 \times 10^{-3} & 1.8 \times 10^{-5} \\
+P(k \mid \text { ice }) / P(k \mid \text { steam }) & 8.9 & 8.5 \times 10^{-2} & 1.36 & 0.96
+\end{array}</script><p>solid 与 ice 相关，与steam 不相关<br>gas 与 ice 不相关，与steam 相关<br>water 与 ice，steam 都相关<br>fashion 与 ice，steam 都不相关</p>
+<p>由Co-occurrence Probabilities matrix可以看出Ratio $=\frac{P<em>{i k}}{P</em>{j k}}$的取值是有规律的。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>ratio i,j,k的值</strong></th>
+<th><strong>单词j,k相关</strong></th>
+<th><strong>单词j,k不相关</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>单词i,k相关</strong></td>
+<td>趋近1</td>
+<td>很大</td>
+</tr>
+<tr>
+<td><strong>单词i,k不相关</strong></td>
+<td>很小</td>
+<td>趋近1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>也就是说Ratio值能够反映word之间的相关性，<strong>而GloVe模型就是利用了这个Ratio值</strong>。<br>再明确一下，<strong>GloVe模型的目标就是获取每一个word的向量表示 $\mathrm{v}$</strong>。不妨假设现在已经得到了word $i, j, k$ 的词 向量 $w<em>i, w_j, w_k$ 。**GloVe认为，这三个向量通过某种函数的作用后所呈现出来的规律和Ratio $=\frac{P</em>{i k}}{P_{j k}}$ 具有一致性，即相等，也就可以认为词向量中包含了共现概率矩阵中的信息。**<br>假设这个末知的函数是 $F$, 则:</p>
+<script type="math/tex; mode=display">
+F\left(w_i, w_j, w_k\right)=\frac{P_{i k}}{P_{j k}}</script><p>右侧的 $\frac{P<em>{ik}}{P</em>{jk}}$ 可以通过统计求的；<br>左侧的 $w_i, w_j, w_k$ 是我们模型要求的量；<br>同时函数 $F$ 是末知的。<br>如果能够将函数F的形式确定下来，就可以通过优化算法求解词向量了。那么GloVe模型的作者是怎么将$F$确定下来的呢?</p>
+<p>1.$\frac{P<em>{ik}}{P</em>{j k}}$ 考察了 $i, j, k$ 三个word两两之间的相似关系，不妨单独考察 $i, j$ 两个词和他们词向量 $w_i, w_j$ ，线性空间中旳相似关系自然想到的是两个向量的差 $\left(v_i-v_j\right)$ 。所以F函数的形式可以是</p>
+<script type="math/tex; mode=display">
+F\left(w_i-w_j, w_k\right)=\frac{P_{i k}}{P_{j k}}</script><p>2.$\frac{P<em>{i k}}{P</em>{j k}}$ 是一个标量，而F是作用在两个向量上的，向量和标量之间的关系自然想到了使用内积。所以F函数的形式可以进一步确定为</p>
+<script type="math/tex; mode=display">
+F\left(\left(w_i-w_j\right)^T w_k\right)=F\left(w_i^T w_k-w_j^T w_k\right)=\frac{P_{i k}}{P_{j k}}</script><p>3.到此为止模型公式的形式是 $F\left(w<em>i^T w_k-w_j^T w_k\right)=\frac{P</em>{i k}}{P_{j k}}$ 。左边是差，右边是商，模型通过将F取作 $\exp$ 来将差和商关联起来</p>
+<script type="math/tex; mode=display">
+\exp \left(w_i^T w_k-w_j^T w_k\right)=\frac{\exp \left(w_i^T w_k\right)}{\exp \left(w_j^T w_k\right)}=\frac{P_{i k}}{P_{j k}}</script><p>4.现在只需要让分子分母分别相等，上式就能够成立，所以</p>
+<script type="math/tex; mode=display">
+\exp \left(w_i^T w_k\right)=P_{i k}, \exp \left(w_j^T w_k\right)=P_{j k}</script><p>5.所以只需要在整个文本库中考察$\exp \left(w<em>i^T w_k\right)=P</em>{i k}=\frac{X_{i k}}{X_i}$，即</p>
+<script type="math/tex; mode=display">
+w_i^T w_k=\log \left(\frac{X_{i k}}{X_i}\right)=\log X_{i k}-\log X_i</script><p>6.作为向量，交换 $i$ 和 $k$ 的顺序 $w<em>i^T w_k$ 和 $w_k^T w_i$ 是相等的，即公式左边对于 $i$ 和 $k$ 的顺序是不敏感的，但是公式右边交换 $i$ 和 $k$ 的顺序 $\log X</em>{i k}-\log X<em>i \neq \log X</em>{k i}-\log X_k$ 。为了解决这个对称性问题 ，模型引入了两个偏置项 $b_i, b_k$,从而将模型变成了</p>
+<script type="math/tex; mode=display">
+\log X_{i k}=w_i^T w_k+b_i+b_k</script><p>7.上面旳公式只是理想情况下，在实际实验中左右两边只能要求接近。从而就有了代价函数cost function：</p>
+<script type="math/tex; mode=display">
+J=\sum_{i k}\left(w_i^T w_k+b_i+b_k-\log X_{i k}\right)^2</script><p>8.根据经验，如果两个词共同出现的次数越多，那么这两个词在代价函数中的影响就应该越大，所以可以根据两个词共同出现的次数设计一个权重项来对代价函数中的每一项进行加权：</p>
+<script type="math/tex; mode=display">
+J=\sum_{i k} f\left(X_{i k}\right)\left(w_i^T w_k+b_i+b_k-\log X_{i k}\right)^2</script><p>模型认为权重函数 $f$ 应该符合以下三个特点：</p>
+<ol>
+<li>$f(0)=0$ （如果两个词没有共同出现过，权重就是0）； </li>
+<li>$f(x)$ 必项是非减函数 (两个词共同出现的次数多，反而权重变小了，违反了设置权重项的初衷）；</li>
+<li>$f(x)$ 对于较大的 $x$ 不能取太大的值(就像是汉语中”的”这个字，在很多文章中都会出现很多次，但是其在文中的重要程度非常小)。综合这三条特点的 $f(x)$ 定义为：</li>
+</ol>
+<script type="math/tex; mode=display">
+f(x)=\left\{\begin{array}{c}
+\left(\frac{x}{x_{\max }}\right)^\alpha, \text { if } x<x_{\max } \\
+1, \text { otherwise }
+\end{array}\right.</script><p>根据经验，GloVe作者认为$x_{\max }=100, \alpha=\frac{3}{4}$是一个比较好的选择</p>
+<p><img src="https://github.com/Splendid-sun/Hexo-photo/blob/master/GloVe/weight_function.png?raw=true" alt="weight function"></p>
+<h2 id="Least-Squares-Objective"><a href="#Least-Squares-Objective" class="headerlink" title="Least Squares Objective"></a>Least Squares Objective</h2><p>GloVe也从另一个角度推导了这个公式。<br>不同的词向量学习方法最终都是基于语料库的共现统计信息，不同的模型之间应该存在一些共通性<br>GloVe类似skip-gram 模型，我们利用下式计算单词j出现在单词i的上下文的概率</p>
+<script type="math/tex; mode=display">
+Q_{i j}=\frac{\exp \left(\vec{u}_j^T \vec{v}_i\right)}{\sum_{w=1}^W \exp \left(\vec{u}_w^T \vec{v}_i\right)}</script><p>所以全局交叉熵为</p>
+<script type="math/tex; mode=display">
+J=-\sum_{i \in \text { corpus }} \sum_{j \in \text { context }(i)} \log Q_{i j}</script><p>利用Co-occurrence Matrix，我们可以将上式写为：</p>
+<script type="math/tex; mode=display">
+J=-\sum_{i=1}^W \sum_{j=1}^W X_{i j} \log Q_{i j}</script><p>如果定义上述损失函数，那么$Q_{i j}$的softmax分母计算需要很多计算量。为了解决这点，我们使用最小二乘损失函数来代替上述损失函数：</p>
+<script type="math/tex; mode=display">
+\hat{J}=\sum_{i=1}^W \sum_{j=1}^W X_i\left(\hat{P}_{i j}-\hat{Q}_{i j}\right)^2</script><p>其中</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\hat{P}_{i j} & =X_{i j} \\
+\hat{Q}_{i j} & =\exp \left(\vec{u}_j^T \vec{v}_i\right)
+\end{aligned}</script><p>由于指数函数可能会产生很大的值，所以对括号内的值取对数更容易减少误差：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\hat{J} & =\sum_{i=1}^W \sum_{j=1}^W X_i\left(\log (\hat{P}_{i j})-\log (\hat{Q}_{i j})\right)^2 \\
+& =\sum_{i=1}^W \sum_{j=1}^W X_i\left(\vec{u}_j^T \vec{v}_i-\log X_{i j}\right)^2
+\end{aligned}</script><p>注意到$X_i$不一定是最好的系数，更一般的形式为</p>
+<script type="math/tex; mode=display">
+\hat{J}=\sum_{i=1}^W \sum_{j=1}^W f\left(X_{i j}\right)\left(\vec{u}_j^T \vec{v}_i-\log X_{i j}\right)^2</script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CS224n/" rel="tag"># CS224n</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/01/22/CS224N-2/" rel="prev" title="Word2vec(CBOW,skip-gram,负采样,分层softmax)">
+      <i class="fa fa-chevron-left"></i> Word2vec(CBOW,skip-gram,负采样,分层softmax)
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/01/30/WordVector-Evalution/" rel="next" title="Evaluation of Word Vectors">
+      Evaluation of Word Vectors <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%80%9D%E6%83%B3"><span class="nav-number">2.</span> <span class="nav-text">基本思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Least-Squares-Objective"><span class="nav-number">3.</span> <span class="nav-text">Least Squares Objective</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">David</p>
+  <div class="site-description" itemprop="description">Blog my daily study on machine learning, mathematics & computer science etc.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">180k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:44</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

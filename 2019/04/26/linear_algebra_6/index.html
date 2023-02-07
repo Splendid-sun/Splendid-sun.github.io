@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"splendid-sun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="复习线性代数：LU分解 参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线性代数（6）：LU分解">
+<meta property="og:url" content="https://splendid-sun.github.io/2019/04/26/linear_algebra_6/index.html">
+<meta property="og:site_name" content="Hello,David!">
+<meta property="og:description" content="复习线性代数：LU分解 参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-04-26T03:56:14.000Z">
+<meta property="article:modified_time" content="2019-04-26T07:22:03.000Z">
+<meta property="article:author" content="David">
+<meta property="article:tag" content="线性代数">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://splendid-sun.github.io/2019/04/26/linear_algebra_6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>线性代数（6）：LU分解 | Hello,David!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello,David!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">There is geometry in the humming of the strings, there is music in the spacing of the spheres.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2019/04/26/linear_algebra_6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          线性代数（6）：LU分解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-04-26 11:56:14 / 修改时间：15:22:03" itemprop="dateCreated datePublished" datetime="2019-04-26T11:56:14+08:00">2019-04-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" itemprop="url" rel="index"><span itemprop="name">线性代数</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>复习线性代数：LU分解</p>
+<p>参考资料:<br>清华大学数学科学系-线性代数-马辉<br>《工程数学 <strong>线性代数</strong> 第六版》 同济大学数学系 高等教育出版社<br>Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课</p>
+<span id="more"></span>
+<h1 id="LU分解"><a href="#LU分解" class="headerlink" title="LU分解"></a>LU分解</h1><p>回忆消元法的过程：利用初等行变换，方阵$A \longrightarrow$上三角矩阵$U$，使用矩阵语言：$E A=U$，$E$是初等矩阵乘积。<br>$A=E^{-1} U$，将矩阵$A$分解成一个下三角矩阵（lower triangular matrix）和一个上三角矩阵的乘积（upper triangular matrix），$U$为上三角矩阵，对角元为$A$的主元。$L$为下三角矩阵，对角元为$1$，乘数$l_{ij}$位于对角元下方。有时，可以把$U$写成$DU$的形式$A=LDU$，$D$是对角矩阵。</p>
+<h1 id="Gauss消元法的计算量"><a href="#Gauss消元法的计算量" class="headerlink" title="Gauss消元法的计算量"></a>Gauss消元法的计算量</h1><p>含乘除法次数：$\frac{n^{3}}{3}+n^{2}-\frac{n}{3} \approx \frac{n^{3}}{3}$<br>加减法次数：$\frac{n^{3}}{3}+\frac{n^{2}}{2}-\frac{5 n}{6} \approx \frac{n^{3}}{3}$</p>
+<h1 id="LU分解的存在性和唯一性"><a href="#LU分解的存在性和唯一性" class="headerlink" title="LU分解的存在性和唯一性"></a>LU分解的存在性和唯一性</h1><p>定理：设可逆矩阵$A$的顺序主子阵$A_{k}(k=1, \cdots, n)$均为可逆阵，则$A$有$LU$分解。</p>
+<p>定理：设$n$阶可逆阵$A$有$A=LU$，其中$L$为下三角矩阵，$U$为上三角矩阵，且$l<em>{i i}=1, u</em>{i i} \neq 0(1 \leq i \leq n)$，则分解唯一。<br>证明：设可逆阵$A$有两个$LU$分解：$A=L<em>{1} U</em>{1}=L<em>{2} U</em>{2}$，则</p>
+<script type="math/tex; mode=display">L_{1}^{-1} L_{2}=U_{1} U_{2}^{-1}</script><p>为对角阵。因$L<em>{1}, L</em>{2}$的对角元为$1$，故$L<em>{1}^{-1} L</em>{2}$对角元全为$1$。故$L<em>{1}^{-1} L</em>{2}=U<em>{1} U</em>{2}^{-1}=I$，即$L<em>{1}=L</em>{2}, U<em>{1}=U</em>{2}$。<br>同理，设可逆矩阵$A=L D U$，则分解唯一。</p>
+<h1 id="对称矩阵的-L-D-L-T-分解"><a href="#对称矩阵的-L-D-L-T-分解" class="headerlink" title="对称矩阵的$L D L^{T}$分解"></a>对称矩阵的$L D L^{T}$分解</h1><p>设可逆对称矩阵$A$不需换行，只通过消元能化成上三角矩阵$U$，即有$A=L D U$，则$A=A^{T}=U^{T} D L^{T}$。由$A=L D U$分解唯一性知$U=L^{T}$。故$A=L D L^{T}$。</p>
+<h1 id="置换矩阵permutation-matrix"><a href="#置换矩阵permutation-matrix" class="headerlink" title="置换矩阵permutation matrix"></a>置换矩阵permutation matrix</h1><p>定义：单位矩阵行重排后得到的矩阵称为置换矩阵<br>共有$n!$个$n$阶置换阵<br>置换阵的逆还是置换阵，置换阵的乘积仍是置换阵<br>置换阵$P$满足$P^{-1}=P^{T}$</p>
+<h1 id="P-A-L-U-分解"><a href="#P-A-L-U-分解" class="headerlink" title="$P A=L U$分解"></a>$P A=L U$分解</h1><p>定理：设$A$是一个$n$阶可逆阵，则存在置换阵$P$，使得$P A=L U$。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" rel="tag"># 线性代数</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/04/14/linear_algebra_5/" rel="prev" title="线性代数（5）：矩阵的逆">
+      <i class="fa fa-chevron-left"></i> 线性代数（5）：矩阵的逆
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/05/02/linear_algebra_7/" rel="next" title="线性代数（7）：向量空间">
+      线性代数（7）：向量空间 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LU%E5%88%86%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">LU分解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Gauss%E6%B6%88%E5%85%83%E6%B3%95%E7%9A%84%E8%AE%A1%E7%AE%97%E9%87%8F"><span class="nav-number">2.</span> <span class="nav-text">Gauss消元法的计算量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LU%E5%88%86%E8%A7%A3%E7%9A%84%E5%AD%98%E5%9C%A8%E6%80%A7%E5%92%8C%E5%94%AF%E4%B8%80%E6%80%A7"><span class="nav-number">3.</span> <span class="nav-text">LU分解的存在性和唯一性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%B9%E7%A7%B0%E7%9F%A9%E9%98%B5%E7%9A%84-L-D-L-T-%E5%88%86%E8%A7%A3"><span class="nav-number">4.</span> <span class="nav-text">对称矩阵的$L D L^{T}$分解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%AE%E6%8D%A2%E7%9F%A9%E9%98%B5permutation-matrix"><span class="nav-number">5.</span> <span class="nav-text">置换矩阵permutation matrix</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#P-A-L-U-%E5%88%86%E8%A7%A3"><span class="nav-number">6.</span> <span class="nav-text">$P A&#x3D;L U$分解</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">David</p>
+  <div class="site-description" itemprop="description">Blog my daily study on machine learning, mathematics & computer science etc.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">180k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:44</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

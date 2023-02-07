@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"splendid-sun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="EM算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EM algorithm">
+<meta property="og:url" content="https://splendid-sun.github.io/2022/05/01/EM/index.html">
+<meta property="og:site_name" content="Hello,David!">
+<meta property="og:description" content="EM算法">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-01T05:43:27.000Z">
+<meta property="article:modified_time" content="2022-05-04T13:07:06.000Z">
+<meta property="article:author" content="David">
+<meta property="article:tag" content="EM">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://splendid-sun.github.io/2022/05/01/EM/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>EM algorithm | Hello,David!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello,David!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">There is geometry in the humming of the strings, there is music in the spacing of the spheres.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2022/05/01/EM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          EM algorithm
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-05-01 13:43:27" itemprop="dateCreated datePublished" datetime="2022-05-01T13:43:27+08:00">2022-05-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-05-04 21:07:06" itemprop="dateModified" datetime="2022-05-04T21:07:06+08:00">2022-05-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/EM/" itemprop="url" rel="index"><span itemprop="name">EM</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>EM算法</p>
+<span id="more"></span>
+<h1 id="（1）琴生不等式（Jensen’s-inequality）"><a href="#（1）琴生不等式（Jensen’s-inequality）" class="headerlink" title="（1）琴生不等式（Jensen’s inequality）"></a>（1）琴生不等式（Jensen’s inequality）</h1><p>如果函数$f(X)$是一个凸函数(convex function)，$X$是随机变量。我们有</p>
+<script type="math/tex; mode=display">\mathrm{E}[f(X)] \geq f(\mathrm{E} [X])</script><p>相反，如果函数$f(X)$是一个凹函数(concave function)，则有</p>
+<script type="math/tex; mode=display">\mathrm{E}[f(X)] \leq f(\mathrm{E} [X])</script><p>如果函数$f(X)$是严格凸(strictly convex)的，使不等式等号成立的充要条件是$P(X=\mathrm{E}[X]) = 1$，随机变量X是一个常数。</p>
+<p><strong>凸函数和凹函数的定义</strong>：若一个函数二阶可导，且$f^{\prime \prime}(x) \geq 0(\forall x \in \mathbb{R})$。或者如果函数的输入是一个向量，其Hessian矩阵是半正定的$H \succeq 0$。则函数是个凸函数。注意这是充分不必要条件，凸函数也可能是不可导的。相反，如果$f^{\prime \prime}(x) \leq 0(\forall x \in \mathbb{R})$或者$H \preceq 0$，则函数是凹函数。<br>如果$f^{\prime \prime}(x) &gt; 0(\forall x \in \mathbb{R})$或者$H \succ 0$，则称$f(X)$是严格凸(strictly convex)的。凹函数同理。</p>
+<h1 id="（2）the-EM-algorithm"><a href="#（2）the-EM-algorithm" class="headerlink" title="（2）the EM algorithm"></a>（2）the EM algorithm</h1><p>假设我们有一个估计问题，有一个训练集：$\left{x^{(1)}, \ldots, x^{(m)}\right}$，其中包含m个独立的样本。我们的模型是$p(x, z; \theta)$。我们希望拟合模型的参数$\theta$，模型的对数似然是：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\ell(\theta) &=\sum_{i=1}^{m} \log p(x ; \theta) \\
+&=\sum_{i=1}^{m} \log \sum_{z} p(x, z ; \theta)
+\end{aligned}</script><p>其中$z^{(i)}$是隐变量，是未知的，观察不到的。<strong>EM算法能有效地求解含隐变量最大似然估计问题</strong>。因为$z^{(i)}$是隐变量，显式地求解这个似然$\ell(\theta)$很难。EM算法的策略就是不断地为对数似然构建一个下界(lower-bound)(E-step)，然后优化这个下界(M-step)。</p>
+<p>对每个样本，随机变量$z^{(i)}$具有某种分布$Q<em>{i}$，满足$(\sum</em>{z} Q<em>{i}(z)=1, Q</em>{i}(z) \geq 0)$。</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\ell(\theta)= \sum_{i} \log p\left(x^{(i)} ; \theta\right) &=\sum_{i} \log \sum_{z^{(i)}} p\left(x^{(i)}, z^{(i)} ; \theta\right) \\
+&=\sum_{i} \log \sum_{z^{(i)}} Q_{i}\left(z^{(i)}\right) \frac{p\left(x^{(i)}, z^{(i)} ; \theta\right)}{Q_{i}\left(z^{(i)}\right)} \\
+& \geq \sum_{i} \sum_{z^{(i)}} Q_{i}\left(z^{(i)}\right) \log \frac{p\left(x^{(i)}, z^{(i)} ; \theta\right)}{Q_{i}\left(z^{(i)}\right)}
+\end{aligned}</script><p>最后一步利用了琴生不等式，因为$f(x)=\log (x)$ 是一个严格凹函数，其二阶导$f^{\prime \prime}(x)=-1 / x^{2}&lt;0$。<br>通过琴生不等式，我们有：</p>
+<script type="math/tex; mode=display">
+f\left(\mathrm{E}_{z^{(i)} \sim Q_{i}}\left[\frac{p\left(x^{(i)}, z^{(i)} ; \theta\right)}{Q_{i}\left(z^{(i)}\right)}\right]\right) \geq \mathrm{E}_{z^{(i)} \sim Q_{i}}\left[f\left(\frac{p\left(x^{(i)}, z^{(i)} ; \theta\right)}{Q_{i}\left(z^{(i)}\right)}\right)\right]</script><p>下标$z^{(i)} \sim Q<em>{i}$表明这个期望是关于变量$z^{(i)}$的，其分布为$Q</em>{i}$。</p>
+<p>现在，对任意分布$Q<em>{i}$，我们给出了似然$\ell(\theta)$的下界。$Q</em>{i}$的分布有无数可能，我们选择哪一个比较好呢？给定当下对参数$\theta$的猜测，我们希望选择一个$Q_{i}$，使这个下界紧贴着我们的似然$\ell(\theta)$。根据琴生不等式等号成立的条件，我们需要</p>
+<script type="math/tex; mode=display">
+\frac{p\left(x^{(i)}, z^{(i)} ; \theta\right)}{Q_{i}\left(z^{(i)}\right)}=c</script><p>其中c是常量，说明：</p>
+<script type="math/tex; mode=display">
+Q_{i}\left(z^{(i)}\right) \propto p\left(x^{(i)}, z^{(i)} ; \theta\right)</script><p>而我们又知道：</p>
+<script type="math/tex; mode=display">
+\sum_{z} Q_{i}\left(z^{(i)}\right)=1</script><p>所以：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+Q_{i}\left(z^{(i)}\right) &=\frac{p\left(x^{(i)}, z^{(i)} ; \theta\right)}{\sum_{z} p\left(x^{(i)}, z ; \theta\right)} \\
+&=\frac{p\left(x^{(i)}, z^{(i)} ; \theta\right)}{p\left(x^{(i)} ; \theta\right)} \\
+&=p\left(z^{(i)} \mid x^{(i)} ; \theta\right)
+\end{aligned}</script><p>所以，使琴生不等式等号成立，我们只需要令$Q_{i}$等于随机变量$z^{(i)} \mid x^{(i)}$的后验分布。</p>
+<h2 id="EM算法的步骤"><a href="#EM算法的步骤" class="headerlink" title="EM算法的步骤"></a>EM算法的步骤</h2><p>Repeat until convergence {<br>(E-step) For each $i$, set</p>
+<script type="math/tex; mode=display">
+Q_{i}\left(z^{(i)}\right):=p\left(z^{(i)} \mid x^{(i)} ; \theta\right)</script><p>(M-step) Set</p>
+<script type="math/tex; mode=display">
+\theta:=\arg \max _{\theta} \sum_{i} \sum_{z^{(i)}} Q_{i}\left(z^{(i)}\right) \log \frac{p\left(x^{(i)}, z^{(i)} ; \theta\right)}{Q_{i}\left(z^{(i)}\right)}</script><p>}</p>
+<p>随着算法不断迭代，为什么这个算法会收敛呢？为什么对数似然会单调递增呢？假设我们迭代第t步，参数为$\theta^{(t)}$，在E-step我们选择$Q_{i}^{(t)}\left(z^{(i)}\right):=p\left(z^{(i)} \mid x^{(i)} ; \theta^{(t)}\right)$，这个选择确保琴生不等式等号成立，也就是在$\theta^{(t)}$时，似然紧贴着它的下界。我们有：</p>
+<script type="math/tex; mode=display">
+\ell\left(\theta^{(t)}\right)=\sum_{i} \sum_{z^{(i)}} Q_{i}^{(t)}\left(z^{(i)}\right) \log \frac{p\left(x^{(i)}, z^{(i)} ; \theta^{(t)}\right)}{Q_{i}^{(t)}\left(z^{(i)}\right)}</script><p>我们在M-step找一个$\theta^{(t+1)}$，</p>
+<script type="math/tex; mode=display">
+\theta^{(t+1)}:=\arg \max _{\theta} \sum_{i} \sum_{z^{(i)}} Q_{i}\left(z^{(i)}\right) \log \frac{p\left(x^{(i)}, z^{(i)} ; \theta\right)}{Q_{i}\left(z^{(i)}\right)}</script><p>我们有</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\ell\left(\theta^{(t+1)}\right) & \geq \sum_{i} \sum_{z^{(i)}} Q_{i}^{(t)}\left(z^{(i)}\right) \log \frac{p\left(x^{(i)}, z^{(i)} ; \theta^{(t+1)}\right)}{Q_{i}^{(t)}\left(z^{(i)}\right)} \\
+& \geq \sum_{i} \sum_{z^{(i)}} Q_{i}^{(t)}\left(z^{(i)}\right) \log \frac{p\left(x^{(i)}, z^{(i)} ; \theta^{(t)}\right)}{Q_{i}^{(t)}\left(z^{(i)}\right)} \\
+&=\ell\left(\theta^{(t)}\right)
+\end{aligned}</script><p>所以</p>
+<script type="math/tex; mode=display">
+\ell\left(\theta^{(t+1)}\right) \geq \ell\left(\theta^{(t)}\right)</script><p>所以EM算法一定是单调收敛的。</p>
+<p>其实可以把EM算法看成是coordinate ascent。E-step看成是固定$\theta$优化$Q$。M-step可以看成是固定$Q$优化$\theta$。</p>
+<script type="math/tex; mode=display">
+J(Q, \theta)=\sum_{i} \sum_{z^{(i)}} Q_{i}\left(z^{(i)}\right) \log \frac{p\left(x^{(i)}, z^{(i)} ; \theta\right)}{Q_{i}\left(z^{(i)}\right)}</script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/EM/" rel="tag"># EM</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/01/03/svm_summary/" rel="prev" title="支持向量机总结">
+      <i class="fa fa-chevron-left"></i> 支持向量机总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/01/Decision-tree/" rel="next" title="决策树">
+      决策树 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%EF%BC%881%EF%BC%89%E7%90%B4%E7%94%9F%E4%B8%8D%E7%AD%89%E5%BC%8F%EF%BC%88Jensen%E2%80%99s-inequality%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">（1）琴生不等式（Jensen’s inequality）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%EF%BC%882%EF%BC%89the-EM-algorithm"><span class="nav-number">2.</span> <span class="nav-text">（2）the EM algorithm</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#EM%E7%AE%97%E6%B3%95%E7%9A%84%E6%AD%A5%E9%AA%A4"><span class="nav-number">2.1.</span> <span class="nav-text">EM算法的步骤</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">David</p>
+  <div class="site-description" itemprop="description">Blog my daily study on machine learning, mathematics & computer science etc.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">180k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:44</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

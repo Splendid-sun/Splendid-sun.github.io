@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"splendid-sun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="清华大学线性代数（2）课程第三讲：奇异值分解 参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常推荐！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线性代数（14）：奇异值分解（Singular Value Decomposition）">
+<meta property="og:url" content="https://splendid-sun.github.io/2020/02/23/linear_algebra_14/index.html">
+<meta property="og:site_name" content="Hello,David!">
+<meta property="og:description" content="清华大学线性代数（2）课程第三讲：奇异值分解 参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常推荐！">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-02-23T09:32:50.000Z">
+<meta property="article:modified_time" content="2021-04-08T02:29:07.000Z">
+<meta property="article:author" content="David">
+<meta property="article:tag" content="线性代数">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://splendid-sun.github.io/2020/02/23/linear_algebra_14/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>线性代数（14）：奇异值分解（Singular Value Decomposition） | Hello,David!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello,David!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">There is geometry in the humming of the strings, there is music in the spacing of the spheres.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2020/02/23/linear_algebra_14/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          线性代数（14）：奇异值分解（Singular Value Decomposition）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-02-23 17:32:50" itemprop="dateCreated datePublished" datetime="2020-02-23T17:32:50+08:00">2020-02-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-08 10:29:07" itemprop="dateModified" datetime="2021-04-08T10:29:07+08:00">2021-04-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" itemprop="url" rel="index"><span itemprop="name">线性代数</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>清华大学线性代数（2）课程第三讲：奇异值分解</p>
+<p>参考资料:<br>清华大学数学科学系-线性代数-马辉<br>《工程数学 <strong>线性代数</strong> 第六版》 同济大学数学系 高等教育出版社<br>Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常<strong>推荐</strong>！</p>
+<span id="more"></span>
+<h1 id="问题：如何“对角化”-m-times-n-矩阵？"><a href="#问题：如何“对角化”-m-times-n-矩阵？" class="headerlink" title="问题：如何“对角化”$m \times n$矩阵？"></a>问题：如何“对角化”$m \times n$矩阵？</h1><h2 id="1-奇异值分解（Singular-Value-Decomposition）"><a href="#1-奇异值分解（Singular-Value-Decomposition）" class="headerlink" title="1.奇异值分解（Singular Value Decomposition）"></a>1.奇异值分解（Singular Value Decomposition）</h2><p>设$A$是一个$m \times n$矩阵，则存在$m$阶正交矩阵$U$和$n$阶正交矩阵$V$，满足</p>
+<script type="math/tex; mode=display">
+A=U\left(\begin{array}{cccc}
+{\sigma_{1}} & {} & {} & {} \\
+{} & {\ddots} & {} & {} \\
+{} & {} & {\sigma_{r}} & {} \\
+{} & {} & {} & {0}
+\end{array}\right) V^{T}=: U \Sigma V^{T}</script><p>其中$r=\operatorname{rank} A$。习惯上，设$\sigma<em>{1} \geq \sigma</em>{2} \geq \cdots \geq \sigma<em>{r}&gt;0$。称$\sigma</em>{1}, \cdots, \sigma_{r}$为<strong>奇异值（singular value）</strong>。称$U$和$V$的前r列向量为<strong>奇异向量（singular vector）</strong>。这个分解为<strong>奇异值分解</strong>，简称$SVD$，它是线性代数中最重要的一类分解。</p>
+<p>其中矩阵$U$和矩阵$V$用列向量表示为：</p>
+<script type="math/tex; mode=display">
+U=\left(\mathbf{u}_{1} \cdots \mathbf{u}_{r} \mathbf{u}_{r+1} \cdots \mathbf{u}_{m}\right), V=\left(\mathbf{v}_{1} \cdots \mathbf{v}_{r} \mathbf{v}_{r+1} \cdots \mathbf{v}_{n}\right)</script><p>因为$U$和$V$都是正交矩阵，所以有</p>
+<script type="math/tex; mode=display">
+A_{m \times n} V_{n \times n}=U_{m \times m} \Sigma_{m \times n}</script><p>其中$V^{T} V=I<em>{n}, U^{T} U=I</em>{m}$，也可以把奇异值分解描述为$r$个秩一矩阵之和</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&A=U \Sigma V^{T},(SVD)\\
+&A=\sigma_{1} \mathbf{u}_{1} \mathbf{v}_{1}^{T}+\cdots+\sigma_{r} \mathbf{u}_{r} \mathbf{v}_{r}^{T}
+\end{aligned}</script><p>还有</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+A \mathbf{v}_{i} &=\sigma_{i} \mathbf{u}_{i}\quad(i=1, \cdots, r) \\
+A^{T} \mathbf{u}_{i} &=\sigma_{i} \mathbf{v}_{i}\quad(i=1, \cdots, r) \\
+A \mathbf{v}_{j}=& \mathbf{0}\quad(j=r+1, \cdots, n) \\
+A^{T} \mathbf{u}_{k} &=\mathbf{0}\quad(k=r+1, \cdots, m)
+\end{aligned}</script><p>有</p>
+<script type="math/tex; mode=display">
+\Rightarrow A^{T} A \mathbf{v}_{i}=\sigma_{i}^{2} \mathbf{v}_{i}, \quad A A^{T} \mathbf{u}_{i}=\sigma_{i}^{2} \mathbf{u}_{i} \quad(1 \leq i \leq r)</script><p>$\mathbf{v}<em>{i}$是矩阵$A^{T} A$对应与特征值$\sigma</em>{i}^{2}$的特征向量，$\mathbf{u}<em>{i}$是矩阵$A A^{T}$对应与特征值$\sigma</em>{i}^{2}$的特征向量。</p>
+<h3 id="矩阵-A-A-T-与-A-T-A-的特征值和特征向量的性质"><a href="#矩阵-A-A-T-与-A-T-A-的特征值和特征向量的性质" class="headerlink" title="矩阵$A A^{T}$与$A^{T} A$的特征值和特征向量的性质"></a>矩阵$A A^{T}$与$A^{T} A$的特征值和特征向量的性质</h3><p>设$A$是秩为$r$的$m \times n$实矩阵，则$A A^{T}$为$m$阶实对称矩阵，$A^{T} A$为$n$阶实对称矩阵<br>（1）$A A^{T}$与$A^{T} A$的特征值为非负数<br>证明：设$A^{T} A \mathbf{x}=\lambda \mathbf{x}(\mathbf{x} \neq \mathbf{0})$，则$\mathbf{x}^{T} A^{T} A \mathbf{x}=\lambda \mathbf{x}^{T} \mathbf{x}$，即</p>
+<script type="math/tex; mode=display">
+\|A \mathbf{x}\|^{2}=\lambda\|\mathbf{x}\|^{2}</script><p>故$\lambda \geq 0$。同理，$A A^{T}$的特征值也全为非负数。</p>
+<p>（2）$A A^{T}$与$A^{T} A$的非零特征值集合相同<br>证明：因为$r\left(A A^{T}\right)=r\left(A^{T}\right)=r(A)=r\left(A^{T} A\right)=r$。$A^{T} A$与对角矩阵相似，相似矩阵秩相同。对角矩阵的秩等于非零特征值数量。故$A A^{T}$的非零特征值数量等于$A^{T} A$的非零特征值数量，等于他们的秩。<br>设$\lambda$是$A^{T} A$的非零特征值，则存在非零向量$\mathbf{x}$，使得$A^{T} A \mathbf{x}=\lambda \mathbf{x}$。则有$A A^{T} A \mathbf{x}=\lambda A \mathbf{x}$。其中$A \mathbf{x}不等于零向量，$故$\lambda$也是$A A^{T}$的非零特征值。反之亦然。因此$A A^{T}$与$A^{T} A$具有相同的非零特征值。</p>
+<p>（3）不妨设$A A^{T}$和$A^{T} A$的这$r$个非零特征值为$\sigma<em>{1}^{2} \geq \cdots \geq \sigma</em>{r}^{2}&gt;0$，其中$\sigma<em>{i}&gt;0$。<br>设$\mathbf{v}</em>{1}, \cdots, \mathbf{v}_{n} \in \mathbb{R}^{n}$为$n$阶实对称方阵$A^{T} A$的单位正交特征向量</p>
+<script type="math/tex; mode=display">
+A^{T} A\left(\mathbf{v}_{1} \cdots \mathbf{v}_{n}\right)=\left(\mathbf{v}_{1} \cdots \mathbf{v}_{n}\right)\left(\begin{array}{cccc}
+{\sigma_{1}^{2}} & {} & {} & {} \\
+{} & {\ddots} & {} & {} \\
+{} & {} & {\sigma_{r}^{2}} \\
+{} & {} & {} & {0}
+\end{array}\right)</script><p>记$V=\left(\mathbf{v}<em>{1}, \cdots, \mathbf{v}</em>{n}\right)$，因为$V$为正交矩阵，有$V^{T} V=I<em>{n}$。<br>注意到$A^{T} A \mathbf{v}</em>{i}=\sigma<em>{i}^{2} \mathbf{v}</em>{i} \quad(1 \leq i \leq r)$<br>故$\mathbf{v}<em>{i}^{T} A^{T} A \mathbf{v}</em>{i}=\sigma<em>{i}^{2} \mathbf{v}</em>{i}^{T} \mathbf{v}<em>{i}$，即$\left|A \mathbf{v}</em>{i}\right|^{2}=\sigma<em>{i}^{2}$。<br>令$\mathbf{u}</em>{i}:=\frac{A \mathbf{v}<em>{i}}{\sigma</em>{i}} \in \mathbb{R}^{m}(1 \leq i \leq r)$，则$A A^{T} \mathbf{u}<em>{i}=\sigma</em>{i}^{2} \mathbf{u}_{i}$，并且</p>
+<script type="math/tex; mode=display">
+\mathbf{u}_{i}^{T} \mathbf{u}_{j}=\frac{\left(A \mathbf{v}_{i}\right)^{T}}{\sigma_{i}} \frac{A \mathbf{v}_{j}}{\sigma_{j}}=\frac{\mathbf{v}_{i}^{T}\left(A^{T} A \mathbf{v}_{j}\right)}{\sigma_{i} \sigma_{j}}=\frac{\sigma_{j}^{2} \mathbf{v}_{i}^{T} \mathbf{v}_{j}}{\sigma_{i} \sigma_{j}}=\frac{\sigma_{j}}{\sigma_{i}} \delta_{i j}=\delta_{i j}</script><p>故$\left{\mathbf{u}_{i} | 1 \leq i \leq r\right}$是$A A^{T}$的单位正交特征向量。<br>又有</p>
+<script type="math/tex; mode=display">
+A \mathbf{v}_{i}=\sigma_{i} \mathbf{u}_{i}, \quad A^{T} \mathbf{u}_{i}=\sigma_{i} \mathbf{v}_{i} \quad 1 \leq i \leq r</script><p>$\mathbf{u}<em>{i}$在矩阵$A$的列空间里，$\mathbf{v}</em>{i}$在矩阵$A$的行空间里，故<br>$\left{\mathbf{u}<em>{1}, \cdots, \mathbf{u}</em>{r}\right}$为$C(A)$的一组单位正交基<br>$\left{\mathbf{v}<em>{1}, \cdots, \mathbf{v}</em>{r}\right}$为$C(A^{T})$的一组单位正交基</p>
+<h2 id="奇异值分解的几何意义"><a href="#奇异值分解的几何意义" class="headerlink" title="奇异值分解的几何意义"></a>奇异值分解的几何意义</h2><p>一般地，秩为$r$的$m \times n$矩阵$A$有SVD：$A_{m \times n}=U \Sigma V^{T}$，则从$\mathbb{R}^{n}$到$\mathbb{R}^{m}$的线性变换$\mathbf{x} \mapsto A \mathbf{x}$可以看成是以下三步的复合：<br>（1）$\mathbb{R}^{n}$中的旋转$\mathbf{x} \mapsto V^{T} \mathbf{x}$<br>（2）$\mathbb{R}^{n}$中的向量$V^{T} \mathbf{x}$的前$r$个分量做伸缩，其余分量变为0：</p>
+<script type="math/tex; mode=display">
+V^{T} \mathbf{x} \mapsto \Sigma V^{T} \mathbf{x}</script><p>（3）再在$\mathbb{R}^{m}$中做旋转</p>
+<script type="math/tex; mode=display">
+\Sigma V^{T} \mathbf{x} \mapsto U \Sigma V^{T} \mathbf{x}</script><h2 id="SVD与矩阵的四个基本子空间"><a href="#SVD与矩阵的四个基本子空间" class="headerlink" title="SVD与矩阵的四个基本子空间"></a>SVD与矩阵的四个基本子空间</h2><p>设$A=U \Sigma V^{T}$是$m \times n$实矩阵$A$的奇异值分解，$r=r(A)$，则<br>$\ast$正交矩阵$U$的前$r$列是$C\left(A \right)$的一组标准正交基<br>$\ast$正交矩阵$U$的后$m-r$列是$N\left(A^{T} \right)$的一组标准正交基<br>$\ast$正交矩阵$V$的前$r$列是$C\left(A^{T} \right)$的一组标准正交基<br>$\ast$正交矩阵$V$的后$n-r$列是$N\left(A \right)$的一组标准正交基</p>
+<h2 id="SVD与图像压缩"><a href="#SVD与图像压缩" class="headerlink" title="SVD与图像压缩"></a>SVD与图像压缩</h2><p>设秩$r$的$m \times n$矩阵$A$的奇异值分解为</p>
+<script type="math/tex; mode=display">
+A=U \Sigma V^{T}=\sigma_{1} \mathbf{u}_{1} \mathbf{v}_{1}^{T}+\cdots+\sigma_{r} \mathbf{u}_{r} \mathbf{v}_{r}^{T}</script><p>其中$\sigma<em>{1} \geq \sigma</em>{2} \geq \cdots \geq \sigma<em>{r}&gt;0$<br>令$A</em>{k}=\sigma<em>{1} \mathbf{u}</em>{1} \mathbf{v}<em>{1}^{T}+\cdots+\sigma</em>{k} \mathbf{u}<em>{k} \mathbf{v}</em>{k}^{T} \quad(1 \leq k&lt;r)$<br>称为$A$的<strong>$k$阶逼近</strong>。特别地，$k=1$时，$A_{1}$是1阶逼近。</p>
+<p>例如：一幅规格为$m \times n$像素的照片可用一个$m \times n$矩阵来存储。利用矩阵的奇异值分解，只需存储矩阵的奇异值$\sigma<em>{i}$，奇异向量$\mathbf{u}</em>{i}, \mathbf{v}<em>{i}$的分量，总计$r \cdot(m+n+1)$个数据，而不是原始的$m \times n$个数据。通常$r \ll m, r \ll n$，则$r \cdot(m+n+1) \ll m \cdot n$。比值$\frac{m \cdot n}{r \cdot(m+n+1)}$称为图像的压缩比（其倒数称为数据压缩率）<br>若$\sigma</em>{1}, \cdots \sigma<em>{k}$远大于$\sigma</em>{k+1}, \cdots \sigma<em>{r}$，则$A</em>{k} \approx A$图像不失真且压缩了存储量。对于较大的$k$，可以获得保真度较高的还原数据。而较小的$k$，可以获得较高的传输效率。</p>
+<h2 id="SVD与特征值"><a href="#SVD与特征值" class="headerlink" title="SVD与特征值"></a>SVD与特征值</h2><p>命题：设$|\lambda|_{\max }$是矩阵$A$的特征值的模长的最大值，则</p>
+<script type="math/tex; mode=display">
+\sigma_{1} \geq|\lambda|_{\max }, \sigma_{1} \geq\left|a_{i j}\right|, \quad \forall i, j</script><p>证明：设$A$有奇异值分解$A=U \Sigma V^{T}$，则对任意向量$\mathbf{x}$，有</p>
+<script type="math/tex; mode=display">
+\|A \mathbf{x}\|=\left\|U \Sigma V^{T} \mathbf{x}\right\|=\left\|\Sigma V^{T} \mathbf{x}\right\| \leq \sigma_{1}\left\|V^{T} \mathbf{x}\right\|=\sigma_{1}\|\mathbf{x}\|</script><p>特别地，若$A \mathbf{x}=\lambda \mathbf{x}$，其中$\mathbf{x}$为对应于$\lambda$的特征向量。则$|A \mathbf{x}|=|\lambda| \cdot|\mathbf{x}|$，故$\sigma<em>{1} \geq|\lambda|$，特别有$\sigma</em>{1} \geq|\lambda|<em>{\max }$。<br>又若取$\mathbf{x}=(1,0, \cdots, 0)$，则$A \mathbf{x}$表示$A$的第一列向量，且$|A \mathbf{x}| \leq \sigma</em>{1}|\mathbf{x}|=\sigma_{1}$，而</p>
+<script type="math/tex; mode=display">
+\left|a_{i 1}\right| \leq \sqrt{a_{11}^{2}+\cdots+a_{n 1}^{2}} \leq \sigma_{1}</script><p>同理，任何一列的某一个分量都有$\left|a<em>{i j}\right| \leq \sigma</em>{1}$，即矩阵的任意一个元素的绝对值都小于等于矩阵$A$的最大的奇异值。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" rel="tag"># 线性代数</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/02/04/legendre_polynomial/" rel="prev" title="勒让德多项式（legendre polynomials）">
+      <i class="fa fa-chevron-left"></i> 勒让德多项式（legendre polynomials）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/02/23/Basic_Concepts_of_Probability/" rel="next" title="Basic Concepts of Probability">
+      Basic Concepts of Probability <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%EF%BC%9A%E5%A6%82%E4%BD%95%E2%80%9C%E5%AF%B9%E8%A7%92%E5%8C%96%E2%80%9D-m-times-n-%E7%9F%A9%E9%98%B5%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">问题：如何“对角化”$m \times n$矩阵？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%EF%BC%88Singular-Value-Decomposition%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">1.奇异值分解（Singular Value Decomposition）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5-A-A-T-%E4%B8%8E-A-T-A-%E7%9A%84%E7%89%B9%E5%BE%81%E5%80%BC%E5%92%8C%E7%89%B9%E5%BE%81%E5%90%91%E9%87%8F%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="nav-number">1.1.1.</span> <span class="nav-text">矩阵$A A^{T}$与$A^{T} A$的特征值和特征向量的性质</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3%E7%9A%84%E5%87%A0%E4%BD%95%E6%84%8F%E4%B9%89"><span class="nav-number">1.2.</span> <span class="nav-text">奇异值分解的几何意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SVD%E4%B8%8E%E7%9F%A9%E9%98%B5%E7%9A%84%E5%9B%9B%E4%B8%AA%E5%9F%BA%E6%9C%AC%E5%AD%90%E7%A9%BA%E9%97%B4"><span class="nav-number">1.3.</span> <span class="nav-text">SVD与矩阵的四个基本子空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SVD%E4%B8%8E%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9"><span class="nav-number">1.4.</span> <span class="nav-text">SVD与图像压缩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SVD%E4%B8%8E%E7%89%B9%E5%BE%81%E5%80%BC"><span class="nav-number">1.5.</span> <span class="nav-text">SVD与特征值</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">David</p>
+  <div class="site-description" itemprop="description">Blog my daily study on machine learning, mathematics & computer science etc.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">180k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:44</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

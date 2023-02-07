@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"splendid-sun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="人工神经网络学习笔记，记录前馈传播信号和反向传播误差的矩阵表示">
+<meta property="og:type" content="article">
+<meta property="og:title" content="人工神经网络">
+<meta property="og:url" content="https://splendid-sun.github.io/2021/12/14/neural-network/index.html">
+<meta property="og:site_name" content="Hello,David!">
+<meta property="og:description" content="人工神经网络学习笔记，记录前馈传播信号和反向传播误差的矩阵表示">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/neural_network/%E6%88%AA%E5%B1%8F2021-12-14%20%E4%B8%8B%E5%8D%884.05.45.png?raw=true">
+<meta property="og:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/neural_network/%E6%88%AA%E5%B1%8F2021-12-16%20%E4%B8%8A%E5%8D%8811.59.56.png?raw=true">
+<meta property="article:published_time" content="2021-12-14T04:39:27.000Z">
+<meta property="article:modified_time" content="2021-12-21T07:10:18.000Z">
+<meta property="article:author" content="David">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/neural_network/%E6%88%AA%E5%B1%8F2021-12-14%20%E4%B8%8B%E5%8D%884.05.45.png?raw=true">
+
+<link rel="canonical" href="https://splendid-sun.github.io/2021/12/14/neural-network/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>人工神经网络 | Hello,David!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello,David!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">There is geometry in the humming of the strings, there is music in the spacing of the spheres.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2021/12/14/neural-network/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          人工神经网络
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-12-14 12:39:27" itemprop="dateCreated datePublished" datetime="2021-12-14T12:39:27+08:00">2021-12-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-21 15:10:18" itemprop="dateModified" datetime="2021-12-21T15:10:18+08:00">2021-12-21</time>
+              </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>人工神经网络学习笔记，记录前馈传播信号和反向传播误差的矩阵表示</p>
+<span id="more"></span>
+<p>注意：神经网络输入层仅表示输入信号，输入节点不对输入值应用激活函数，历史就是这样规定的</p>
+<p><img src="https://github.com/Splendid-sun/Hexo-photo/blob/master/neural_network/截屏2021-12-14%20下午4.05.45.png?raw=true" alt="structure"></p>
+<h2 id="前馈传播信号"><a href="#前馈传播信号" class="headerlink" title="前馈传播信号"></a>前馈传播信号</h2><p>人工神经网络层与层之间前馈传播方式：</p>
+<script type="math/tex; mode=display">
+X=W \cdot I</script><p>其中，W是权重矩阵，I是输入矩阵，X是组合调节后的信号，输入到下一层，然后应用激活函数，使神经网络的反应更像是生物神经元，激活函数为logistic function：$y=\frac{1}{1+e^{-x}}$</p>
+<script type="math/tex; mode=display">
+O=\operatorname{sigmoid}(X)</script><h2 id="反向传播误差"><a href="#反向传播误差" class="headerlink" title="反向传播误差"></a>反向传播误差</h2><p>忽略归一化因子分母，反向传播误差矩阵表示为：以输出层与挨着输出层的隐藏层为例，其他层之间也是一样的道理</p>
+<script type="math/tex; mode=display">
+\text { error }_{\text {hidden }}=W^{T}_{\text {hidden_output}} \cdot \text { error }_{\text {output }}</script><p>实践证明，这种相对简单的误差信号反馈方式，与我们先前相对复杂的方式一样有效！</p>
+<h2 id="Cost-function："><a href="#Cost-function：" class="headerlink" title="Cost function："></a>Cost function：</h2><p>如果神经网络有n个输出节点：</p>
+<script type="math/tex; mode=display">
+E = \sum_{n}\left(t_{n}-o_{n}\right)^{2}</script><p>对权重$w_{j, k}$的偏导数为</p>
+<script type="math/tex; mode=display">
+\frac{\partial E}{\partial w_{j, k}}=\frac{\partial}{\partial w_{j, k}}\sum_{n}\left(t_{n}-o_{n}\right)^{2}</script><p>因为神经网络的结构，节点k的输出不依赖于其他不与它相连的链接，这可以让我们删除令人厌烦的求和运算。这是一个很有用的技巧。代价函数根本就不需要对所有输出节点求和。原因是节点的输出只取决于所连接的链接。这个过程在许多教科书中一略而过，这些教科书只是简单地声明了误差函数，却没有解释原因。所以我们有：</p>
+<script type="math/tex; mode=display">
+\frac{\partial E}{\partial w_{j, k}}=\frac{\partial}{\partial w_{j, k}}\left(t_{k}-o_{k}\right)^{2}</script><h2 id="gradient-descent："><a href="#gradient-descent：" class="headerlink" title="gradient descent："></a>gradient descent：</h2><p>这里我们以三层，每层三个节点的神经网络为例，用i表示输入层，j表示隐藏层，k表示输出层，利用链式法则：<br>$\frac{\partial E}{\partial w<em>{j, k}}=\frac{\partial E}{\partial o</em>{k}} \cdot \frac{\partial o<em>{k}}{\partial w</em>{j, k}}$<br>$\frac{\partial E}{\partial w<em>{j, k}}=-2\left(t</em>{k}-o<em>{k}\right) \cdot \frac{\partial o</em>{k}}{\partial w<em>{j, k}}$<br>$\frac{\partial E}{\partial w</em>{j, k}}=-2\left(t<em>{k}-o</em>{k}\right) \cdot \frac{\partial}{\partial w<em>{j, k}} \operatorname{sigmoid}\left(\Sigma</em>{j} w<em>{j, k} \cdot o</em>{j}\right)$<br>$\frac{\partial E}{\partial w<em>{j, k}}=-2\left(t</em>{k}-o<em>{k}\right) \cdot \operatorname{sigmoid}\left(\Sigma</em>{j} w<em>{j, k} \cdot o</em>{j}\right)\left(1-\operatorname{sigmoid}\left(\Sigma<em>{j} w</em>{j, k} \cdot o<em>{j}\right)\right) \cdot \frac{\partial}{\partial w</em>{j, k}}\left(\Sigma<em>{j} w</em>{j, k} \cdot o<em>{j}\right)$<br>$=-2\left(t</em>{k}-o<em>{k}\right) \cdot \operatorname{sigmoid}\left(\Sigma</em>{j} w<em>{j, k} \cdot o</em>{j}\right)\left(1-\operatorname{sigmoid}\left(\Sigma<em>{j} w</em>{j, k} \cdot o<em>{j}\right)\right) \cdot o</em>{j}$</p>
+<p>同理，对于输入层和隐藏层，我们有</p>
+<script type="math/tex; mode=display">
+\frac{\partial E}{\partial w_{i j}}=-\left(e_{j}\right) \cdot \operatorname{sigmoid}\left(\Sigma_{i} w_{i j} \cdot o_{i}\right)\left(1-\operatorname{sigmoid}\left(\Sigma_{i} w_{i j} \cdot o_{i}\right)\right) \cdot o_{i}</script><p>梯度的矩阵形式：</p>
+<script type="math/tex; mode=display">
+\left(\begin{array}{cccc}
+\Delta w_{1,1} & \Delta w_{2,1} & \Delta w_{3,1} & \cdots \\
+\Delta w_{1,2} & \Delta w_{2,2} & \Delta w_{3,2} & \cdots \\
+\Delta w_{1,3} & \Delta w_{2,3} & \Delta w_{1 j} k & \cdots \\
+\cdots & \cdots & \cdots & \cdots
+\end{array}\right) =
+\left(\begin{array}{cccc}
+E_{1} * S_{1}\left(1-S_{1}\right) \\
+E_{2} * S_{2}\left(1-S_{3}\right) \\
+\cdots \\
+E_{k} * S_{k}\left(1-S_{k}\right) \\
+\cdots
+\end{array}\right)
+\cdot
+\left(\begin{array}{cccc}
+O_{1} & O_{2} & \dots & O_{j} & \dots
+\end{array}\right)</script><h2 id="梯度的反向传播"><a href="#梯度的反向传播" class="headerlink" title="梯度的反向传播"></a>梯度的反向传播</h2><h3 id="cost-function对输出层输入值-z-3-的梯度-nabla-z-3-J-1"><a href="#cost-function对输出层输入值-z-3-的梯度-nabla-z-3-J-1" class="headerlink" title="cost function对输出层输入值$z{3}$的梯度$\nabla{z^{(3)}} J_{1}$"></a>cost function对输出层输入值$z<em>{3}$的梯度$\nabla</em>{z^{(3)}} J_{1}$</h3><p>我们以手写数字识别为例，手写字体为$20 \times 20$像素的灰度值图片，神经网络结构为三层，第一层为输入层，为401维$(20 \times 20+1)$，第二层为隐藏层，25+1维，第三层是输出层，10维，每一个输出代表第k类的概率。神经网络前馈传播信号过程如下：</p>
+<script type="math/tex; mode=display">
+\stackrel{a^{(1)} = x}{\longrightarrow}
+\left(\begin{array}{cccc}
+1 \\ x_{1} \\  x_{2} \\  \dots \\  x_{400} 
+\end{array}\right)
+\stackrel{z^{(2)} = \Theta^{(1)}a^{(1)}}{\longrightarrow}
+\left(\begin{array}{cccc}
+z_{1}^{(2)} \\  z_{2}^{(2)} \\  \dots \\  z_{25}^{(2)} 
+\end{array}\right)
+\stackrel{a^{(2)} = g \left( z^{(2)} \right)}{\longrightarrow}
+\left(\begin{array}{cccc}
+1 \\ a^{(2)}_{1} \\ a^{(2)}_{2} \\ \dots \\ a^{(2)}_{25}
+\end{array}\right)
+\stackrel{z^{(3)} = \Theta^{(2)}a^{(2)}}{\longrightarrow}
+\left(\begin{array}{cccc}
+z_{1}^{(3)} \\  z_{2}^{(3)} \\  \dots \\  z_{10}^{(3)} 
+\end{array}\right)
+\stackrel{a^{(3)} = g\left(z^{(3)}\right)=h_{\theta}(x)}{\longrightarrow}
+\left(\begin{array}{cccc}
+h_{\theta}(x)_{1} \\ h_{\theta}(x)_{2} \\ \dots \\ h_{\theta}(x)_{10}
+\end{array}\right)</script><p><img src="https://github.com/Splendid-sun/Hexo-photo/blob/master/neural_network/截屏2021-12-16%20上午11.59.56.png?raw=true" alt="structure"></p>
+<p>神经网络的cost function:</p>
+<script type="math/tex; mode=display">
+\begin{aligned} J(\theta)=& \frac{1}{m} \sum_{i=1}^{m} \sum_{k=1}^{K}\left[-y_{k}^{(i)} \log \left(\left(h_{\theta}\left(x^{(i)}\right)\right)_{k}\right)-\left(1-y_{k}^{(i)}\right) \log \left(1-\left(h_{\theta}\left(x^{(i)}\right)\right)_{k}\right)\right]+ \\ &\frac{\lambda}{2 m}\left[\sum_{j=1}^{25} \sum_{k=1}^{400}\left(\Theta_{j, k}^{(1)}\right)^{2}+\sum_{j=1}^{10} \sum_{k=1}^{25}\left(\Theta_{j, k}^{(2)}\right)^{2}\right] \end{aligned}</script><p>为了方便，我们把cost function的前半部分用$J_{1}$表示:</p>
+<script type="math/tex; mode=display">
+J_{1}=\frac{1}{m} \sum_{k=1}^{K}\left[-y_{k}^{(i)} \log \left(\left(h_{\theta}\left(x^{(i)}\right)\right)_{k}\right)-\left(1-y_{k}^{(i)}\right) \log \left(1-\left(h_{\theta}\left(x^{(i)}\right)\right)_{k}\right)\right]</script><p>因为<br>$\frac{\partial ln(h<em>{\theta}(x)</em>{k})}{\partial z^{(3)}<em>{k}}=\frac{1}{h</em>{\theta}(x)<em>{k}}\frac{dh</em>{\theta}(x)<em>{k}}{dz^{(3)}</em>{k}}=\frac{1}{h<em>{\theta}(x)</em>{k}}h<em>{\theta}(x)</em>{k}(1-h<em>{\theta}(x)</em>{k})=1-h<em>{\theta}(x)</em>{k}$<br>$\frac{\partial ln(1-h<em>{\theta}(x)</em>{k})}{\partial z^{(3)}<em>{k}}=\frac{-1}{1-h</em>{\theta}(x)<em>{k}}\frac{dh</em>{\theta}(x)<em>{k}}{dz^{(3)}</em>{k}}=\frac{-1}{1-h<em>{\theta}(x)</em>{k}}h<em>{\theta}(x)</em>{k}(1-h<em>{\theta}(x)</em>{k})=-h<em>{\theta}(x)</em>{k}$<br>$J<em>{1}$虽然有求和符号，但是求梯度分量的过程中我们知道，第k个分量$z^{(3)}</em>{k}$只与$h_{k}$有关，而与其他分量无关。所以求和符号在求梯度过程中可省略掉</p>
+<script type="math/tex; mode=display">
+\frac{\partial J_{1}}{\partial z^{(3)}_{k}} = -y_{k} (1-h_{\theta}(x)_{k}) - (1-y_{k})(-h_{\theta}(x)_{k}) = h_{\theta}(x)_{k}-y_{k}</script><p>$J_{1}$对$z^{(3)}$求梯度，经过化简最终我们有：</p>
+<script type="math/tex; mode=display">
+\nabla_{z^{(3)}} J_{1} = \vec{h_{\theta}} - \vec{y}</script><p>我们成功地求出了对输出层z3的梯度！而且对数似然链式求导和logistic函数链式求导后会约掉，数学之美！简洁之美！</p>
+<h3 id="cost-function对隐藏层输出值-a-2-的梯度-nabla-a-2-J-1"><a href="#cost-function对隐藏层输出值-a-2-的梯度-nabla-a-2-J-1" class="headerlink" title="cost function对隐藏层输出值$a{2}$的梯度$\nabla{a^{(2)}} J_{1}$"></a>cost function对隐藏层输出值$a<em>{2}$的梯度$\nabla</em>{a^{(2)}} J_{1}$</h3><p>在前馈传播过程中，我们有：</p>
+<script type="math/tex; mode=display">
+z^{(3)} = \Theta^{(2)}a^{(2)}</script><p>接下来结论很重要，梯度的反向传播的求法：</p>
+<p>我们以2维向量前馈传播为例，高维向量一样的道理！</p>
+<script type="math/tex; mode=display">
+\left(\begin{array}{c}y_{1} \\ y_{2} \end{array}\right) = \left(\begin{array}{c}a&b \\ c&d \end{array}\right) \left(\begin{array}{c}x_{1} \\ x_{2} \end{array}\right)=\Theta \left(\begin{array}{c}x_{1} \\ x_{2} \end{array}\right)</script><p>其中，$\vec{y}$是神经网络在下一层输入，$\vec{x}$是前一层输出，$\Theta$是权重矩阵</p>
+<script type="math/tex; mode=display">
+\Theta = \left(\begin{array}{c}a&b \\ c&d \end{array}\right)</script><p>我们有</p>
+<script type="math/tex; mode=display">
+\left\{
+\begin{aligned}
+y_{1} = a x_{1} + bx_{2} \\
+y_{2} = c x_{1} + dx_{2}
+\end{aligned}
+\right.</script><p>cost function对向量$\vec{x}$求梯度，有</p>
+<script type="math/tex; mode=display">
+\nabla_{x} J_{1} = 
+\left(\begin{array}{c}\frac{\partial J_{1}}{\partial x_{1}} \\ \frac{\partial J_{1}}{\partial x_{2}}  \end{array}\right) = \left(\begin{array}{c}\frac{\partial J_{1}}{\partial y_{1}}a + \frac{\partial J_{1}}{\partial y_{2}}c \\ \frac{\partial J_{1}}{\partial y_{1}}b+\frac{\partial J_{1}}{\partial y_{2}}d  \end{array}\right) = \left(\begin{array}{c}a&c\\ b&d  \end{array}\right)\left(\begin{array}{c}\frac{\partial J_{1}}{\partial y_{1}} \\ \frac{\partial J_{1}}{\partial y_{2}}  \end{array}\right) = \Theta^{T}\left(\begin{array}{c}\frac{\partial J_{1}}{\partial y_{1}} \\ \frac{\partial J_{1}}{\partial y_{2}}  \end{array}\right)</script><p>所以有</p>
+<script type="math/tex; mode=display">
+\nabla_{a_{2}} J_{1} = \Theta^{T} \nabla_{z_{3}} J_{1}</script><h3 id="梯度-nabla-z-3-J-1-与参数-Theta-2-的梯度-nabla-Theta-2-J-1-的关系："><a href="#梯度-nabla-z-3-J-1-与参数-Theta-2-的梯度-nabla-Theta-2-J-1-的关系：" class="headerlink" title="梯度$\nabla{z^{(3)}} J{1}$ 与参数$\Theta{2}$的梯度$\nabla{\Theta{2}} J{1}$的关系："></a>梯度$\nabla<em>{z^{(3)}} J</em>{1}$ 与参数$\Theta<em>{2}$的梯度$\nabla</em>{\Theta<em>{2}} J</em>{1}$的关系：</h3><p>在前馈传播过程中，我们有：</p>
+<script type="math/tex; mode=display">
+z^{(3)} = \Theta^{(2)}a^{(2)}</script><p>我们还是以2维向量前馈传播为例，高维向量一样的道理！</p>
+<script type="math/tex; mode=display">
+\left(\begin{array}{c}y_{1} \\ y_{2} \end{array}\right) = \left(\begin{array}{c}a&b \\ c&d \end{array}\right) \left(\begin{array}{c}x_{1} \\ x_{2} \end{array}\right)=\Theta \left(\begin{array}{c}x_{1} \\ x_{2} \end{array}\right)</script><p>其中，$\vec{y}$是神经网络在下一层输入，$\vec{x}$是前一层输出，$\Theta$是权重矩阵</p>
+<script type="math/tex; mode=display">
+\Theta = \left(\begin{array}{c}a&b \\ c&d \end{array}\right)</script><p>我们有</p>
+<script type="math/tex; mode=display">
+\left\{
+\begin{aligned}
+y_{1} = a x_{1} + bx_{2} \\
+y_{2} = c x_{1} + dx_{2}
+\end{aligned}
+\right.</script><p>cost function对$\Theta_{2}$求梯度，有</p>
+<script type="math/tex; mode=display">
+\nabla_{\Theta_{2}} J_{1} = 
+\left(\begin{array}{c}\frac{\partial J_{1}}{\partial a} &\frac{\partial J_{1}}{\partial b} \\ \frac{\partial J_{1}}{\partial c}&\frac{\partial J_{1}}{\partial d}   \end{array}\right) = \left(\begin{array}{c}\frac{\partial J_{1}}{\partial y_{1}}x_{1}&\frac{\partial J_{1}}{\partial y_{1}}x_{2} \\ \frac{\partial J_{1}}{\partial y_{2}}x_{1}&\frac{\partial J_{1}}{\partial y_{2}}x_{2}  \end{array}\right) = \left(\begin{array}{c}\frac{\partial J_{1}}{\partial y_{1}} \\ \frac{\partial J_{1}}{\partial y_{2}}  \end{array}\right) \left(\begin{array}{c} x_{1}&x_{2} \end{array}\right) =
+\nabla_{y} J_{1} \left(\begin{array}{c} x_{1}&x_{2} \end{array}\right)</script><p>我们成功地求出了对参数$\Theta_{2}$的梯度！</p>
+<script type="math/tex; mode=display">
+\nabla_{\Theta_{2}} J_{1} = \nabla_{z_{3}} J_{1} \cdot a_{2}^{T}</script><h3 id="cost-function对隐藏层输入值-z-2-的梯度-nabla-z-2-J-1"><a href="#cost-function对隐藏层输入值-z-2-的梯度-nabla-z-2-J-1" class="headerlink" title="cost function对隐藏层输入值$z{2}$的梯度$\nabla{z^{(2)}} J_{1}$"></a>cost function对隐藏层输入值$z<em>{2}$的梯度$\nabla</em>{z^{(2)}} J_{1}$</h3><p>在前馈传播过程中，我们有：</p>
+<script type="math/tex; mode=display">
+a_{(2)} = sigmoid(z_{(2)})</script><p>对分量求偏导</p>
+<script type="math/tex; mode=display">
+\frac{\partial J_{1}}{\partial z^{(2)}_{k}}=\frac{\partial J_{1}}{\partial a^{(2)}_{k}} \frac{\partial a^{(2)}_{k}}{\partial z^{(2)}_{k}}
+=\frac{\partial J_{1}}{\partial a^{(2)}_{k}} g(z^{(2)}_{k})(1-g(z^{(2)}_{k}))</script><p>把分量整合成向量的形式</p>
+<script type="math/tex; mode=display">
+\nabla_{z_{2}} J_{1} = \nabla_{a_{2}} J_{1} \ast g(z^{(2)})(1-g(z^{(2)}))</script><h3 id="cost-function对参数-Theta-1-的梯度-nabla-Theta-1-J-1"><a href="#cost-function对参数-Theta-1-的梯度-nabla-Theta-1-J-1" class="headerlink" title="cost function对参数$\Theta{1}$的梯度$\nabla{\Theta{(1)}} J{1}$"></a>cost function对参数$\Theta<em>{1}$的梯度$\nabla</em>{\Theta<em>{(1)}} J</em>{1}$</h3><p>在前馈传播过程中，我们有：</p>
+<script type="math/tex; mode=display">
+z_{(2)} = \Theta^{(1)} a^{(1)}</script><script type="math/tex; mode=display">
+\nabla_{\Theta_{1}} J_{1} = \nabla_{z_{z}} J_{1} \cdot a_{1}^{T}</script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/12/08/kernel/" rel="prev" title="核函数 Kernel">
+      <i class="fa fa-chevron-left"></i> 核函数 Kernel
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/01/03/svm_summary/" rel="next" title="支持向量机总结">
+      支持向量机总结 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E9%A6%88%E4%BC%A0%E6%92%AD%E4%BF%A1%E5%8F%B7"><span class="nav-number">1.</span> <span class="nav-text">前馈传播信号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E8%AF%AF%E5%B7%AE"><span class="nav-number">2.</span> <span class="nav-text">反向传播误差</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cost-function%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">Cost function：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gradient-descent%EF%BC%9A"><span class="nav-number">4.</span> <span class="nav-text">gradient descent：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E7%9A%84%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD"><span class="nav-number">5.</span> <span class="nav-text">梯度的反向传播</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cost-function%E5%AF%B9%E8%BE%93%E5%87%BA%E5%B1%82%E8%BE%93%E5%85%A5%E5%80%BC-z-3-%E7%9A%84%E6%A2%AF%E5%BA%A6-nabla-z-3-J-1"><span class="nav-number">5.1.</span> <span class="nav-text">cost function对输出层输入值$z{3}$的梯度$\nabla{z^{(3)}} J_{1}$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cost-function%E5%AF%B9%E9%9A%90%E8%97%8F%E5%B1%82%E8%BE%93%E5%87%BA%E5%80%BC-a-2-%E7%9A%84%E6%A2%AF%E5%BA%A6-nabla-a-2-J-1"><span class="nav-number">5.2.</span> <span class="nav-text">cost function对隐藏层输出值$a{2}$的梯度$\nabla{a^{(2)}} J_{1}$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6-nabla-z-3-J-1-%E4%B8%8E%E5%8F%82%E6%95%B0-Theta-2-%E7%9A%84%E6%A2%AF%E5%BA%A6-nabla-Theta-2-J-1-%E7%9A%84%E5%85%B3%E7%B3%BB%EF%BC%9A"><span class="nav-number">5.3.</span> <span class="nav-text">梯度$\nabla{z^{(3)}} J{1}$ 与参数$\Theta{2}$的梯度$\nabla{\Theta{2}} J{1}$的关系：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cost-function%E5%AF%B9%E9%9A%90%E8%97%8F%E5%B1%82%E8%BE%93%E5%85%A5%E5%80%BC-z-2-%E7%9A%84%E6%A2%AF%E5%BA%A6-nabla-z-2-J-1"><span class="nav-number">5.4.</span> <span class="nav-text">cost function对隐藏层输入值$z{2}$的梯度$\nabla{z^{(2)}} J_{1}$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cost-function%E5%AF%B9%E5%8F%82%E6%95%B0-Theta-1-%E7%9A%84%E6%A2%AF%E5%BA%A6-nabla-Theta-1-J-1"><span class="nav-number">5.5.</span> <span class="nav-text">cost function对参数$\Theta{1}$的梯度$\nabla{\Theta{(1)}} J{1}$</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">David</p>
+  <div class="site-description" itemprop="description">Blog my daily study on machine learning, mathematics & computer science etc.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">180k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:44</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

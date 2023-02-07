@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"splendid-sun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Batch Norm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Batch Normalization">
+<meta property="og:url" content="https://splendid-sun.github.io/2022/10/29/batchnorm/index.html">
+<meta property="og:site_name" content="Hello,David!">
+<meta property="og:description" content="Batch Norm">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-10-29T14:00:59.000Z">
+<meta property="article:modified_time" content="2022-10-31T14:19:28.000Z">
+<meta property="article:author" content="David">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://splendid-sun.github.io/2022/10/29/batchnorm/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Batch Normalization | Hello,David!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello,David!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">There is geometry in the humming of the strings, there is music in the spacing of the spheres.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2022/10/29/batchnorm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Batch Normalization
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-10-29 22:00:59" itemprop="dateCreated datePublished" datetime="2022-10-29T22:00:59+08:00">2022-10-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-10-31 22:19:28" itemprop="dateModified" datetime="2022-10-31T22:19:28+08:00">2022-10-31</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/deeplearning/" itemprop="url" rel="index"><span itemprop="name">deeplearning</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Batch Norm</p>
+<span id="more"></span>
+<h2 id="1-Batch-Normalization是什么"><a href="#1-Batch-Normalization是什么" class="headerlink" title="1.Batch Normalization是什么"></a>1.Batch Normalization是什么</h2><p><strong>Batch Normalization</strong>是为了解决深度学习网络中<strong>Internal Covariate Shift</strong>问题而提出的对一个batch的数据进行Normalization的方法，优点是可以使用更大的学习率、更快的的训练速度、更不依赖于模型的初始化、对模型进行正则化（类似dropout的一部分效果）。</p>
+<p>有研究表明对数据进行白化（whiten）操作可以加速模型的收敛，白化是将输入数据分布转换到均值为0、方差为1的正态分布。对于深度网络，每一层的输出都是下一层的输入。所以如果对每一层的输出进行白化操作可以加速收敛，并且每一层的输入的分布稳定。</p>
+<h2 id="2-什么是Internal-Covariate-Shift"><a href="#2-什么是Internal-Covariate-Shift" class="headerlink" title="2.什么是Internal Covariate Shift"></a>2.什么是Internal Covariate Shift</h2><p>Internal Covariate Shift：深度神经网络有多层结构，每一层的输出是下一层的输入，所以每一层网络学习的是上一层输出的分布。而每一层参数的更新又会影响该层输出的分布，导致下一层的输入分布变化，使得学习难度加大。并且随着模型深度的增加，学习的难度也会增加。</p>
+<h2 id="3-Batch-Normalization流程"><a href="#3-Batch-Normalization流程" class="headerlink" title="3.Batch Normalization流程"></a>3.Batch Normalization流程</h2><p>首先，Batch norm位于X=WU+B激活值获得之后，非线性函数变换之前</p>
+<p>如果batch size为m，则在前向传播时每个节点都有m个输出，对每个节点的m个输出进行归一化。实现可以分为两步：</p>
+<p>1.Standardization：对m个$x$进行标准化得到zero mean unit variance的 $\hat{x}$<br>2.scale and shift：对$\hat{x}$进行缩放和平移，得到最终的分布$y$，具有新的均值$\beta$和方差$\gamma$</p>
+<p><strong>Input</strong>:Values of x over a mini-batch:$\mathcal{B}=\left{x_{1 \ldots m}\right}$;<br>Parameters to be learned: $\gamma, \beta$</p>
+<p><strong>Output</strong>:$\left{y<em>i=\mathrm{BN}</em>{\gamma, \beta}\left(x_i\right)\right}$</p>
+<p>mini-batch mean:<br>$\mu<em>{\mathcal{B}} \leftarrow \frac{1}{m} \sum</em>{i=1}^m x_i$</p>
+<p>mini-batch variance:<br>$\sigma<em>{\mathcal{B}}^2 \leftarrow \frac{1}{m} \sum</em>{i=1}^m\left(x<em>i-\mu</em>{\mathcal{B}}\right)^2$</p>
+<p>normalize:<br>$\hat{x}<em>i \leftarrow \frac{x_i-\mu</em>{\mathcal{B}}}{\sqrt{\sigma_{\mathcal{B}}^2+\epsilon}}$</p>
+<p>scale and shift:<br>$y<em>i \leftarrow \gamma \hat{x}_i+\beta \equiv \mathrm{BN}</em>{\gamma, \beta}\left(x_i\right)$</p>
+<p>Batch Normalizing Transform:</p>
+<p>总体可以写为如下公式，所以，无论$x_i$原本的均值和方差是多少，通过Batch Norm后其均值和方差分别变为待学习的$\beta$和$\gamma$。<br>$y_i^{(b)}=B N\left(x_i\right)^{(b)}=\gamma \cdot\left(\frac{x_i^{(b)}-\mu\left(x_i\right)}{\sqrt{\sigma\left(x_i\right)^2+\epsilon}}\right)+\beta$</p>
+<h3 id="BN在训练和测试的使用"><a href="#BN在训练和测试的使用" class="headerlink" title="BN在训练和测试的使用"></a>BN在训练和测试的使用</h3><p>这里没细看，感觉暂时不重要</p>
+<h2 id="4-Batch-Normalization的作用"><a href="#4-Batch-Normalization的作用" class="headerlink" title="4.Batch Normalization的作用"></a>4.Batch Normalization的作用</h2><p><strong>可以使用更大的学习率</strong>，训练过程更加稳定，极大提高了训练速度。<br><strong>可以将bias置为0</strong>，因为Batch Normalization的Standardization过程会移除直流分量，所以不再需要bias。<br><strong>对权重初始化不再敏感</strong>，通常权重采样自0均值某方差的高斯分布，以往对高斯分布的方差设置十分重要，有了Batch Normalization后，对与同一个输出节点相连的权重进行放缩，其标准差$\sigma$也会放缩同样的倍数，相除抵消。<br><strong>对权重的尺度不再敏感</strong>，理由同上，尺度统一由$\gamma$参数控制，在训练中决定。<br><strong>深层网络可以使用sigmoid和tanh了</strong>，理由同上，BN抑制了梯度消失。<br><strong>Batch Normalization具有某种正则作用，不需要太依赖dropout，减少过拟合。</strong></p>
+<p><strong>Reference</strong><br><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1502.03167.pdf">Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/20/optimize/" rel="prev" title="Optimization algorithms:SGD/AdaGrad/Adam">
+      <i class="fa fa-chevron-left"></i> Optimization algorithms:SGD/AdaGrad/Adam
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/11/10/transfer-learning/" rel="next" title="transfer learning迁移学习">
+      transfer learning迁移学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Batch-Normalization%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">1.Batch Normalization是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BB%80%E4%B9%88%E6%98%AFInternal-Covariate-Shift"><span class="nav-number">2.</span> <span class="nav-text">2.什么是Internal Covariate Shift</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Batch-Normalization%E6%B5%81%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">3.Batch Normalization流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BN%E5%9C%A8%E8%AE%AD%E7%BB%83%E5%92%8C%E6%B5%8B%E8%AF%95%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">3.1.</span> <span class="nav-text">BN在训练和测试的使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Batch-Normalization%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">4.Batch Normalization的作用</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">David</p>
+  <div class="site-description" itemprop="description">Blog my daily study on machine learning, mathematics & computer science etc.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">180k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:44</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
