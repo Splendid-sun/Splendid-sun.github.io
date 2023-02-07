@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"splendid-sun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="参考资料：吴恩达深度学习专项课程： deeplearning.ai">
+<meta property="og:type" content="article">
+<meta property="og:title" content="神经网络参数Xavier初始化">
+<meta property="og:url" content="https://splendid-sun.github.io/2022/09/15/Xavier/index.html">
+<meta property="og:site_name" content="Hello,David!">
+<meta property="og:description" content="参考资料：吴恩达深度学习专项课程： deeplearning.ai">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-09-15T12:58:46.000Z">
+<meta property="article:modified_time" content="2022-09-16T04:01:36.000Z">
+<meta property="article:author" content="David">
+<meta property="article:tag" content="Deeplearning">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://splendid-sun.github.io/2022/09/15/Xavier/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>神经网络参数Xavier初始化 | Hello,David!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello,David!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">There is geometry in the humming of the strings, there is music in the spacing of the spheres.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2022/09/15/Xavier/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          神经网络参数Xavier初始化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-15 20:58:46" itemprop="dateCreated datePublished" datetime="2022-09-15T20:58:46+08:00">2022-09-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-16 12:01:36" itemprop="dateModified" datetime="2022-09-16T12:01:36+08:00">2022-09-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/" itemprop="url" rel="index"><span itemprop="name">Deeplearning</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>参考资料：<br>吴恩达深度学习专项课程： deeplearning.ai<br><span id="more"></span></p>
+<p>在训练deep neural network时会遇到梯度消失/梯度爆炸的问题（vanishing/exploding gradient)，Xavier初始化能缓解这个问题（不能完全解决）</p>
+<p>Xavier初始化参数矩阵</p>
+<script type="math/tex; mode=display">
+\begin{array}{|c|c|c|c|}
+\hline \text { 激活函数 } & \text { sigmoid } & \text { relu } & \tanh \\
+\hline \begin{array}{c}
+\text { 均匀分布 } \\
+\text { (给出取值时的上下限) }
+\end{array} & \pm \sqrt{\frac{6}{n_{\text {in }}+n_{\text {out }}}} & \pm \sqrt{\frac{6}{n_{\text {in }}+n_{\text {out }}}} \times \sqrt{2} & \pm \sqrt{\frac{6}{n_{\text {in }}+n_{\text {out }}}} \times 4 \\
+\hline \begin{array}{c}
+\text { 高斯分布 } \\
+\text { (给出取值时的标准差) }
+\end{array} & \sqrt{\frac{2}{n_{\text {in }}+n_{\text {out }}}} & \sqrt{\frac{2}{n_{\text {in }}+n_{\text {out }}}} \times \sqrt{2} & \sqrt{\frac{2}{n_{\text {in }}+n_{\text {ont }}}} \times 4 \\
+\hline
+\end{array}</script><h2 id="以均匀分布为例，证明均匀分布上下限为-sqrt-frac-6-n-i-n-n-text-out"><a href="#以均匀分布为例，证明均匀分布上下限为-sqrt-frac-6-n-i-n-n-text-out" class="headerlink" title="以均匀分布为例，证明均匀分布上下限为$\sqrt{\frac{6}{n{i n}+n{\text {out }}}}$"></a>以均匀分布为例，证明均匀分布上下限为$\sqrt{\frac{6}{n<em>{i n}+n</em>{\text {out }}}}$</h2><h2 id="随机变量乘积的方差-mathrm-D-mathrm-X-mathrm-Y-展开式"><a href="#随机变量乘积的方差-mathrm-D-mathrm-X-mathrm-Y-展开式" class="headerlink" title="随机变量乘积的方差$\mathrm{D}(\mathrm{X}\mathrm{Y})$展开式:"></a>随机变量乘积的方差$\mathrm{D}(\mathrm{X}\mathrm{Y})$展开式:</h2><p>学过概率论，有随机变量的期望和方差公式：<br>$1.\mathrm{E}(\mathrm{X}\mathrm{Y})=\mathrm{E}(\mathrm{X})\mathrm{E}(\mathrm{Y})$<br>$2.\mathrm{D}(\mathrm{X})=\mathrm{E}\left(\mathrm{X}^2\right)-[\mathrm{E}(\mathrm{X})]^2$<br>$3.\mathrm{D}(\mathrm{X}+\mathrm{Y})=\mathrm{D}(\mathrm{X})+\mathrm{D}(\mathrm{Y})$<br>由1.2.3推出<br>$\text { 1.2.3 } \Rightarrow \mathrm{D}(\mathrm{X}\mathrm{Y})=\mathrm{D}(\mathrm{X}) \mathrm{D}(\mathrm{Y})+\mathrm{D}(\mathrm{X})[\mathrm{E}(Y)]^2+\mathrm{D}(\mathrm{Y}) [\mathrm{E}(X)]^2$<br>证明过程如下：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\mathrm{D}(\mathrm{X}\mathrm{Y})=\mathrm{E}[(\mathrm{X} \mathrm{Y})^2]-[\mathrm{E}(\mathrm{X} \mathrm{Y})]^2 \\
+&=\mathrm{E} (\mathrm{X}^2) \mathrm{E} (\mathrm{Y}^2)-[\mathrm{E}(\mathrm{X})]^2[\mathrm{E}(\mathrm{Y})]^2 \\
+&=\left(\mathrm{D}(\mathrm{X})+\mathrm{E}^2 (\mathrm{X})\right)\left(\mathrm{D}(\mathrm{Y})+\mathrm{E}^2 (\mathrm{Y})\right)-[\mathrm{E}(\mathrm{X})]^2[\mathrm{E}(\mathrm{Y})]^2\\
+&=\mathrm{D}(\mathrm{X}) \mathrm{D}(\mathrm{Y})+\mathrm{D}(\mathrm{X}) \mathrm{E}^2 (\mathrm{Y})+\mathrm{D}(\mathrm{Y}) \mathrm{E}^2 (\mathrm{X})
+\end{aligned}</script><p>上面第三行是因为：</p>
+<p>$\mathrm{D}(\mathrm{X})=\mathrm{E}\left(\mathrm{X}^2\right)-\mathrm{E}^2 (\mathrm{X})$<br>$\mathrm{D}(\mathrm{Y})=\mathrm{E}\left(\mathrm{Y}^2\right)-\mathrm{E}^2 (\mathrm{Y})$<br>$\mathrm{E}\left(\mathrm{X}^2\right)=\mathrm{D}(\mathrm{X})+\mathrm{E}^2 (\mathrm{X})$<br>$\mathrm{E}\left(\mathrm{Y}^2\right)=\mathrm{D}(\mathrm{Y})+\mathrm{E}^2 (\mathrm{Y})$</p>
+<p>对每个神经元的输入$z$：有$z=\sum_{i=1}^n w_i x_i$，其中$n$是上一层神经元的数量。根据我们刚才证明的概率统计里的两个随机变量乘积的方差展开式：<br>$\operatorname{Var}(w_i x_i)=E^2[w_i] \operatorname{Var}(x_i)+E^2[x_i] \operatorname{Var}(w_i)+\operatorname{Var}(w_i) \operatorname{Var}(x_i)$<br>如果$\mathrm{E}(x_i)=\mathrm{E}(w_i)=0$（可以通过批量归一化Batch Normalization来满足），那么就有：</p>
+<script type="math/tex; mode=display">
+\operatorname{Var}(z)=\sum_{i=1}^n \operatorname{Var}(x_i) \operatorname{Var}(w_i)</script><p>如果随机变量$x_i$和$w_i$再满足独立同分布的话：</p>
+<script type="math/tex; mode=display">
+\operatorname{Var}(z)=\sum_{i=1}^n \operatorname{Var}(x_i) \operatorname{Var}(w_i)=n \operatorname{Var}(w) \operatorname{Var}(x)</script><p>整个大型前馈神经网络无非就是一个超级大映射，将原始样本稳定的映射成它的类别。也就是将样本空间映射到类别空间。试想，如果样本空间与类别空间的分布差异很大，比如说类别空间特别稠密，样本空间特别稀疏辽阔，那么在类别空间得到的用于反向传播的误差丢给样本空间后简直变得微不足道，也就是会导致模型的训练非常缓慢。同样，如果类别空间特别稀疏，样本空间特别稠密，那么在类别空间算出来的误差丢给样本空间后简直是爆炸般的存在，即导致模型发散震荡，无法收敛。因此，我们要让样本空间与类别空间的分布差异（密度差别）不要太大，也就是要让它们的方差尽可能相等。因此为了得到$\operatorname{Var}(z)=\operatorname{Var}(x)$，只能让$n*\operatorname{Var}(w)=1$，也就是$\operatorname{Var}(w)=1/n$。<br>同样的道理，正向传播时是从前往后计算的，因此 $\operatorname{Var}(w)=1 /\left(n<em>{i n}\right)$ ，反向传播时是从后往前计算的，因此 $\operatorname{Var}(w)=1 /\left(n</em>{\text {out }}\right)$。然而$n<em>{in}$和$n</em>{out}$往往不相等啊，怎么办呢？所以就取他们的均值就好啦~即：<br> 令$\operatorname{Var}(w)=\frac{2}{n<em>{i n}+n</em>{\text {out }}}$<br>因为均匀分布的方差有：</p>
+<script type="math/tex; mode=display">
+\operatorname{Var}(w)=\frac{(b-a)^2}{12}</script><script type="math/tex; mode=display">
+\frac{(b-a)^2}{12}=\frac{2}{n_{in}+n_{out}}</script><p>解得<br>$a=-\frac{\sqrt{6}}{\sqrt{n<em>{\text {in }}+n</em>{\text {out }}}}$<br>$b=\frac{\sqrt{6}}{\sqrt{n<em>{\text {in }}+n</em>{\text {out }}}}$<br>所以</p>
+<script type="math/tex; mode=display">
+w \sim U\left[-\frac{\sqrt{6}}{\sqrt{n_{\text {in }}+n_{\text {out }}}}, \frac{\sqrt{6}}{\sqrt{n_{\text {in }}+n_{\text {out }}}}\right]</script><p>我们证明了均匀分布上下限为$\sqrt{\frac{6}{n<em>{i n}+n</em>{\text {out }}}}$</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Deeplearning/" rel="tag"># Deeplearning</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/14/drop-out/" rel="prev" title="Drop_out 正则化">
+      <i class="fa fa-chevron-left"></i> Drop_out 正则化
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/09/20/optimize/" rel="next" title="Optimization algorithms:SGD/AdaGrad/Adam">
+      Optimization algorithms:SGD/AdaGrad/Adam <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A5%E5%9D%87%E5%8C%80%E5%88%86%E5%B8%83%E4%B8%BA%E4%BE%8B%EF%BC%8C%E8%AF%81%E6%98%8E%E5%9D%87%E5%8C%80%E5%88%86%E5%B8%83%E4%B8%8A%E4%B8%8B%E9%99%90%E4%B8%BA-sqrt-frac-6-n-i-n-n-text-out"><span class="nav-number">1.</span> <span class="nav-text">以均匀分布为例，证明均匀分布上下限为$\sqrt{\frac{6}{n{i n}+n{\text {out }}}}$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E4%B9%98%E7%A7%AF%E7%9A%84%E6%96%B9%E5%B7%AE-mathrm-D-mathrm-X-mathrm-Y-%E5%B1%95%E5%BC%80%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">随机变量乘积的方差$\mathrm{D}(\mathrm{X}\mathrm{Y})$展开式:</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">David</p>
+  <div class="site-description" itemprop="description">Blog my daily study on machine learning, mathematics & computer science etc.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">180k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:44</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

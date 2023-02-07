@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"splendid-sun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="吴恩达deeplearning.ai专项课程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Optimization algorithms:SGD&#x2F;AdaGrad&#x2F;Adam">
+<meta property="og:url" content="https://splendid-sun.github.io/2022/09/20/optimize/index.html">
+<meta property="og:site_name" content="Hello,David!">
+<meta property="og:description" content="吴恩达deeplearning.ai专项课程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/optimize/1.png?raw=true">
+<meta property="og:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/optimize/2.png?raw=true">
+<meta property="article:published_time" content="2022-09-20T04:35:22.000Z">
+<meta property="article:modified_time" content="2022-09-22T16:39:16.000Z">
+<meta property="article:author" content="David">
+<meta property="article:tag" content="optimize">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/optimize/1.png?raw=true">
+
+<link rel="canonical" href="https://splendid-sun.github.io/2022/09/20/optimize/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Optimization algorithms:SGD/AdaGrad/Adam | Hello,David!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello,David!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">There is geometry in the humming of the strings, there is music in the spacing of the spheres.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2022/09/20/optimize/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Optimization algorithms:SGD/AdaGrad/Adam
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-20 12:35:22" itemprop="dateCreated datePublished" datetime="2022-09-20T12:35:22+08:00">2022-09-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-23 00:39:16" itemprop="dateModified" datetime="2022-09-23T00:39:16+08:00">2022-09-23</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/optimize/" itemprop="url" rel="index"><span itemprop="name">optimize</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>吴恩达deeplearning.ai专项课程</p>
+<span id="more"></span>
+<h2 id="指数加权-滑动-平均-exponentially-weighted（moving）averages"><a href="#指数加权-滑动-平均-exponentially-weighted（moving）averages" class="headerlink" title="指数加权(滑动)平均 exponentially weighted（moving）averages"></a>指数加权(滑动)平均 exponentially weighted（moving）averages</h2><p>$v<em>t=\beta v\</em>{t-1}+(1-\beta) \theta<em>t$<br>$v</em>{0}=0$<br>$\beta = 0.9$</p>
+<p>其中$v<em>t$为迭代次数为t的时刻的指数加权平均值，我们一般设置$v_0=0$，$\beta = 0.9$。<br>指数加权平均大概为最近$\frac{1}{1-\beta}$次迭代的平均，因为$(1-(1-\beta))^{\frac{1}{1-\beta}}\approx \frac{1}{e}$。<br>提示：$\lim </em>{x \rightarrow \infty}\left(1-\frac{1}{x}\right)^x=\frac{1}{\mathrm{e}}$</p>
+<h3 id="偏差修正bias-correction"><a href="#偏差修正bias-correction" class="headerlink" title="偏差修正bias correction"></a>偏差修正bias correction</h3><p>因为$v_0=0$，所以指数加权平均刚开始偏差比较大。这时候我们可以用偏差修正bias correction:<br>$v_t:=\frac{v_t}{1-\beta^t}$<br>指数加权平均在迭代几步之后一般都没什么偏差了，开始的偏差无伤大雅，所以偏差修正一般很少用。</p>
+<h2 id="梯度下降的Challenges"><a href="#梯度下降的Challenges" class="headerlink" title="梯度下降的Challenges"></a>梯度下降的Challenges</h2><p>1.很难选择合适的学习率$\alpha$。学习率太小收敛很慢，学习率太大会阻碍收敛，导致损失函数在极小值附近震荡甚至发散。<br>2.梯度下降不应该对所有的参数使用相同的学习率$\alpha$，如果我们的数据是稀疏的，对于经常更新的参数，我们已经积累了大量关于它的知识，不希望被单个样本影响太大，希望学习速率慢一些。对于偶尔更新的参数，我们了解的信息太少，希望能从每个偶然出现的样本身上多学一些，即学习速率大一些。<br>3.对于非凸的损失函数的优化，关键挑战在于避免陷入次优的局部极小值(suboptimal local minima)，还有鞍点(saddle points)。鞍点附近损失函数数值接近，形状像一个平台，梯度在所有维度上都接近于零，这使得SGD很难逃脱。</p>
+<h2 id="一个框架回顾优化算法"><a href="#一个框架回顾优化算法" class="headerlink" title="一个框架回顾优化算法"></a>一个框架回顾优化算法</h2><p>深度学习优化算法经历了 SGD -&gt; SGDM -&gt; NAG -&gt; AdaGrad -&gt; AdaDelta -&gt; Adam -&gt; Nadam 这样的发展历程。这里我们用一个框架来梳理所有的优化算法，做一个对比。</p>
+<p>首先定义：待优化参数：$w$，目标函数：$f(w)$，初始学习率$\alpha$。<br>而后，开始进行迭代优化。在每个epoch t：<br>1.计算目标函数关于当前参数的梯度：$g<em>t=\nabla f\left(w_t\right)$<br>2.根据历史梯度计算梯度的一阶矩first moment和二阶矩second moment：$m_t=\phi\left(g_1, g_2, \cdots, g_t\right) ; V_t=\psi\left(g_1, g_2, \cdots, g_t\right)$<br>3.计算当前时刻的下降梯度：$\eta_t=\frac{\alpha}{\sqrt{V_t}+\epsilon} m_t$<br>4.根据下降梯度进行更新：$w</em>{t+1}=w_t-\eta_t$</p>
+<h3 id="SGD-with-Momentum"><a href="#SGD-with-Momentum" class="headerlink" title="SGD with Momentum"></a>SGD with Momentum</h3><p><img src="https://github.com/Splendid-sun/Hexo-photo/blob/master/optimize/1.png?raw=true" alt="1"><br>如果损失函数是狭长沟壑状的，梯度下降常常会在沟壑里震荡。momentum方法能帮助SGD加快收敛并抑制振荡。SGDM全称是SGD with momentum，在SGD基础上引入了一阶动量：</p>
+<script type="math/tex; mode=display">
+m_t=\beta_1 \cdot m_{t-1}+\left(1-\beta_1\right) \cdot g_t</script><p>一阶动量是各个时刻梯度的指数加权平均值，约等于最近$1 /\left(1-\beta_1\right)$个时刻的梯度向量和的平均值。<br>也就是说，t时刻的下降方向，不仅由当前点的梯度方向决定，而且由此前累积的下降方向决定。$\beta_1$的经验值为0.9，这就意味着下降方向主要是此前累积的下降方向，并略微偏向当前时刻的下降方向。</p>
+<h3 id="Nesterov-accelerated-gradient"><a href="#Nesterov-accelerated-gradient" class="headerlink" title="Nesterov accelerated gradient"></a>Nesterov accelerated gradient</h3><p><img src="https://github.com/Splendid-sun/Hexo-photo/blob/master/optimize/2.png?raw=true" alt="2"><br>NAG全称Nesterov Accelerated Gradient，是在SGD、SGD-M的基础上的进一步改进，改进点在于步骤1。我们知道在时刻t的下降方向主要是由累积动量决定的，自己目前梯度方向只决定0.1，那与其看当前梯度方向，不如先看看如果跟着累积动量走了一步，那个时候再怎么走。因此，NAG在步骤1，不计算当前位置的梯度方向，而是计算如果按照累积动量走了一步，那个时候的下降方向：</p>
+<script type="math/tex; mode=display">
+g_t=\nabla f\left(w_t- \frac{\alpha}{\sqrt{V_{t-1}}}m_{t-1}\right)</script><script type="math/tex; mode=display">
+\begin{aligned}
+m_t &=\beta_1 m_{t-1}+(1-\beta_1) \nabla_\theta J\left(\theta-\beta_1 m_{t-1}\right) \\
+\theta &=\theta-m_t
+\end{aligned}</script><h3 id="AdaGrad"><a href="#AdaGrad" class="headerlink" title="AdaGrad"></a>AdaGrad</h3><p>此前我们都没有用到二阶动量。二阶动量的出现，才意味着“自适应学习率”优化算法时代的到来。SGD及其变种以同样的学习率更新每个参数，但深度神经网络往往包含大量的参数，这些参数并不是总会用得到（想想大规模的embedding）。对于经常更新的参数，我们已经积累了大量关于它的知识，不希望被单个样本影响太大，希望学习速率慢一些；对于偶尔更新的参数，我们了解的信息太少，希望能从每个偶然出现的样本身上多学一些，即学习速率大一些。<br>怎么样去度量历史更新频率呢？那就是二阶动量，对应于某一维度上，迄今为止所有梯度值的平方和：</p>
+<script type="math/tex; mode=display">
+V_{t,i}=\sum_{\tau=1}^t g_{\tau,i}^2</script><p>t代表t时刻，i代表向量的第i个分量<br>我们再回顾一下步骤3中的下降梯度：</p>
+<script type="math/tex; mode=display">
+\eta_t=\frac{\alpha}{\sqrt{V_t}} m_t</script><p>可以看出，此时实质上的学习率由$\alpha$变成了$\frac{\alpha}{\sqrt{V_t}}$，$\alpha$一般设置为0.01。 一般为了避免分母为0，会在分母上加一个小的平滑项$\epsilon$(通常是1e−8的量级)。因此$\sqrt{V_t}+\epsilon$是恒大于0的。而且某一维度上参数更新越频繁，这个维度上二阶动量越大，学习率就越小。<br>这一方法在稀疏数据场景下表现非常好。但也存在一些问题：因为$\sqrt{V_t}+\epsilon$是单调递增的，会使得学习率单调递减至0，可能会使得训练过程提前结束，即便后续还有数据也无法有效学习</p>
+<h3 id="AdaDelta-RMSProp"><a href="#AdaDelta-RMSProp" class="headerlink" title="AdaDelta / RMSProp"></a>AdaDelta / RMSProp</h3><p>RMSProp全称：Root Mean Square prop<br>由于AdaGrad单调递减的学习率变化过于激进，我们考虑一个改变二阶动量计算方法的策略：不累积全部历史梯度，而只关注过去一段时间窗口的下降梯度。这也就是AdaDelta名称中Delta的来历。<br>修改的思路很简单。前面我们讲到，指数加权平均值大约就是过去$\frac{1}{1-\beta_1}$个时刻的平均值，因此我们用这一方法来计算二阶累积动量：</p>
+<script type="math/tex; mode=display">
+V_t=\beta_2 * V_{t-1}+\left(1-\beta_2\right) g_t^2</script><p>这就避免了二阶动量持续累积，导致训练过程提前结束的问题了。</p>
+<h3 id="Adam-Adaptive-Moment-Estimation-自适应矩估计"><a href="#Adam-Adaptive-Moment-Estimation-自适应矩估计" class="headerlink" title="Adam(Adaptive Moment Estimation):自适应矩估计"></a>Adam(Adaptive Moment Estimation):自适应矩估计</h3><p>谈到这里，Adam和Nadam的出现就很自然而然了——它们是前述方法的集大成者。我们看到，SGD-M在SGD基础上增加了一阶动量，AdaGrad和AdaDelta在SGD基础上增加了二阶动量。把一阶动量和二阶动量都用起来，就是Adam了——Adaptive + Momentum。<br>SGD的一阶动量：</p>
+<script type="math/tex; mode=display">
+m_t=\beta_1 m_{t-1}+\left(1-\beta_1\right) \cdot g_t</script><p>加上AdaDelta的二阶动量：</p>
+<script type="math/tex; mode=display">
+V_t=\beta_2 \cdot V_{t-1}+\left(1-\beta_2\right) g_t^2</script><p>优化算法里最常见的两个超参数$\beta_1, \beta_2$就都在这里了，前者控制一阶动量，后者控制二阶动量。实际使用过程中，参数的经验值是：<br>$\beta_1=0.9, \beta_2=0.999$<br>初始化：$m_0=0, V_0=0$</p>
+<p>在初期，$m_t, V_t$都会接近于0，这个估计是有问题的。因此我们常常根据下式进行指数移动平均值的偏差修正：<br>$\tilde{m}_t=m_t /\left(1-\beta_1^t\right)$<br>$\tilde{V}_t=V_t /\left(1-\beta_2^t\right)$</p>
+<h3 id="Nadam"><a href="#Nadam" class="headerlink" title="Nadam"></a>Nadam</h3><p>我们说Adam是集大成者，把Adam加上Nesterov，就是Nadam：</p>
+<script type="math/tex; mode=display">
+g_t=\nabla f\left(w_t- \frac{\alpha}{\sqrt{V_{t-1}}}m_{t-1}\right)</script><p>这就是Nesterov + Adam = Nadam了。</p>
+<h3 id="Adam的缺点："><a href="#Adam的缺点：" class="headerlink" title="Adam的缺点："></a>Adam的缺点：</h3><p>1.<strong>可能不收敛</strong><br>AdaDelta和Adam的二阶动量是固定时间窗口内的累积，随着时间窗口的变化，遇到的数据可能发生巨变，使得$V<em>t$可能会时大时小，不是单调变化。这就可能在训练后期引起学习率的震荡，导致模型无法收敛。可以令：<br>$V_t=\max \left(\beta_2 \cdot V</em>{t-1}+\left(1-\beta<em>2\right) g_t^2, V</em>{t-1}\right)$<br>通过这样的修改，就保证了$\left|V<em>t\right| \geq\left|V</em>{t-1}\right|$，从而使学习率单调递减<br>2.<strong>可能错过全局最优</strong><br>深度神经网络往往包含大量的参数，在这样一个维度极高的空间内，非凸的目标函数往往起起伏伏，拥有无数个高地和洼地。<br>改进Adam的方法：前期用Adam，享受Adam快速收敛的优势；后期切换到SGD，慢慢寻找最优解。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/optimize/" rel="tag"># optimize</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/15/Xavier/" rel="prev" title="神经网络参数Xavier初始化">
+      <i class="fa fa-chevron-left"></i> 神经网络参数Xavier初始化
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/10/29/batchnorm/" rel="next" title="Batch Normalization">
+      Batch Normalization <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E6%95%B0%E5%8A%A0%E6%9D%83-%E6%BB%91%E5%8A%A8-%E5%B9%B3%E5%9D%87-exponentially-weighted%EF%BC%88moving%EF%BC%89averages"><span class="nav-number">1.</span> <span class="nav-text">指数加权(滑动)平均 exponentially weighted（moving）averages</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%8F%E5%B7%AE%E4%BF%AE%E6%AD%A3bias-correction"><span class="nav-number">1.1.</span> <span class="nav-text">偏差修正bias correction</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E7%9A%84Challenges"><span class="nav-number">2.</span> <span class="nav-text">梯度下降的Challenges</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E6%A1%86%E6%9E%B6%E5%9B%9E%E9%A1%BE%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">一个框架回顾优化算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SGD-with-Momentum"><span class="nav-number">3.1.</span> <span class="nav-text">SGD with Momentum</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Nesterov-accelerated-gradient"><span class="nav-number">3.2.</span> <span class="nav-text">Nesterov accelerated gradient</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AdaGrad"><span class="nav-number">3.3.</span> <span class="nav-text">AdaGrad</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AdaDelta-RMSProp"><span class="nav-number">3.4.</span> <span class="nav-text">AdaDelta &#x2F; RMSProp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adam-Adaptive-Moment-Estimation-%E8%87%AA%E9%80%82%E5%BA%94%E7%9F%A9%E4%BC%B0%E8%AE%A1"><span class="nav-number">3.5.</span> <span class="nav-text">Adam(Adaptive Moment Estimation):自适应矩估计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Nadam"><span class="nav-number">3.6.</span> <span class="nav-text">Nadam</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adam%E7%9A%84%E7%BC%BA%E7%82%B9%EF%BC%9A"><span class="nav-number">3.7.</span> <span class="nav-text">Adam的缺点：</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">David</p>
+  <div class="site-description" itemprop="description">Blog my daily study on machine learning, mathematics & computer science etc.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">180k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:44</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

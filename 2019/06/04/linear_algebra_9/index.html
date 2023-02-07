@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"splendid-sun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线性代数（9）：正交投影与最小二乘法">
+<meta property="og:url" content="https://splendid-sun.github.io/2019/06/04/linear_algebra_9/index.html">
+<meta property="og:site_name" content="Hello,David!">
+<meta property="og:description" content="参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/linear-algebra/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-05-23%20%E4%B8%8A%E5%8D%8810.21.08.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/linear-algebra/projection.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/linear-algebra/projection2.png">
+<meta property="article:published_time" content="2019-06-04T04:12:59.000Z">
+<meta property="article:modified_time" content="2019-12-27T12:17:20.000Z">
+<meta property="article:author" content="David">
+<meta property="article:tag" content="线性代数">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/linear-algebra/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-05-23%20%E4%B8%8A%E5%8D%8810.21.08.png">
+
+<link rel="canonical" href="https://splendid-sun.github.io/2019/06/04/linear_algebra_9/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>线性代数（9）：正交投影与最小二乘法 | Hello,David!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello,David!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">There is geometry in the humming of the strings, there is music in the spacing of the spheres.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2019/06/04/linear_algebra_9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          线性代数（9）：正交投影与最小二乘法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-06-04 12:12:59" itemprop="dateCreated datePublished" datetime="2019-06-04T12:12:59+08:00">2019-06-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-27 20:17:20" itemprop="dateModified" datetime="2019-12-27T20:17:20+08:00">2019-12-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" itemprop="url" rel="index"><span itemprop="name">线性代数</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>参考资料:<br>清华大学数学科学系-线性代数-马辉<br>《工程数学 <strong>线性代数</strong> 第六版》 同济大学数学系 高等教育出版社<br>Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课</p>
+<span id="more"></span>
+<h2 id="正交投影"><a href="#正交投影" class="headerlink" title="正交投影"></a>正交投影</h2><h3 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h3><p>首先复习下Ax=b在行空间中的唯一性，从几何直观上看，Ax=b在A的行空间中的唯一解，实际上是所有解在行空间里面的投影。</p>
+<p><img src="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/linear-algebra/屏幕快照%202019-05-23%20上午10.21.08.png" alt="R^n到R^m映射"></p>
+<p>定理：若$A \mathbf{x}=\mathbf{b}$有解，则$A \mathbf{x}=\mathbf{b}$在$C\left(A^{T}\right)$中有唯一解</p>
+<p>我们首先学习下投影的概念</p>
+<h3 id="点在直线上的投影"><a href="#点在直线上的投影" class="headerlink" title="点在直线上的投影"></a>点在直线上的投影</h3><p><img src="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/linear-algebra/projection.png" alt="点在直线上的投影"></p>
+<p>如图所示，求$b$在$a (a \neq 0)$上的投影向量$p$</p>
+<script type="math/tex; mode=display">
+\left\{\begin{array}{l}{p+e=b, e \perp \alpha} \\ {p=t \alpha(t \in R)}\end{array}\right.</script><script type="math/tex; mode=display">
+\mathbf{e} \perp \mathbf{a} \Longrightarrow \mathbf{a}^{T}(\mathbf{b}-t \mathbf{a})=0 \Longrightarrow t=\frac{\mathbf{a}^{T} \mathbf{b}}{\mathbf{a}^{T} \mathbf{a}}(\mathbf{a} \neq \mathbf{0})</script><p>即$\mathbf{b}$在$\mathbf{a}$上的投影向量为$\left(\frac{\mathbf{a}^{T} \mathbf{b}}{\mathbf{a}^{T} \mathbf{a}}\right) \mathbf{a}=\mathbf{p}$</p>
+<script type="math/tex; mode=display">\left(\mathbf{a}^{T} \mathbf{b}\right) \mathbf{a}=\mathbf{a}\left(\mathbf{a}^{T} \mathbf{b}\right)=\left(\mathbf{a} \mathbf{a}^{T}\right) \mathbf{b}</script><p>因此，$\mathbf{p}=\left(\frac{\mathbf{a} \mathbf{a}^{T}}{\mathbf{a}^{T} \mathbf{a}}\right) \mathbf{b}$</p>
+<p>其中$S=\frac{\mathbf{a} \mathbf{a}^{T}}{\mathbf{a}^{T} \mathbf{a}}$称为投影矩阵，$S$满足$S^{2}=S, S^{T}=S$<br>$\forall \mathbf{b} \in \mathbb{R}^{2}$，$S \mathbf{b}$是$\mathbf{b}$在$\mathbf{a}$上的投影向量</p>
+<h3 id="点在平面上的投影"><a href="#点在平面上的投影" class="headerlink" title="点在平面上的投影"></a>点在平面上的投影</h3><p><img src="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/linear-algebra/projection2.png" alt="点在直线上的投影"></p>
+<p>现在我们考虑点在平面上的投影。给定$\mathbf{v}=\left(v<em>{1}, v</em>{2}, v<em>{3}\right)^{T} \in \mathbb{R}^{3}$，平面$\pi : a x+b y+c z=0$。设$\mathbf{P}$是$\mathbf{v}$在$\pi$上的投影，求$\mathbf{P}$。<br>令$\alpha</em>{1}, \alpha<em>{2}$是平面$\pi$上的两无关向量，即$a x+b y+c z=0$的基础解系或$N((a, b, c))$的一组基。<br>令$A=\left(\alpha</em>{1}, \alpha<em>{2}\right)$，则平面$\pi=C(A)$，求投影$\mathbf{p} \Longleftrightarrow$求$\mathbf{v}$关于$\mathbb{R}^{3}=C(A)+N\left(A^{T}\right)$的分解$\mathbf{v}</em>{l}+\mathbf{v}<em>{l n}$，其中$\mathbf{v}</em>{l}=\mathbf{p}, \mathbf{v}_{l n}=\mathbf{e} \in N\left(A^{T}\right)$</p>
+<script type="math/tex; mode=display">
+\begin{array}{l}{\mathbf{p}=\mathbf{v}_{l} \in C(A) \Longleftrightarrow \exists \hat{\mathbf{x}}, A \hat{\mathbf{x}}=\mathbf{p}} \\ {\mathbf{e}=\mathbf{v}-\mathbf{p} \perp \pi \Longrightarrow A^{T}(A \hat{\mathbf{x}}-\mathbf{v})=\mathbf{0}}\end{array}</script><p>即$\hat{\mathbf{x}}$是$A^{T} A \mathbf{x}=A^{T} \mathbf{v}$的解。$A^{T} A$是可逆矩阵（A列满秩）$\Longrightarrow \hat{\mathbf{x}}=\left(A^{T} A\right)^{-1} A^{T} \mathbf{v}$，则$\mathbf{p}=A\left(A^{T} A\right)^{-1} A^{T} \mathbf{v}$。<br>此时，$A\left(A^{T} A\right)^{-1} A^{T}$为投影矩阵</p>
+<p>一般地，一个矩阵$P$满足$P^{2}=P, P^{T}=P$，则称$P$为投影矩阵</p>
+<p>定理：若$P$是一个投影矩阵，则$C(P)=N(I-P), N(P)=C(I-P)$<br>证明：从P(I-P)=(I-P)P=0思考</p>
+<h2 id="最小二乘法"><a href="#最小二乘法" class="headerlink" title="最小二乘法"></a>最小二乘法</h2><p>回到解方程组$A<em>{m \times n} \mathbf{x}=\mathbf{b}$<br>$A \mathbf{x}=\mathbf{b}$有解$\Longleftrightarrow \mathbf{b} \in C(A)$<br>假设它无解，则$\mathbf{b} \notin C(A)$，此时问题转化为：<br>求$\hat{\mathbf{x}}$使得$\Vert A \hat{\mathbf{x}}-\mathbf{b}\Vert$最小，即$\min </em>{\mathbf{x} \in \mathbb{R}^{n}}\Vert A \hat{\mathbf{x}}-\mathbf{b}\Vert$的最小值点。<br>$\hat{\mathbf{x}}$为最小二乘解（the least square solution）<br>$A^{T} A \hat{\mathbf{x}}=A^{T} \mathbf{b}$称为法方程组（normal equations）</p>
+<p>性质：<br>1.法方程组总有解（无论A是否列满秩），这是因为$C\left(A^{T}\right)=C\left(A^{T} A\right), A^{T} \mathbf{b} \in C\left(A^{T}\right)=C\left(A^{T} A\right)$<br>2.$A^{T} A \hat{\mathbf{x}}=A^{T} \mathbf{b}$的解可能有无穷个，但$A \hat{\mathbf{x}}$（投影p）唯一。<br>3.若A列满秩，则$A^{T} A$可逆，$\hat{\mathbf{x}}=\left(A^{T} A\right)^{-1} A^{T} \mathbf{b}$</p>
+<h3 id="最小二乘法的应用：曲线拟合"><a href="#最小二乘法的应用：曲线拟合" class="headerlink" title="最小二乘法的应用：曲线拟合"></a>最小二乘法的应用：曲线拟合</h3><p>给定数据$\left{\left(x<em>{1}, y</em>{1}\right), \cdots,\left(x<em>{N}, y</em>{N}\right)\right}$<br>寻求直线$y=C+D x$，使得误差</p>
+<script type="math/tex; mode=display">E(C, D)=\left[y_{1}-\left(C+D x_{1}\right)\right]^{2}+\cdots+\left[y_{N}-\left(C+D x_{N}\right)\right]^{2}</script><p>最小，即使向量：</p>
+<script type="math/tex; mode=display">\left(\begin{array}{c}{y_{1}-\left(C+D x_{1}\right)} \\ {\vdots} \\ {y_{N}-\left(C+D x_{N}\right)}\end{array}\right)</script><p>的长度最小。<br>令</p>
+<script type="math/tex; mode=display">A=\left(\begin{array}{cc}{1} & {x_{1}} \\ {\vdots} & {\vdots} \\ {1} & {x_{N}}\end{array}\right), \mathbf{b}=\left(\begin{array}{c}{y_{1}} \\ {\vdots} \\ {y_{N}}\end{array}\right), \hat{\mathbf{x}}=\left(\begin{array}{c}{\hat{C}} \\ {\hat{D}}\end{array}\right)</script><p>即求$\hat{\mathbf{x}}$使得$\Vert A \hat{\mathbf{x}}-\mathbf{b}\Vert$最小。解法方程组$A^{T} A \hat{\mathbf{x}}=A^{T} \mathbf{b}$，即</p>
+<script type="math/tex; mode=display">
+\left(\begin{array}{cc}{N} & {\sum_{i=1}^{N} x_{i}} \\ {\sum_{i=1}^{N} x_{i}} & {\sum_{i=1}^{N} x_{i}^{2}}\end{array}\right)\left(\begin{array}{l}{\hat{C}} \\ {\hat{D}}\end{array}\right)=\left(\begin{array}{c}{\sum_{i=1}^{N} y_{i}} \\ {\sum_{i=1}^{N} x_{i} y_{i}}\end{array}\right)</script><p>令$\overline{x}=\frac{1}{N} \sum<em>{i=1}^{N} x</em>{i}, \overline{y}=\frac{1}{N} \sum<em>{i=1}^{N} y</em>{i}$，求得$\hat{C}=\overline{y}-\hat{D} \overline{x}, \hat{D}=\frac{x<em>{1} y</em>{1}+\cdots+x<em>{N} y</em>{N}-N \overline{x} \overline{y}}{x<em>{1}^{2}+\cdots+x</em>{N}^{2}-N \overline{x}^{2}}$<br>直线$y=\hat{C}+\hat{D} x$称为最小二乘直线。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" rel="tag"># 线性代数</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/05/07/linear_algebra_8/" rel="prev" title="线性代数（8）：基和维数，四个基本子空间及其正交性">
+      <i class="fa fa-chevron-left"></i> 线性代数（8）：基和维数，四个基本子空间及其正交性
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/06/linear_algebra_10/" rel="next" title="线性代数（10）：Gram-Schmidt正交化">
+      线性代数（10）：Gram-Schmidt正交化 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E4%BA%A4%E6%8A%95%E5%BD%B1"><span class="nav-number">1.</span> <span class="nav-text">正交投影</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E9%A1%BE"><span class="nav-number">1.1.</span> <span class="nav-text">回顾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%B9%E5%9C%A8%E7%9B%B4%E7%BA%BF%E4%B8%8A%E7%9A%84%E6%8A%95%E5%BD%B1"><span class="nav-number">1.2.</span> <span class="nav-text">点在直线上的投影</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%B9%E5%9C%A8%E5%B9%B3%E9%9D%A2%E4%B8%8A%E7%9A%84%E6%8A%95%E5%BD%B1"><span class="nav-number">1.3.</span> <span class="nav-text">点在平面上的投影</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">最小二乘法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%B0%8F%E4%BA%8C%E4%B9%98%E6%B3%95%E7%9A%84%E5%BA%94%E7%94%A8%EF%BC%9A%E6%9B%B2%E7%BA%BF%E6%8B%9F%E5%90%88"><span class="nav-number">2.1.</span> <span class="nav-text">最小二乘法的应用：曲线拟合</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">David</p>
+  <div class="site-description" itemprop="description">Blog my daily study on machine learning, mathematics & computer science etc.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">180k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:44</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

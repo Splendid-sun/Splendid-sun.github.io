@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"splendid-sun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线性代数（8）：基和维数，四个基本子空间及其正交性">
+<meta property="og:url" content="https://splendid-sun.github.io/2019/05/07/linear_algebra_8/index.html">
+<meta property="og:site_name" content="Hello,David!">
+<meta property="og:description" content="参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/linear-algebra/%E6%AD%A3%E4%BA%A4%E8%A1%A5%E7%A9%BA%E9%97%B4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/linear-algebra/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-05-23%20%E4%B8%8A%E5%8D%8810.21.08.png">
+<meta property="article:published_time" content="2019-05-07T07:49:19.000Z">
+<meta property="article:modified_time" content="2019-06-04T04:15:23.000Z">
+<meta property="article:author" content="David">
+<meta property="article:tag" content="线性代数">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/linear-algebra/%E6%AD%A3%E4%BA%A4%E8%A1%A5%E7%A9%BA%E9%97%B4.png">
+
+<link rel="canonical" href="https://splendid-sun.github.io/2019/05/07/linear_algebra_8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>线性代数（8）：基和维数，四个基本子空间及其正交性 | Hello,David!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello,David!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">There is geometry in the humming of the strings, there is music in the spacing of the spheres.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2019/05/07/linear_algebra_8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          线性代数（8）：基和维数，四个基本子空间及其正交性
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-05-07 15:49:19" itemprop="dateCreated datePublished" datetime="2019-05-07T15:49:19+08:00">2019-05-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-06-04 12:15:23" itemprop="dateModified" datetime="2019-06-04T12:15:23+08:00">2019-06-04</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" itemprop="url" rel="index"><span itemprop="name">线性代数</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>参考资料:<br>清华大学数学科学系-线性代数-马辉<br>《工程数学 <strong>线性代数</strong> 第六版》 同济大学数学系 高等教育出版社<br>Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课</p>
+<span id="more"></span>
+<h2 id="基和维数"><a href="#基和维数" class="headerlink" title="基和维数"></a>基和维数</h2><p>$\left{\mathbf{v}<em>{1}, \cdots, \mathbf{v}</em>{n}\right}$是$V$的一个基（basis）<br>（1）$\mathbf{v}<em>{1}, \cdots, \mathbf{v}</em>{n}$线性无关<br>（2）$\forall \alpha \in V, \alpha$是$\mathbf{v}<em>{1}, \cdots, \mathbf{v}</em>{n}$的线性组合<br>我们说$V$的维数（dimension）是$n =$基中向量个数</p>
+<p>定理：设$V$是一个向量空间，$\left{\mathbf{v}<em>{1}, \cdots, \mathbf{v}</em>{n}\right}$是一组基，$\left{\mathbf{w}<em>{1}, \cdots, \mathbf{w}</em>{m}\right}$是另一组基，则$m=n$</p>
+<p>命题：$\mathbb{R}^{n}$中任意$n+1$个向量线性相关</p>
+<p>性质：设$\mathbf{v}<em>{1}, \cdots, \mathbf{v}</em>{n}$是$\mathbb{R}^{n}$的一组基，$A$是一个$n \times n$可逆矩阵，则$A \mathbf{v}<em>{1}, \cdots, A \mathbf{v}</em>{n}$也是$\mathbb{R}^{n}$的一组基。</p>
+<h3 id="关于秩的不等式"><a href="#关于秩的不等式" class="headerlink" title="关于秩的不等式"></a>关于秩的不等式</h3><p>(1) $r(A)=r\left(A^{T}\right)$<br>(2) $r(A B) \leq \min (r(A), r(B))$<br>(3) $r(A+B) \leq r(A)+r(B)$</p>
+<h2 id="四个基本子空间"><a href="#四个基本子空间" class="headerlink" title="四个基本子空间"></a>四个基本子空间</h2><p>设A是一个$m \times n$阶矩阵，考虑：<br>列空间（column space）$C(A)=\left{\mathbf{y} \in \mathbb{R}^{m} | \mathbf{y}=A \mathbf{x}, \exists \mathbf{x} \in \mathbb{R}^{n}\right}$ $dim = r$<br>行空间（row space）$C\left(A^{T}\right)=\left{\mathbf{y} \in \mathbb{R}^{n} | \mathbf{y}=A^{T} \mathbf{x}, \exists \mathbf{x} \in \mathbb{R}^{m}\right}$ $dim = r$<br>零空间（null space）$N(A)=\left{\mathbf{x} \in \mathbb{R}^{n} | A \mathbf{x}=\mathbf{0}\right}$ $dim = n-r$<br>左零空间（left null space）$N\left(A^{T}\right)=\left{\mathbf{x} \in \mathbb{R}^{m} | A^{T} \mathbf{x}=\mathbf{0}\right} =\left{\mathrm{x} \in \mathbb{R}^{m} | \mathrm{x}^{T} A=0\right}$ $dim = m-r$</p>
+<h3 id="维数公式"><a href="#维数公式" class="headerlink" title="维数公式"></a>维数公式</h3><p>设$V$是一个向量空间，$W<em>{1}, W</em>{2}$是两个子空间，则$W<em>{1} \cap W</em>{2}$和$W<em>{1}+W</em>{2}$是$V$的子空间，但$W<em>{1} \cup W</em>{2}$一般不是子空间</p>
+<p>这些空间的维数有如下关系：<br>$\operatorname{dim} W<em>{1}+\operatorname{dim} W</em>{2}=\operatorname{dim}\left(W<em>{1} \cap W</em>{2}\right)+\operatorname{dim}\left(W<em>{1}+W</em>{2}\right)$</p>
+<h2 id="四个子空间的正交性"><a href="#四个子空间的正交性" class="headerlink" title="四个子空间的正交性"></a>四个子空间的正交性</h2><p>定义：设$S$和$T$是$\mathbb{R}^{n}$的两个子空间（subspaces），我们说$S$垂直（perpendicular）于$T$，如果对于$\forall \mathbf{v} \in S, \mathbf{w} \in T, \mathbf{v}^{T} \mathbf{w}=0$，记作$S \perp T$或$T \perp S$。我们也可以说：$S$和$T$是正交（orthogonal）的。</p>
+<p>定理：设$A$是$m \times n$阶矩阵，则$C(A)$和$N\left(A^{T}\right)$正交，$C\left(A^{T}\right)$和$N(A)$正交。</p>
+<p>四个子空间还有如下的关系：<br>$C\left(A^{T}\right)+N(A)=\mathbb{R}^{n}, C\left(A^{T}\right) \perp N(A)$<br>$C(A)+N\left(A^{T}\right)=\mathbb{R}^{m}, C(A) \perp N\left(A^{T}\right)$</p>
+<p><img src="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/linear-algebra/正交补空间.png" alt="正交补空间Orthogonal complement space"></p>
+<p>正交补定义：设$V \subset \mathbb{R}^{n}$是一个子空间，$V$在$\mathbb{R}^{n}$中的正交补定义为集合$\left{\mathbf{w} \in \mathbb{R}^{n} | \mathbf{v}^{T} \mathbf{w}=0, \forall \mathbf{v} \in V\right}$，记作$V^{\perp}$</p>
+<h3 id="Ax-b在行空间中的唯一性"><a href="#Ax-b在行空间中的唯一性" class="headerlink" title="Ax=b在行空间中的唯一性"></a>Ax=b在行空间中的唯一性</h3><p><img src="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/linear-algebra/屏幕快照%202019-05-23%20上午10.21.08.png" alt="R^n到R^m映射"></p>
+<p>定理：若$A \mathbf{x}=\mathbf{b}$有解，则$A \mathbf{x}=\mathbf{b}$在$C\left(A^{T}\right)$中有唯一解</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" rel="tag"># 线性代数</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/05/02/linear_algebra_7/" rel="prev" title="线性代数（7）：向量空间">
+      <i class="fa fa-chevron-left"></i> 线性代数（7）：向量空间
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/06/04/linear_algebra_9/" rel="next" title="线性代数（9）：正交投影与最小二乘法">
+      线性代数（9）：正交投影与最小二乘法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E5%92%8C%E7%BB%B4%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">基和维数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E7%A7%A9%E7%9A%84%E4%B8%8D%E7%AD%89%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">关于秩的不等式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E4%B8%AA%E5%9F%BA%E6%9C%AC%E5%AD%90%E7%A9%BA%E9%97%B4"><span class="nav-number">2.</span> <span class="nav-text">四个基本子空间</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%B4%E6%95%B0%E5%85%AC%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">维数公式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E4%B8%AA%E5%AD%90%E7%A9%BA%E9%97%B4%E7%9A%84%E6%AD%A3%E4%BA%A4%E6%80%A7"><span class="nav-number">3.</span> <span class="nav-text">四个子空间的正交性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Ax-b%E5%9C%A8%E8%A1%8C%E7%A9%BA%E9%97%B4%E4%B8%AD%E7%9A%84%E5%94%AF%E4%B8%80%E6%80%A7"><span class="nav-number">3.1.</span> <span class="nav-text">Ax&#x3D;b在行空间中的唯一性</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">David</p>
+  <div class="site-description" itemprop="description">Blog my daily study on machine learning, mathematics & computer science etc.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">180k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:44</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

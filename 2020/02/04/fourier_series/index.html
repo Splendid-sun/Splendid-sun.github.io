@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"splendid-sun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="参考资料：线代启示录：傅立叶分析专题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="傅立叶分析专题：傅立叶级数和傅立叶变换">
+<meta property="og:url" content="https://splendid-sun.github.io/2020/02/04/fourier_series/index.html">
+<meta property="og:site_name" content="Hello,David!">
+<meta property="og:description" content="参考资料：线代启示录：傅立叶分析专题">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-02-04T02:53:38.000Z">
+<meta property="article:modified_time" content="2020-02-05T13:54:51.000Z">
+<meta property="article:author" content="David">
+<meta property="article:tag" content="傅立叶分析">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://splendid-sun.github.io/2020/02/04/fourier_series/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>傅立叶分析专题：傅立叶级数和傅立叶变换 | Hello,David!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello,David!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">There is geometry in the humming of the strings, there is music in the spacing of the spheres.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2020/02/04/fourier_series/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          傅立叶分析专题：傅立叶级数和傅立叶变换
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-02-04 10:53:38" itemprop="dateCreated datePublished" datetime="2020-02-04T10:53:38+08:00">2020-02-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-02-05 21:54:51" itemprop="dateModified" datetime="2020-02-05T21:54:51+08:00">2020-02-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90/" itemprop="url" rel="index"><span itemprop="name">傅立叶分析</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>参考资料：<br><a target="_blank" rel="noopener" href="https://ccjou.wordpress.com/專題探究/傅立葉分析專題/">线代启示录：傅立叶分析专题</a></p>
+<span id="more"></span>
+<h2 id="1-函数空间"><a href="#1-函数空间" class="headerlink" title="1. 函数空间"></a>1. 函数空间</h2><p>函数空间是一个希尔伯特（Hilbert）空间，即一个保有一般几何性质的无限维实向量空间。<br>函数也是向量，而仅包含有限长度的函数可以形成向量空间。<br>以$\langle f, g\rangle$表示函数$f$和$g$的内积：</p>
+<script type="math/tex; mode=display">
+\langle f, g\rangle=\int_{0}^{T} f(x) g(x) d x</script><p>函数长度可由内积求得：$|f|^{2}=\langle f, f\rangle$</p>
+<p>函数空间最有名的例子为傅立叶级数（Fourier series），函数$f(x)$表示为正弦函数和余弦函数的展开式：</p>
+<script type="math/tex; mode=display">
+f(x)=a_{0}+a_{1} \cos x+b_{1} \sin x+a_{2} \cos 2 x+b_{2} \sin 2 x+\cdots</script><p>傅立叶级数的基底函数包含：</p>
+<script type="math/tex; mode=display">
+1, \cos x, \sin x, \cos 2 x, \sin 2 x, \cdots</script><h2 id="2-傅立叶级数"><a href="#2-傅立叶级数" class="headerlink" title="2. 傅立叶级数"></a>2. 傅立叶级数</h2><p>考虑一有限维内积空间$\mathcal{V}$，且$\operatorname{dim} \mathcal{V}=n$。任意$\mathbf{x}, \mathbf{y} \in \mathcal{V}$的内积记为$\langle\mathbf{x}, \mathbf{y}\rangle$。令$\boldsymbol{\beta}=\left{\mathbf{v}<em>{1}, \ldots, \mathbf{v}</em>{n}\right}$为$\mathcal{V}$的一组<strong>单位正交基底</strong>（orthonormal basis），也就是说$\left\langle\mathbf{v}<em>{i}, \mathbf{v}</em>{j}\right\rangle= 1$若$i=j$，$\left\langle\mathbf{v}<em>{i}, \mathbf{v}</em>{j}\right\rangle= 0$若$i \neq j$，则有</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\left\langle\mathbf{v}_{i}, \mathbf{x}\right\rangle &=\left\langle\mathbf{v}_{i}, c_{1} \mathbf{v}_{1}+\cdots+c_{n} \mathbf{v}_{n}\right\rangle \\
+&= c_{1}\left\langle\mathbf{v}_{i}, \mathbf{v}_{1}\right\rangle+\cdots+ c_{n}\left\langle\mathbf{v}_{i}, \mathbf{v}_{n}\right\rangle \\
+&= c_{i}\left\langle\mathbf{v}_{i}, \mathbf{v}_{i}\right\rangle= c_{i}
+\end{aligned}</script><p>故$\mathbf{x}$有下列正交分解展开式：</p>
+<script type="math/tex; mode=display">
+\mathbf{x}=\left\langle\mathbf{v}_{1}, \mathbf{x}\right\rangle \mathbf{v}_{1}+\cdots+\left\langle\mathbf{v}_{n}, \mathbf{x}\right\rangle \mathbf{v}_{n}</script><p>其中 $\left\langle\mathbf{v}_i,\mathbf{x}\right\rangle\mathbf{v}_i $即为 $\mathbf{x}$ 至“超直线” $\mathrm{span}{\mathbf{v}_i}$ 的正交投影分量。</p>
+<hr>
+<h3 id="周期函数-f-x-可展开成傅立叶级数的条件："><a href="#周期函数-f-x-可展开成傅立叶级数的条件：" class="headerlink" title="周期函数$f(x)$可展开成傅立叶级数的条件："></a>周期函数$f(x)$可展开成傅立叶级数的条件：</h3><p><strong>收敛定理</strong>，<strong>狄利克雷（Dirichlet）充分条件</strong>：<br>（1）此函数必须是有界的（bounded），即对于任意$x$，$|f(x)|&lt;M$，$M$是一正实数<br>（2）在任意区间内，除了有限个不连续点，$f(x)$必须是连续函数<br>（3）在任意区间内，$f(x)$必须仅包含有限个极值<br>（4）在一周期内，$|f(x)|$的积分必须收敛</p>
+<hr>
+<h3 id="三角函数系的正交性："><a href="#三角函数系的正交性：" class="headerlink" title="三角函数系的正交性："></a>三角函数系的正交性：</h3><p>所谓三角函数系</p>
+<script type="math/tex; mode=display">
+1, \cos x, \sin x, \cos 2 x, \sin 2 x, \cdots, \cos n x, \sin n x, \cdots</script><p>在区间$[-\pi, \pi]$上<strong>正交</strong>，就是指在三角函数系中任何不同的两个函数的乘积$[-\pi, \pi]$上的积分等于零，即</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&\int_{-\pi}^{\pi} \cos n x \mathrm{d} x=0 \quad(n=1,2,3, \cdots)\\
+&\int_{-\pi}^{\pi} \sin n x \mathrm{d} x=0 \quad(n=1,2,3, \cdots)\\
+&\int_{-\pi}^{\pi} \sin k x \cos n x \mathrm{d} x=0 \quad(k, n=1,2,3, \cdots)\\
+&\int_{-\pi}^{\pi} \cos k x \cos n x \mathrm{d} x=0 \quad(k, n=1,2,3, \cdots, k \neq n)\\
+&\int_{-\pi}^{\pi} \sin k x \sin n x \mathrm{d} x=0 \quad(k, n=1,2,3, \cdots, k \neq n)
+\end{aligned}</script><p>以上等式，都可以通过计算定积分来验证。<br>在三角函数系中，两个相同函数的乘积在区间$[-\pi, \pi]$上的积分不等于零，即</p>
+<script type="math/tex; mode=display">
+\int_{-\pi}^{\pi} 1^{2} \mathrm{d} x=2 \pi, \int_{-\pi}^{\pi} \sin ^{2} n x \mathrm{d} x=\pi, \int_{-\pi}^{\pi} \cos ^{2} n x \mathrm{d} x=\pi \quad(n=1,2,3, \cdots)</script><hr>
+<p>令$\mathcal{V}$是由定义于区间$[-\pi, \pi]$（亦可选择$[0,2 \pi]$）的实函数所成的内积空间，函数空间$\mathcal{V}$是一无限维空间。对于$\mathcal{V}$中两实函数$f(x)$和$g(x)$，其内积定义如下（有些学者采用不含$1 / \pi$的内积定义，如此一来，$1 / \sqrt{\pi}$则需乘入余弦和正弦函数）：</p>
+<script type="math/tex; mode=display">
+\langle f, g\rangle \stackrel{\text { def }}{=} \frac{1}{\pi} \int_{-\pi}^{\pi} f(x) g(x) d x</script><p>则$f(x)$的<strong>长度</strong>或<strong>范数（norm）</strong> 为</p>
+<script type="math/tex; mode=display">
+\|f\|=\langle f, f\rangle^{1 / 2}=\left(\frac{1}{\pi} \int_{-\pi}^{\pi}(f(x))^{2} d x\right)^{1 / 2}</script><p>考虑无穷函数集合</p>
+<script type="math/tex; mode=display">
+\boldsymbol{\beta}=\left\{\frac{1}{\sqrt{2}}, \cos x, \sin x, \cos (2 x), \sin (2 x), \ldots\right\}</script><p>有</p>
+<script type="math/tex; mode=display">
+\begin{array}{l}
+{\frac{1}{\pi} \int_{-\pi}^{\pi}\left(\frac{1}{\sqrt{2}}\right)^{2} d x=1} \\
+{\frac{1}{\pi} \int_{-\pi}^{\pi} \cos ^{2}(m x) d x=1, m=1,2, \ldots} \\
+{\frac{1}{\pi} \int_{-\pi}^{\pi} \sin ^{2}(m x) d x=1, m=1,2, \ldots}
+\end{array}</script><p>故$\boldsymbol{\beta}$是一个单位正交集。</p>
+<hr>
+<h3 id="周期为-2-pi-实函数-f-x-的傅立叶级数"><a href="#周期为-2-pi-实函数-f-x-的傅立叶级数" class="headerlink" title="周期为$2 \pi$实函数$f(x)$的傅立叶级数"></a>周期为$2 \pi$实函数$f(x)$的傅立叶级数</h3><p>周期为$2 \pi$实函数$f(x)$的傅立叶级数$F(x)$为余弦和正弦函数组成的无穷级数：</p>
+<script type="math/tex; mode=display">
+F(x)=\frac{a_{0}}{2}+\sum_{k=1}^{\infty} a_{k} \cos (k x)+\sum_{k=1}^{\infty} b_{k} \sin (k x)</script><p>其中傅立叶系数$a<em>{k}$和$b</em>{k}$的计算公式如下：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&a_{k}=\frac{1}{\pi} \int_{-\pi}^{\pi} f(x) \cos (k x) d x, \quad k=0,1,2, \ldots\\
+&b_{k}=\frac{1}{\pi} \int_{-\pi}^{\pi} f(x) \sin (k x) d x, \quad k=1,2, \ldots
+\end{aligned}</script><p>若$f(x)$为奇函数，则$f(x) \cos (k x)$为奇函数，奇函数在关于原点对称区间上的积分为零，故$a<em>{k}=0, \quad k=0,1, 2\dots$。另一方面若$f(x)$为偶函数，则$f(x) \sin (k x)$为奇函数，有$b</em>{k}=0, \quad k=1,2, \dots$。</p>
+<h3 id="周期为-T-实函数-f-x-的傅立叶级数"><a href="#周期为-T-实函数-f-x-的傅立叶级数" class="headerlink" title="周期为$T$实函数$f(x)$的傅立叶级数"></a>周期为$T$实函数$f(x)$的傅立叶级数</h3><p>周期为$T$，定义于区间$[-T / 2, T / 2]$的周期函数$f(t)$。利用变数变换$t / T=x /(2 \pi)$，可使区间$[-\pi, \pi]$变换至$[-T / 2, T / 2]$，将$x=2 \pi t / T$代入$F(x)$，即得到$f(t)$的傅立叶级数：</p>
+<script type="math/tex; mode=display">
+F(t)=\frac{a_{0}}{2}+\sum_{k=1}^{\infty} a_{k} \cos \left(\frac{2 \pi k t}{T}\right)+\sum_{k=1}^{\infty} b_{k} \sin \left(\frac{2 \pi k t}{T}\right)</script><p>将$d x=2 \pi d t / T$代入$f(x)$的傅立叶系数的积分公式，可得</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&a_{k}=\frac{2}{T} \int_{-T / 2}^{T / 2} f(t) \cos \left(\frac{2 \pi k t}{T}\right) d t, k=0,1,2, \ldots\\
+&b_{k}=\frac{2}{T} \int_{-T / 2}^{T / 2} f(t) \sin \left(\frac{2 \pi k t}{T}\right) d t, k=1,2, \ldots
+\end{aligned}</script><p>对于周期为$T$的函数$f(t)$，任何区间$\left[t<em>{0}, t</em>{0}+T\right]$皆可使用，如何选择$t<em>{0}$值取决于便利性和个人偏好，常见的设定有$t</em>{0}=0$或$t_{0}=-T / 2$</p>
+<h3 id="指数傅立叶级数"><a href="#指数傅立叶级数" class="headerlink" title="指数傅立叶级数"></a>指数傅立叶级数</h3><p>利用欧拉公式$e^{i x}=\cos x+i \sin x$，我们可以写出更为精简的傅立叶级数表达式。</p>
+<script type="math/tex; mode=display">
+\cos x=\frac{e^{i x}+e^{-i x}}{2}, \sin x=\frac{e^{i x}-e^{-i x}}{2 i}</script><p>再将傅立叶级数$F(x)$中$\cos (k x)$和$\sin (k x)$的线形组合式改写如下：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+a_{k} \cos (k x)+b_{k} \sin (k x) &=a_{k}\left(\frac{e^{i k x}+e^{-i k x}}{2}\right)+b_{k}\left(\frac{e^{i k x}-e^{-i k x}}{2 i}\right) \\
+&=\left(\frac{a_{k}-i b_{k}}{2}\right) e^{i k x}+\left(\frac{a_{k}+i b_{k}}{2}\right) e^{-i k x} \\
+&=c_{k} e^{i k x}+c_{-k} e^{-i k x}, \quad k=1,2, \ldots
+\end{aligned}</script><p>其中$e^{i k x}$和$e^{-i k x}$的系数分别为</p>
+<script type="math/tex; mode=display">
+c_{k}=\frac{a_{k}-i b_{k}}{2}, \quad c_{-k}=\frac{a_{k}+i b_{k}}{2}</script><p>若$k=0$，就有$c<em>{0}=a</em>{0} / 2$。将以上结果代回$2 \pi$周期函数$f(x)$的傅立叶级数即得指数傅立叶级数：</p>
+<script type="math/tex; mode=display">
+F(x)=\sum_{k=-\infty}^{\infty} c_{k} e^{i k x}</script><p>复傅立叶系数$c_{k}$有计算公式：</p>
+<script type="math/tex; mode=display">
+c_{k}=\frac{1}{2 \pi} \int_{-\pi}^{\pi} f(x)(\cos (k x)-i \sin (k x)) d x=\frac{1}{2 \pi} \int_{-\pi}^{\pi} f(x) e^{-i k x} d x</script><p>类似地，$T$周期函数$f(t)$的指数傅立叶级数如下：</p>
+<script type="math/tex; mode=display">
+F(t)=\sum_{k=-\infty}^{\infty} c_{k} e^{2 \pi i k t / T}</script><p>复傅立叶系数则为</p>
+<script type="math/tex; mode=display">
+c_{k}=\frac{1}{T} \int_{-T / 2}^{T / 2} f(t) e^{-2 \pi i k t / T} d t</script><p>如果从一开始考虑指数函数集$\boldsymbol{\beta}^{\prime}=\left{e^{i k x}, k \in \mathbb{Z}\right}$，把$f(x)$正交投影至集合$\beta^{\prime}$扩张出的子空间上，可以导出$2 \pi$周期实函数的指数傅立叶级数，但$e^{i k x}$是复指数，因此实函数的内积定义必须修改为复函数内积。对于区间$[-\pi, \pi]$的两个复函数$f(x)$和$g(x)$，我们定义内积如下：</p>
+<script type="math/tex; mode=display">
+\langle f, g\rangle \stackrel{\text { def }}{=} \frac{1}{2 \pi} \int_{-\pi}^{\pi} \overline{f(x)} g(x) d x</script><p>复函数$f(x)$的长度或范数（norm）为</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\|f\| &=\langle f, f\rangle^{1 / 2} \\
+&=\left(\frac{1}{2 \pi} \int_{-\pi}^{\pi} \overline{f(x)} f(x) d x\right)^{1 / 2} \\
+&=\left(\frac{1}{2 \pi} \int_{-\pi}^{\pi}|f(x)|^{2} d x\right)^{1 / 2}
+\end{aligned}</script><p>复函数内积引入常数$1 / 2$的目的在于使$\beta^{\prime}$成为一个单位正交（orthonormal）函数集。</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\int_{-\pi}^{\pi} e^{-i m x} e^{i n x} d x &=\int_{-\pi}^{\pi}(\cos (m x)-i \sin (m x))(\cos (n x)+i \sin (n x)) d x \\
+&=\int_{-\pi}^{\pi} \cos (m x) \cos (n x) d x+\int_{-\pi}^{\pi} \sin (m x) \sin (n x) d x \\
+&+i \int_{-\pi}^{\pi} \cos (m x) \sin (n x) d x-i \int_{-\pi}^{\pi} \sin (m x) \cos (n x) d x \\
+&=2 \pi \delta_{m n}
+\end{aligned}</script><p>其中$\delta<em>{m n}=1$，若$m = n$，$\delta</em>{m n}=0$若$m \neq n$。因此证明$\boldsymbol{\beta}^{\prime}=\left{e^{i k x}, k \in \mathbb{Z}\right}$是一个单位正交集。函数$f(x)$的指数傅立叶级数即为$f(x)$至$\beta^{\prime}$扩张成的子空间的正交投影：</p>
+<script type="math/tex; mode=display">
+F(x)=\sum_{k=-\infty}^{\infty}\left\langle e^{i k x}, f(x)\right\rangle e^{i k x}</script><p>上式中，正交分解所含的系数就是傅立叶系数：</p>
+<script type="math/tex; mode=display">
+c_{k}=\left\langle e^{i k x}, f(x)\right\rangle=\frac{1}{2 \pi} \int_{-\pi}^{\pi} f(x) e^{-i k x} d x</script><h2 id="2-离散傅立叶变换"><a href="#2-离散傅立叶变换" class="headerlink" title="2. 离散傅立叶变换"></a>2. 离散傅立叶变换</h2><p>考虑定义于区间$[-T / 2, T / 2]$的周期为$T$的函数$f(t)$的指数傅立叶级数</p>
+<script type="math/tex; mode=display">
+F(t)=\sum_{k=-\infty}^{\infty} c_{k} e^{2 \pi i k t / T}</script><p>其中复傅立叶系数为</p>
+<script type="math/tex; mode=display">
+c_{k}=\frac{1}{T} \int_{-T / 2}^{T / 2} f(t) e^{-2 \pi i k t / T} d t, \quad k \in \mathbb{Z}</script><p>若$f(t)$满足Dirichlet条件，可以证明$|f-F|^{2}=0$，从现在开始将解除$f(t)$是周期函数的限制，假设$\int_{-\infty}^{\infty}|f(t)| d t$是有界的。当$T \rightarrow \infty$，傅立叶级数可推广为傅立叶转换（Fourier transform）。进一步地，若$f(t)$不再是连续函数而是一有限数列，傅立叶级数又可延伸为离散傅立叶转换（discrete Fourier transform，简称DFT）。</p>
+<p>傅立叶转换是傅立叶级数于$T \rightarrow \infty$的表达形式。令$\nu<em>{k}=k / T$，且$\Delta \nu=\nu</em>{k+1}-\nu<em>{k}=1 / T$，则$f</em>{T}(t)$的傅立叶级数为</p>
+<script type="math/tex; mode=display">
+f_{T}(t)=\sum_{k=-\infty}^{\infty} c_{k}(T) e^{2 \pi i \nu_{k} t}</script><p>其中我们令</p>
+<script type="math/tex; mode=display">
+c_{k}(T)=\frac{1}{T} \int_{-T / 2}^{T / 2} f_{T}(t) e^{-2 \pi i \nu_{k} t} dt</script><p>将$c<em>{k}(T)$代回傅立叶级数$f</em>{T}(t)$，可得</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+f_{T}(t) &=\sum_{k=-\infty}^{\infty}\left[\frac{1}{T} \int_{-T / 2}^{T / 2} f_{T}(t) e^{-2 \pi i \nu_{k} t} d t\right] e^{2 \pi i \nu_{k} t} \\
+&=\sum_{k=-\infty}^{\infty}\left[\int_{-T / 2}^{T / 2} f_{T}(t) e^{-2 \pi i \nu_{k} t} d t\right] e^{2 \pi i \nu_{k} t} \Delta \nu
+\end{aligned}</script><p>注意，上式中括弧内的$t$是虚拟变量（dummy variable）。当$T$逐渐增大时，$\Delta \nu=1 / T$变成一微小量$d \nu$，使得$\nu<em>{k}$逼近连续变量$\mathcal{V}$，总和因此趋于积分。令$T \rightarrow \infty$，则$f</em>{T}(t) \rightarrow f(t)$，可得下列等式：</p>
+<script type="math/tex; mode=display">
+f(t)=\int_{-\infty}^{\infty}\left[\int_{-\infty}^{\infty} f(t) e^{-2 \pi i \nu t} d t\right] e^{2 \pi i \nu t} d \nu</script><p>欲看清整个关系，将上式拆开为两部分。令括弧内的函数为</p>
+<script type="math/tex; mode=display">
+\hat{f}(\nu)=\int_{-\infty}^{\infty} f(t) e^{-2 \pi i \nu t} d t</script><p>称为$f(t)$的傅立叶转换，其中变量$\nu$代表频率。因此得到</p>
+<script type="math/tex; mode=display">
+f(t)=\int_{-\infty}^{\infty} \hat{f}(\nu) e^{2 \pi i \nu t} d \nu</script><p>称为$\hat{f}(\nu)$的逆傅立叶转换。</p>
+<hr>
+<h3 id="傅立叶矩阵"><a href="#傅立叶矩阵" class="headerlink" title="傅立叶矩阵"></a>傅立叶矩阵</h3><p>在数值计算上，因为电脑仅能处理有限维向量，连续型态的傅立叶转换必须换装成离散傅立叶转换。离散傅立叶转换的输入不再是无限维函数$f(t)$，我们仅能运用一周期$[0, T]$内$n$个等间距函数值$x<em>{j} \equiv f\left(t</em>{j}\right)$，其中$t<em>{j}=j T / n, \quad j=0,1, \ldots, n-1$。其次离散傅立叶转换的输出是复傅立叶系数构成的相同长度数列$c</em>{k}, k=0,1, \ldots, n-1$，而非无穷数列。因为傅立叶系数$c<em>{k}$与函数$f(t)$的关系是线性的（积分是线性函数），我们也预期离散傅立叶转换是数列$\left{x</em>{j}\right}$和$\left{c_{k}\right}$之间的一可逆线性转换，故可表示为$n \times n$阶可逆矩阵。在连续情况下，将区间正规化，令$T=1$，复傅立叶级数即为：</p>
+<script type="math/tex; mode=display">
+c_{k}=\int_{0}^{1} f(t) e^{-2 \pi i k t} d t</script><p>在离散情况下，以$t_{j}=j / n$取代$t$，将连续函数的傅立叶系数改为计算和，可得对应的离散公式：对于$k=0,1, \ldots, n-1$</p>
+<script type="math/tex; mode=display">
+y_{k}=\sum_{j=0}^{n-1} x_{j} e^{-2 \pi i k j / n}</script><p>此即<strong>离散傅立叶转换</strong>。为了与傅立叶系数$c<em>{k}$区分，我们以$y</em>{k}$代表离散傅立叶转换结果。使用欧拉公式$e^{i \theta}=\cos \theta+i \sin \theta$，令</p>
+<script type="math/tex; mode=display">
+w=e^{-2 \pi i / n}=\cos \left(\frac{2 \pi}{n}\right)-i \sin \left(\frac{2 \pi}{n}\right)</script><p>离散傅立叶转换可表示成矩阵形式$\mathbf{y}=F \mathbf{x}$，如下：</p>
+<script type="math/tex; mode=display">
+\left[\begin{array}{c}
+{y_{0}} \\
+{y_{1}} \\
+{y_{2}} \\
+{\vdots} \\
+{y_{n-1}}
+\end{array}\right]=\left[\begin{array}{ccccc}
+{1} & {1} & {1} & {\cdots} & {1} \\
+{1} & {w} & {w^{2}} & {\cdots} & {w^{n-1}} \\
+{1} & {w^{2}} & {w^{4}} & {\cdots} & {w^{2(n-1)}} \\
+{\vdots} & {\vdots} & {\vdots} & {\ddots} & {\vdots} \\
+{1} & {w^{n-1}} & {w^{2(n-1)}} & {\cdots} & {w^{(n-1)^{2}}}
+\end{array}\right]\left[\begin{array}{c}
+{x_{0}} \\
+{x_{1}} \\
+{x_{2}} \\
+{\vdots} \\
+{x_{n-1}}
+\end{array}\right]</script><p>上面的$n \times n$阶矩阵$F$称为傅立叶矩阵。$F$是一种特殊的Vandermonde矩阵。</p>
+<p>复数集$\left{1, w, w^{2}, \ldots, w^{n-1}\right}$为方程式$z^{n}=1$的根，称为$n$次方单位根，这些根在复数平面上单位圆按顺时针旋转并以相同间距排列。若$k \geq n$，则$w^{k}=w^{k \bmod n}$。对于任意整数$k$，由欧拉公式可确认</p>
+<script type="math/tex; mode=display">
+\overline{w^{k}}=\overline{e^{-2 \pi i k / n}}=\cos \left(\frac{2 \pi k}{n}\right)+i \sin \left(\frac{2 \pi k}{n}\right)=e^{2 \pi i k / n}=w^{-k}</script><p>考虑下式</p>
+<script type="math/tex; mode=display">
+w^{k}\left(1+w^{k}+w^{2 k}+\cdots+w^{(n-2) k}+w^{(n-1) k}\right)=w^{k}+w^{2 k}+\cdots+w^{(n-1) k}+1</script><script type="math/tex; mode=display">
+\left(w^{k}-1\right)\left(1+w^{k}+w^{2 k}+\cdots+w^{(n-2) k}+w^{(n-1) k}\right)=0</script><p>若$k \text { mod } n \neq 0$，则$w^{k} \neq 1$，可推得</p>
+<script type="math/tex; mode=display">
+\sum_{j=0}^{n-1} w^{j k}=1+w^{k}+w^{2 k}+\cdots+w^{(n-2) k}+w^{(n-1) k}=0</script><p>可以看出，傅立叶矩阵除了第一行，其余行的所有元素之和为0<br>下面我们运用此等式计算逆傅立叶矩阵$F^{-1}$<br>令$\mathbf{f}<em>{p}$和$\mathbf{f}</em>{q}$代表$F$的第$p$行和第$q$行，若$p \neq q$，则$(q-p) \text { mod } n \neq 0$，两向量的内积为</p>
+<script type="math/tex; mode=display">
+\left\langle\mathbf{f}_{p}, \mathbf{f}_{q}\right\rangle \stackrel{\text { def }}{=} \mathbf{f}_{p}^{*} \mathbf{f}_{q}=\sum_{j=0}^{n-1} \overline{w^{p j}} w^{j q}=\sum_{j=0}^{n-1} w^{j(q-p)}=0</script><p>并且</p>
+<script type="math/tex; mode=display">
+\left\|\mathbf{f}_{p}\right\|^{2}=\mathbf{f}_{p}^{*} \mathbf{f}_{p}=\sum_{j=0}^{n-1} \overline{w^{p j}} w^{j p}=\sum_{j=0}^{n-1} 1=n</script><p>有$\left|\mathbf{f}_{p}\right|=\sqrt{n}$。若将$F$的各行向量单位化，$\frac{1}{\sqrt{n}} F$为一酉矩阵（unitary）。因为$F^{T}=F$，就有</p>
+<script type="math/tex; mode=display">
+\left(\frac{1}{\sqrt{n}} F\right)^{-1}=\left(\frac{1}{\sqrt{n}} F\right)^{H}=\frac{1}{\sqrt{n}} \bar{F}</script><p>故$F^{-1}=\bar{F} / n$，即$\left(F^{-1}\right)_{p q}=w^{-p q} / n$，或明确写出</p>
+<script type="math/tex; mode=display">
+F^{-1}=\frac{1}{n}\left[\begin{array}{ccccc}
+{1} & {1} & {1} & {\cdots} & {1} \\
+{1} & {w^{-1}} & {w^{-2}} & {\cdots} & {w^{-(n-1)}} \\
+{1} & {w^{-2}} & {w^{-4}} & {\cdots} & {w^{-2(n-1)}} \\
+{\vdots} & {\vdots} & {\vdots} & {\ddots} & {\vdots} \\
+{1} & {w^{-(n-1)}} & {w^{-2(n-1)}} & {\cdots} & {w^{-(n-1)^{2}}}
+\end{array}\right]</script><p>所以，逆离散傅立叶转换$\mathbf{x}=F^{-1} \mathbf{y}$：对于$j=0,1, \ldots, n-1$</p>
+<script type="math/tex; mode=display">
+x_{j}=\frac{1}{n} \sum_{k=0}^{n-1} y_{k} e^{2 \pi i k j / n}</script><p>离散傅立叶转换$F_{\mathbf{X}}$和逆转换$F^{-1} \mathbf{y}$有相同的运算方式，因为</p>
+<script type="math/tex; mode=display">
+F^{-1} \mathbf{y}=\frac{\bar{F} \mathbf{y}}{n}=\frac{\overline{F \overline{\mathbf{y}}}}{n}</script><p>假设我们设计出一个离散傅立叶转换程序DFT(·)，则逆转换$\mathbf{x}=F^{-1} \mathbf{y}$的算法如下：<br>（1）计算共轭向量$\overline{\mathbf{y}}$<br>（2）计算离散傅立叶转换$\mathbf{z}=\operatorname{DFT}(\bar{\mathbf{y}})$<br>（3）计算共轭向量的纯量乘法$\mathbf{x}=(1 / n) \overline{\mathbf{z}}$</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%82%85%E7%AB%8B%E5%8F%B6%E5%88%86%E6%9E%90/" rel="tag"># 傅立叶分析</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/29/linear_algebra_13/" rel="prev" title="线性代数（13）：正定矩阵（positive definite matrix）">
+      <i class="fa fa-chevron-left"></i> 线性代数（13）：正定矩阵（positive definite matrix）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/02/04/legendre_polynomial/" rel="next" title="勒让德多项式（legendre polynomials）">
+      勒让德多项式（legendre polynomials） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%87%BD%E6%95%B0%E7%A9%BA%E9%97%B4"><span class="nav-number">1.</span> <span class="nav-text">1. 函数空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%82%85%E7%AB%8B%E5%8F%B6%E7%BA%A7%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">2. 傅立叶级数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%A8%E6%9C%9F%E5%87%BD%E6%95%B0-f-x-%E5%8F%AF%E5%B1%95%E5%BC%80%E6%88%90%E5%82%85%E7%AB%8B%E5%8F%B6%E7%BA%A7%E6%95%B0%E7%9A%84%E6%9D%A1%E4%BB%B6%EF%BC%9A"><span class="nav-number">2.1.</span> <span class="nav-text">周期函数$f(x)$可展开成傅立叶级数的条件：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E8%A7%92%E5%87%BD%E6%95%B0%E7%B3%BB%E7%9A%84%E6%AD%A3%E4%BA%A4%E6%80%A7%EF%BC%9A"><span class="nav-number">2.2.</span> <span class="nav-text">三角函数系的正交性：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%A8%E6%9C%9F%E4%B8%BA-2-pi-%E5%AE%9E%E5%87%BD%E6%95%B0-f-x-%E7%9A%84%E5%82%85%E7%AB%8B%E5%8F%B6%E7%BA%A7%E6%95%B0"><span class="nav-number">2.3.</span> <span class="nav-text">周期为$2 \pi$实函数$f(x)$的傅立叶级数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%A8%E6%9C%9F%E4%B8%BA-T-%E5%AE%9E%E5%87%BD%E6%95%B0-f-x-%E7%9A%84%E5%82%85%E7%AB%8B%E5%8F%B6%E7%BA%A7%E6%95%B0"><span class="nav-number">2.4.</span> <span class="nav-text">周期为$T$实函数$f(x)$的傅立叶级数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E6%95%B0%E5%82%85%E7%AB%8B%E5%8F%B6%E7%BA%A7%E6%95%B0"><span class="nav-number">2.5.</span> <span class="nav-text">指数傅立叶级数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E7%A6%BB%E6%95%A3%E5%82%85%E7%AB%8B%E5%8F%B6%E5%8F%98%E6%8D%A2"><span class="nav-number">3.</span> <span class="nav-text">2. 离散傅立叶变换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%82%85%E7%AB%8B%E5%8F%B6%E7%9F%A9%E9%98%B5"><span class="nav-number">3.1.</span> <span class="nav-text">傅立叶矩阵</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">David</p>
+  <div class="site-description" itemprop="description">Blog my daily study on machine learning, mathematics & computer science etc.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">180k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:44</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"splendid-sun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="参考资料：吴恩达深度学习专项课程： deeplearning.ai">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Drop_out 正则化">
+<meta property="og:url" content="https://splendid-sun.github.io/2022/09/14/drop-out/index.html">
+<meta property="og:site_name" content="Hello,David!">
+<meta property="og:description" content="参考资料：吴恩达深度学习专项课程： deeplearning.ai">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/Drop_out/2.png?raw=true">
+<meta property="og:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/Drop_out/1.png?raw=true">
+<meta property="og:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/Drop_out/3.png?raw=true">
+<meta property="article:published_time" content="2022-09-14T04:39:27.000Z">
+<meta property="article:modified_time" content="2022-09-16T01:55:09.000Z">
+<meta property="article:author" content="David">
+<meta property="article:tag" content="Deeplearning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/Drop_out/2.png?raw=true">
+
+<link rel="canonical" href="https://splendid-sun.github.io/2022/09/14/drop-out/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Drop_out 正则化 | Hello,David!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello,David!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">There is geometry in the humming of the strings, there is music in the spacing of the spheres.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2022/09/14/drop-out/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Drop_out 正则化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-09-14 12:39:27" itemprop="dateCreated datePublished" datetime="2022-09-14T12:39:27+08:00">2022-09-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-16 09:55:09" itemprop="dateModified" datetime="2022-09-16T09:55:09+08:00">2022-09-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Deeplearning/" itemprop="url" rel="index"><span itemprop="name">Deeplearning</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>参考资料：<br>吴恩达深度学习专项课程： deeplearning.ai</p>
+<span id="more"></span>
+<p>Dropout(Srivastava et al., 2014) 提供了正则化一大类模型的方法，计算方便且功能强大。Dropout可以被认为是集成大量深层神经网络的实用Bagging方法。Bagging涉及训练多个模型，并在每个测试样本上评估 多个模型。当每个模型都是一个很大的神经网络时，这似乎是不切实际的，因为训 练和评估这样的网络需要花费很多运行时间和内存。通常我们只能集成五至十个神经网络，如Szegedy et al. (2014a)集成了六个神经网络赢得 ILSVRC，超过这个数量 就会迅速变得难以处理。Dropout提供了一种廉价的Bagging集成近似，能够训练和评估<strong>指数级</strong>数量的神经网络。</p>
+<h2 id="Drop-out原理"><a href="#Drop-out原理" class="headerlink" title="Drop_out原理"></a>Drop_out原理</h2><p><img src="https://github.com/Splendid-sun/Hexo-photo/blob/master/Drop_out/2.png?raw=true" alt="1"></p>
+<p>drop_out的过程很简单，可以明显地减少过拟合现象，可以减少特征检测器(feature detectors)（隐层节点）间的相互作用。神经网络每一层有一个超参数Keep_prob，为这一层隐藏单元保留的几率。对参数较多的$W^{[l]}$，容易过拟合，可以把Keep_prob设置的低些。不容易过拟合的层，可以把Keep_prob设置的高些，甚至为1。</p>
+<p>通常输入层不应用drop_out。</p>
+<h2 id="inverted-dropout"><a href="#inverted-dropout" class="headerlink" title="inverted dropout"></a>inverted dropout</h2><p><img src="https://github.com/Splendid-sun/Hexo-photo/blob/master/Drop_out/1.png?raw=true" alt="2"></p>
+<p>反向随机失活(inverted dropout)方法，通过除以 keep-prob，确保$a^{[l]}$的期望值不变。inverted dropout可以使应用dropout之后，每一层的输出期望值保持稳定。确保在测试阶段不执行 dropout 来调整数值范围，激活函数的预期结果也不会发生变化。</p>
+<h2 id="dropout缺点downside-代价函数𝐽不再被明确定义"><a href="#dropout缺点downside-代价函数𝐽不再被明确定义" class="headerlink" title="dropout缺点downside:代价函数𝐽不再被明确定义"></a>dropout缺点downside:代价函数𝐽不再被明确定义</h2><p><img src="https://github.com/Splendid-sun/Hexo-photo/blob/master/Drop_out/3.png?raw=true" alt="3"></p>
+<p>为什么drop_out能正则化？因为该单元的输入可能随时被清除，不依赖于任何一个特征，不会太依赖某些局部的特征，使模型泛化性更强。drop_out 将产生收缩权重的平方范数的效果，和之前讲的l2正则化类似。</p>
+<p>计算视觉中，图片像素多，输入量非常大。而数据量一般不足，容易过拟合。所以 dropout 在计算机视觉中应用得比较频繁，几乎是计算机视觉研究人员默认选择。</p>
+<p>drop_out缺点downside：就是代价函数 不再被明确定义</p>
+<p>Reference:</p>
+<p>Hinton G E, Srivastava N, Krizhevsky A, et al. Improving neural networks by preventing co-adaptation of feature detectors[J]. arXiv preprint arXiv:1207.0580, 2012.<br>Krizhevsky A, Sutskever I, Hinton G E. Imagenet classification with deep convolutional neural networks[C]//Advances in neural information processing systems. 2012: 1097-1105.<br>Srivastava N, Hinton G, Krizhevsky A, et al. Dropout: A simple way to prevent neural networks from overfitting[J]. The Journal of Machine Learning Research, 2014, 15(1): 1929-1958.<br>Srivastava N. Improving neural networks with dropout[J]. University of Toronto, 2013, 182.<br>Bouthillier X, Konda K, Vincent P, et al. Dropout as data augmentation[J]. arXiv preprint arXiv:1506.08700, 2015.</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Deeplearning/" rel="tag"># Deeplearning</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/01/Decision-tree/" rel="prev" title="决策树">
+      <i class="fa fa-chevron-left"></i> 决策树
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/09/15/Xavier/" rel="next" title="神经网络参数Xavier初始化">
+      神经网络参数Xavier初始化 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Drop-out%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">Drop_out原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#inverted-dropout"><span class="nav-number">2.</span> <span class="nav-text">inverted dropout</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dropout%E7%BC%BA%E7%82%B9downside-%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0%F0%9D%90%BD%E4%B8%8D%E5%86%8D%E8%A2%AB%E6%98%8E%E7%A1%AE%E5%AE%9A%E4%B9%89"><span class="nav-number">3.</span> <span class="nav-text">dropout缺点downside:代价函数𝐽不再被明确定义</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">David</p>
+  <div class="site-description" itemprop="description">Blog my daily study on machine learning, mathematics & computer science etc.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">180k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:44</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

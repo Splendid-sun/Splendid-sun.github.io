@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"splendid-sun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本文阐述如何通过 协方差矩阵 的 奇异值分解 理解 主成分分析PCA：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="主成分分析PCA">
+<meta property="og:url" content="https://splendid-sun.github.io/2021/11/06/PCA/index.html">
+<meta property="og:site_name" content="Hello,David!">
+<meta property="og:description" content="本文阐述如何通过 协方差矩阵 的 奇异值分解 理解 主成分分析PCA：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/PCA/PCA.jpg?raw=true">
+<meta property="article:published_time" content="2021-11-06T10:02:53.000Z">
+<meta property="article:modified_time" content="2021-11-08T06:21:52.000Z">
+<meta property="article:author" content="David">
+<meta property="article:tag" content="降维">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/PCA/PCA.jpg?raw=true">
+
+<link rel="canonical" href="https://splendid-sun.github.io/2021/11/06/PCA/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>主成分分析PCA | Hello,David!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello,David!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">There is geometry in the humming of the strings, there is music in the spacing of the spheres.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2021/11/06/PCA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          主成分分析PCA
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-06 18:02:53" itemprop="dateCreated datePublished" datetime="2021-11-06T18:02:53+08:00">2021-11-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-11-08 14:21:52" itemprop="dateModified" datetime="2021-11-08T14:21:52+08:00">2021-11-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%99%8D%E7%BB%B4/" itemprop="url" rel="index"><span itemprop="name">降维</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文阐述如何通过 <strong>协方差矩阵</strong> 的 <strong>奇异值分解</strong> 理解 <strong>主成分分析PCA</strong>：</p>
+<span id="more"></span>
+<h2 id="数据降维问题："><a href="#数据降维问题：" class="headerlink" title="数据降维问题："></a>数据降维问题：</h2><p>我们想对一个feature过多的数据集进行<strong>降维</strong>：假设我们有一个m个样本点的数据集：$\left{x^{(i)} ; i=1, \ldots, m\right}$，其中$x^{(i)} \in \mathbb{R}^{n}$。其中n很大，很多属性对我们的数据分析问题作用不大。我们想通过基变换，把n维空间中的样本点映射到$\mathbb{R}^{n}$的k维子空间中。其中$k \ll n$。这k个基能最大地保留原始数据集的信息，使原数据集的信息损失最少。</p>
+<p>我们的原始数据集如下图所示，以$\mathbb{R}^{2}$为例：<br><img src="https://github.com/Splendid-sun/Hexo-photo/blob/master/PCA/PCA.jpg?raw=true" alt="PCA"></p>
+<p>如何通过协方差矩阵的奇异值分解来理解主成分分析PCA呢？观察上图，在2维平面上我们有m个样本点，这m个样本点我们以自然基$\mathrm{\vec e}<em>{1}:(1,0)$和$\mathrm{\vec e}</em>{2}:(0,1)$下的坐标来表示。我们对这个m个样本点构造一个matrix：</p>
+<script type="math/tex; mode=display">X = \left[\begin{array}{ccccc}\vdots & \vdots & \vdots & & \vdots \\ \vec x_{1} & \vec x_{2} & \vec x_{3} & \ldots & \vec x_{m} \\ \vdots & \vdots & \vdots & & \vdots\end{array}\right]</script><p>那么这个数据集的协方差矩阵是$\Sigma=\frac{1}{m} X X^{T}$。在这一步之前我们需要对数据集进行预处理：</p>
+<script type="math/tex; mode=display">
+x_{j}^{(i)} \leftarrow \frac{x_{j}^{(i)}-\mu_{j}}{\sigma_{j}}</script><p>先normalizing这个数据集，使其各分量均值为0，方差为1。均值为0是为了协方差矩阵不用减去均值，方差为1是为了在同一个量级下比较。<br>协方差矩阵的元素$\Sigma_{ij}$是数据集：$\left{x^{(i)} ; i=1, \ldots, m\right}$的第i和第j分量的协方差，协方差矩阵对角线上的元素为各个分量的方差。</p>
+<p>对于图中数据集样本点的分布，我们可以明显看出，在自然基表示下的各个点的坐标，不同分量之间的协方差是不为零的，那么我就想找到新的基，使这m个点在这个新基$\mathrm{\vec u}<em>{1}$和$\mathrm{\vec u}</em>{2}$的表示下，各个分量之间的协方差为零。矩阵$X$的各个点在新基$\mathrm{\vec u}<em>{1}$和$\mathrm{\vec u}</em>{2}$下的坐标为$\left{y^{(i)} ; i=1, \ldots, m\right}$，那么经过基变换之后，矩阵$X$变成：</p>
+<script type="math/tex; mode=display">Y = \left[\begin{array}{ccccc}\vdots & \vdots & \vdots & & \vdots \\ \vec y_{1} & \vec y_{2} & \vec y_{3} & \ldots & \vec y_{m} \\ \vdots & \vdots & \vdots & & \vdots\end{array}\right]</script><p>在这里我们要牢记并理解一个线性代数基础概念：<strong>基变换与坐标变换</strong>，在同济大学《线性代数》第六版第148页，我们这里复习下，不熟悉的同学可以回去翻教材。</p>
+<h2 id="基变换与坐标变换"><a href="#基变换与坐标变换" class="headerlink" title="基变换与坐标变换"></a>基变换与坐标变换</h2><p>同一向量在不同的基中有不同的坐标，不同的基与不同的坐标之间有怎样的关系呢?<br>设$\boldsymbol{\alpha}<em>{1}, \cdots, \boldsymbol{\alpha}</em>{n}$及$\boldsymbol{\beta}<em>{1}, \cdots, \boldsymbol{\beta}</em>{n}$是线性空间$V_{n}$中的两个基</p>
+<script type="math/tex; mode=display">
+\left\{\begin{array}{l}
+\boldsymbol{\beta}_{1}=p_{11} \boldsymbol{\alpha}_{1}+p_{21} \boldsymbol{\alpha}_{2}+\cdots+p_{n 1} \boldsymbol{\alpha}_{n}, \\
+\boldsymbol{\beta}_{2}=p_{12} \boldsymbol{\alpha}_{1}+p_{22} \boldsymbol{\alpha}_{2}+\cdots+p_{n 2} \boldsymbol{\alpha}_{n}, \\
+\cdots \cdots \cdots \cdots \\
+\boldsymbol{\beta}_{n}=p_{1 n} \boldsymbol{\alpha}_{1}+p_{2 n} \boldsymbol{\alpha}_{2}+\cdots+p_{n n} \boldsymbol{\alpha}_{n},
+\end{array}\right.</script><p>把$\boldsymbol{\alpha}<em>{1}, \boldsymbol{\alpha}</em>{2}, \cdots, \boldsymbol{\alpha}<em>{n}$这n个有序向量记作$\left(\boldsymbol{\alpha}</em>{1}, \boldsymbol{\alpha}<em>{2}, \cdots, \boldsymbol{\alpha}</em>{n}\right)$，记n阶矩阵$\boldsymbol{P}=\left(p_{i j}\right)$，利用向量和矩阵的形式，上式可表示为</p>
+<script type="math/tex; mode=display">
+\left(\boldsymbol{\beta}_{1}, \boldsymbol{\beta}_{2}, \cdots, \boldsymbol{\beta}_{n}\right)=\left(\boldsymbol{\alpha}_{1}, \boldsymbol{\alpha}_{2}, \cdots, \boldsymbol{\alpha}_{n}\right) \boldsymbol{P}</script><p>上面两式称为<strong>基变换公式</strong>，矩阵$\boldsymbol{P}$称为由基$\boldsymbol{\alpha}<em>{1}, \boldsymbol{\alpha}</em>{2}, \cdots, \boldsymbol{\alpha}<em>{n}$到基$\boldsymbol{\beta}</em>{1}, \boldsymbol{\beta}<em>{2}, \cdots, \boldsymbol{\beta}</em>{n}$的<strong>过渡矩阵</strong>。由于$\boldsymbol{\beta}<em>{1}, \boldsymbol{\beta}</em>{2}, \cdots, \boldsymbol{\beta}_{n}$线性无关，故过渡矩阵$\boldsymbol{P}$可逆。</p>
+<p><strong>定理</strong> 设$V<em>{n}$中的向量$\boldsymbol{\alpha}$在基$\boldsymbol{\alpha}</em>{1}, \boldsymbol{\alpha}<em>{2}, \cdots, \boldsymbol{\alpha}</em>{n}$中的坐标为$\left(x<em>{1}, x</em>{2}, \cdots, x<em>{n}\right)^{\mathrm{T}}$，在基$\boldsymbol{\beta}</em>{1}, \boldsymbol{\beta}<em>{2}, \cdots, \boldsymbol{\beta}</em>{n}$中的坐标为$\left(x<em>{1}^{\prime}, x</em>{2}^{\prime}, \cdots, x_{n}^{\prime}\right)^{\mathrm{T}}$，若两个基满足上面两个关系式，则有<strong>坐标变换公式</strong>：</p>
+<script type="math/tex; mode=display">
+\left(\begin{array}{c}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n}
+\end{array}\right)=\boldsymbol{P}\left(\begin{array}{c}
+x_{1}^{\prime} \\
+x_{2}^{\prime} \\
+\vdots \\
+x_{n}^{\prime}
+\end{array}\right)</script><p>或</p>
+<script type="math/tex; mode=display">
+\left(\begin{array}{c}
+x_{1}^{\prime} \\
+x_{2}^{\prime} \\
+\vdots \\
+x_{n}^{\prime}
+\end{array}\right)=\boldsymbol{P}^{-1}\left(\begin{array}{c}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n}
+\end{array}\right)=\boldsymbol{P}^{T}\left(\begin{array}{c}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n}
+\end{array}\right)</script><p>证明：因为</p>
+<script type="math/tex; mode=display">
+\left(\boldsymbol{\alpha}_{1}, \boldsymbol{\alpha}_{2}, \cdots, \boldsymbol{\alpha}_{n}\right)\left(\begin{array}{c}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n}
+\end{array}\right)=\boldsymbol{\alpha}=\left(\boldsymbol{\beta}_{1}, \boldsymbol{\beta}_{2}, \cdots, \boldsymbol{\beta}_{n}\right)\left(\begin{array}{c}
+x_{1}^{\prime} \\
+x_{2}^{\prime} \\
+\vdots \\
+x_{n}^{\prime}
+\end{array}\right)</script><script type="math/tex; mode=display">
+=\left(\boldsymbol{\alpha}_{1}, \boldsymbol{\alpha}_{2}, \cdots, \boldsymbol{\alpha}_{n}\right) \boldsymbol{P}\left(\begin{array}{c}
+x_{1}^{\prime} \\
+x_{2}^{\prime} \\
+\vdots \\
+x_{n}^{\prime}
+\end{array}\right)</script><p>由于$\boldsymbol{\alpha}<em>{1}, \boldsymbol{\alpha}</em>{2}, \cdots, \boldsymbol{\alpha}_{n}$线性无关，证毕。</p>
+<hr>
+<p>那么根据以上概念，我们从自然基$\mathrm{\vec e}<em>{1} \mathrm{\vec e}</em>{2} \dots \mathrm{\vec e}<em>{n}$到$\mathrm{\vec u}</em>{1} \mathrm{\vec u}<em>{2} \dots \mathrm{\vec u}</em>{n}$的基变换公式是：</p>
+<script type="math/tex; mode=display">
+\left(\boldsymbol{u}_{1}, \boldsymbol{u}_{2}, \cdots, \boldsymbol{u}_{n}\right)=\left(\boldsymbol{e}_{1}, \boldsymbol{e}_{2}, \cdots, \boldsymbol{e}_{n}\right) \boldsymbol{P}</script><p>其中自然基矩阵为单位阵，所以过渡矩阵$\boldsymbol{P}$为:</p>
+<script type="math/tex; mode=display">
+\boldsymbol{P} = \left(\boldsymbol{u}_{1}, \boldsymbol{u}_{2}, \cdots, \boldsymbol{u}_{n}\right)</script><p>新的基$\boldsymbol{u}<em>{1}, \boldsymbol{u}</em>{2}, \cdots, \boldsymbol{u}_{n}$彼此正交，长度为1。所以过渡矩阵$\boldsymbol{P}$为正交矩阵！</p>
+<p>设$\mathbb{R}^{n}$中的向量$\boldsymbol{\alpha}$在基$\boldsymbol{e}<em>{1}, \boldsymbol{e}</em>{2}, \cdots, \boldsymbol{e}<em>{n}$中的坐标为$\left(x</em>{1}, x<em>{2}, \cdots, x</em>{n}\right)^{\mathrm{T}}$，在基$\boldsymbol{u}<em>{1}, \boldsymbol{u}</em>{2}, \cdots, \boldsymbol{u}<em>{n}$中的坐标为$\left(x</em>{1}^{\prime}, x<em>{2}^{\prime}, \cdots, x</em>{n}^{\prime}\right)^{\mathrm{T}}$，若两个基满足上面关系式，则有<strong>坐标变换公式</strong>：</p>
+<script type="math/tex; mode=display">
+\left(\begin{array}{c}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n}
+\end{array}\right)=\boldsymbol{P}\left(\begin{array}{c}
+x_{1}^{\prime} \\
+x_{2}^{\prime} \\
+\vdots \\
+x_{n}^{\prime}
+\end{array}\right)</script><p>或</p>
+<script type="math/tex; mode=display">
+\left(\begin{array}{c}
+x_{1}^{\prime} \\
+x_{2}^{\prime} \\
+\vdots \\
+x_{n}^{\prime}
+\end{array}\right)=\boldsymbol{P}^{-1}\left(\begin{array}{c}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n}
+\end{array}\right)=\boldsymbol{P}^{T}\left(\begin{array}{c}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n}
+\end{array}\right)</script><p>我们通过基变换，有坐标变换：</p>
+<script type="math/tex; mode=display">Y = \left[\begin{array}{ccccc}\vdots & \vdots & \vdots & & \vdots \\ \vec y_{1} & \vec y_{2} & \vec y_{3} & \ldots & \vec y_{m} \\ \vdots & \vdots & \vdots & & \vdots\end{array}\right] = \boldsymbol{P}^{T} \left[\begin{array}{ccccc}\vdots & \vdots & \vdots & & \vdots \\ \vec x_{1} & \vec x_{2} & \vec x_{3} & \ldots & \vec x_{m} \\ \vdots & \vdots & \vdots & & \vdots\end{array}\right] = \boldsymbol{P}^{T}X</script><p>于是我们发现：旧自然基下的协方差矩阵$\Sigma=\frac{1}{m} X X^{T}$和新基下的协方差矩阵$\Sigma^{\prime}=\frac{1}{m} Y Y^{T}$之间的关系是：</p>
+<script type="math/tex; mode=display">
+\Sigma^{\prime}=\frac{1}{m} Y Y^{T}=\frac{1}{m} P^{T} X\left(P^{T} X\right)^{T}=\frac{1}{m} P^{T} X X^{T} P=P^{T} \frac{1}{m}X X^{T} P=P^{T} \Sigma P</script><script type="math/tex; mode=display">
+\Sigma=\frac{1}{m} X X^{T}=P\frac{1}{m} Y Y^{T}P^{T}=P\Sigma^{\prime}P^{T}</script><p>其中$\Sigma^{\prime}$是对角阵，$\boldsymbol{P}$是正交矩阵。关键来了！</p>
+<h2 id="结论："><a href="#结论：" class="headerlink" title="结论："></a>结论：</h2><p>我们对数据集m个样本点在旧自然基下的协方差矩阵$\Sigma=\frac{1}{m} X X^{T}$有奇异值分解：</p>
+<p>$\Sigma=\frac{1}{m} X X^{T}=P\Sigma^{\prime}P^{T}$，其中对角矩阵$\Sigma^{\prime}=\frac{1}{m} Y Y^{T}$，$P$是过渡矩阵。</p>
+<p>对角阵$\Sigma^{\prime}$的对角线上是从大到小排列的奇异值，我们取前k个奇异值，这k个奇异值对应的奇异向量，就是我们要找的新的k个基$\boldsymbol{u}<em>{1}, \boldsymbol{u}</em>{2}, \cdots, \boldsymbol{u}_{k}$</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%99%8D%E7%BB%B4/" rel="tag"># 降维</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/05/numpy/" rel="prev" title="numpy常用命令笔记">
+      <i class="fa fa-chevron-left"></i> numpy常用命令笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/12/08/kernel/" rel="next" title="核函数 Kernel">
+      核函数 Kernel <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%99%8D%E7%BB%B4%E9%97%AE%E9%A2%98%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">数据降维问题：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E5%8F%98%E6%8D%A2%E4%B8%8E%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2"><span class="nav-number">2.</span> <span class="nav-text">基变换与坐标变换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">结论：</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">David</p>
+  <div class="site-description" itemprop="description">Blog my daily study on machine learning, mathematics & computer science etc.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">180k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:44</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

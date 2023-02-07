@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"splendid-sun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="CS224N:Natural Language Processing with Deep Learning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS224n-1">
+<meta property="og:url" content="https://splendid-sun.github.io/2023/01/17/cs224n-1/index.html">
+<meta property="og:site_name" content="Hello,David!">
+<meta property="og:description" content="CS224N:Natural Language Processing with Deep Learning">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/cs224n_1/denotational_semantics.png?raw=true">
+<meta property="og:image" content="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/cs224n_1/1560070410531.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/cs224n_1/1560070494437.png">
+<meta property="article:published_time" content="2023-01-17T12:58:22.000Z">
+<meta property="article:modified_time" content="2023-01-26T06:29:09.000Z">
+<meta property="article:author" content="David">
+<meta property="article:tag" content="CS224n">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/Splendid-sun/Hexo-photo/blob/master/cs224n_1/denotational_semantics.png?raw=true">
+
+<link rel="canonical" href="https://splendid-sun.github.io/2023/01/17/cs224n-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CS224n-1 | Hello,David!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello,David!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">There is geometry in the humming of the strings, there is music in the spacing of the spheres.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2023/01/17/cs224n-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CS224n-1
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-01-17 20:58:22" itemprop="dateCreated datePublished" datetime="2023-01-17T20:58:22+08:00">2023-01-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-01-26 14:29:09" itemprop="dateModified" datetime="2023-01-26T14:29:09+08:00">2023-01-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CS224n/" itemprop="url" rel="index"><span itemprop="name">CS224n</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a target="_blank" rel="noopener" href="https://web.stanford.edu/class/cs224n/">CS224N:Natural Language Processing with Deep Learning</a></p>
+<span id="more"></span>
+<h1 id="Human-language-and-word-meaning"><a href="#Human-language-and-word-meaning" class="headerlink" title="Human language and word meaning"></a>Human language and word meaning</h1><p>NLP的目标是设计算法让计算机理解自然语言，NLP的常见任务有：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>难度</th>
+<th style="text-align:center">task</th>
+<th style="text-align:center"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>简单</td>
+<td style="text-align:center">Spell Checking 拼写检查</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td>简单</td>
+<td style="text-align:center">Keyword Search 关键字搜索</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td>简单</td>
+<td style="text-align:center">Finding Synonyms 寻找同义词</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td>中等</td>
+<td style="text-align:center">Parsing</td>
+<td style="text-align:center">Parsing information from websites, documents, etc.</td>
+</tr>
+<tr>
+<td>难</td>
+<td style="text-align:center">Machine Translation 机器翻译</td>
+<td style="text-align:center">e.g. Translate Chinese text to English</td>
+</tr>
+<tr>
+<td>难</td>
+<td style="text-align:center">Semantic Analysis 语义分析</td>
+<td style="text-align:center">What is the meaning of query statement?</td>
+</tr>
+<tr>
+<td>难</td>
+<td style="text-align:center">Coreference</td>
+<td style="text-align:center">e.g. What does “he” or “it” refer to given a document?</td>
+</tr>
+<tr>
+<td>难</td>
+<td style="text-align:center">Question Answering</td>
+<td style="text-align:center">e.g. Answering Jeopardy questions</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>parse /pɑːz/<br>v. 对（句子）作语法分析；分析<br>n. （计算机）句法分析，句法分析结果</p>
+<h2 id="denotational-semantics-指称语义学"><a href="#denotational-semantics-指称语义学" class="headerlink" title="denotational semantics 指称语义学"></a>denotational semantics 指称语义学</h2><p>指称语义学是一种用符号（word或者one-hot vector）表示含义的概念，这种表示是稀疏的，不能捕捉相似性。这是一种”localist” representation.</p>
+<p>signifier(symbol) &lt;—&gt; signified(idea or thing)</p>
+<h3 id="WordNet"><a href="#WordNet" class="headerlink" title="WordNet"></a>WordNet</h3><p>WordNet是一个包含同义词集（synonym sets）和上位词(hypernyms)(“is a” relationships)的列表的辞典<br> <img src="https://github.com/Splendid-sun/Hexo-photo/blob/master/cs224n_1/denotational_semantics.png?raw=true" alt="denotational_semantics"></p>
+<p>WordNet存在的问题：</p>
+<ol>
+<li>WordNet是一个很好的资源，但忽略了同义词之间的细微差别<ul>
+<li>例如“proficient”被列为“good”的同义词。这只在某些上下文中是正确的</li>
+</ul>
+</li>
+<li>对words的新的含义无法及时更新：<ul>
+<li>例如 wicked, badass, nifty, wizard, genius, ninja, bombest</li>
+<li>不可能永远保持更新words的新的含义</li>
+</ul>
+</li>
+<li>主观</li>
+<li>需要人类劳动和调整</li>
+<li>无法计算单词之间的相似度</li>
+</ol>
+<h3 id="one-hot-vector"><a href="#one-hot-vector" class="headerlink" title="one-hot vector"></a>one-hot vector</h3><p>one-hot vector: 用一个 $\mathbb{R}^{|V| \times 1}$ 向量表示每一个word，1位于这个word在词汇表中的索引位置，其余位置全是0。 $|V|$ 是词汇表的大小. 用这种形式编码的Word vectors 会以如下形式出现：</p>
+<script type="math/tex; mode=display">
+w^{a a r d v a r k}=\left[\begin{array}{c}
+1 \\
+0 \\
+0 \\
+\vdots \\
+0
+\end{array}\right], w^a=\left[\begin{array}{c}
+0 \\
+1 \\
+0 \\
+\vdots \\
+0
+\end{array}\right], w^{a t}=\left[\begin{array}{c}
+0 \\
+0 \\
+1 \\
+\vdots \\
+0
+\end{array}\right], \cdots ,w^{z e b r a}=\left[\begin{array}{c}
+0 \\
+0 \\
+0 \\
+\vdots \\
+1
+\end{array}\right]</script><p>one-hot vector存在的问题：</p>
+<p>所有向量是正交的，没有相似性概念，并且向量维度过大。</p>
+<h2 id="Distributional-semantics-分布语义学"><a href="#Distributional-semantics-分布语义学" class="headerlink" title="Distributional semantics 分布语义学"></a>Distributional semantics 分布语义学</h2><p>这是基于word经常出现的上下文context表示一个word含义的概念。这种表示是密集的dense，可以更好地捕捉相似性similarity。</p>
+<blockquote>
+<p>“You shall know a word by the company it keeps”(J. R Firth 1957: 11)<br>你可以通过一个单词的上下文了解它的含义 语言学家J. R Firth</p>
+</blockquote>
+<p>分布语义学是现代统计NLP最成功的理念之一</p>
+<p>当一个单词word出现在文本中时，它的上下文context是出现在其附近的一组单词(在一个固定大小的窗口中)</p>
+<p>word vector, (word) embedding, (neural) word representations这三个概念等价，他们都是distributed representation，区别于”localist” representation</p>
+<h2 id="Word2vec"><a href="#Word2vec" class="headerlink" title="Word2vec"></a>Word2vec</h2><p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1301.3781.pdf">Efficient Estimation of Word Representations in Vector Space</a></p>
+<p>Word2vec (Mikolov et al. 2013) 是一个学习word vectors的框架</p>
+<ul>
+<li>Word2vec<ul>
+<li>我们有大量的文本 (corpus means ‘body’ in Latin. 复数为corpora)</li>
+<li>固定词汇表中的每个单词都由一个向量表示</li>
+<li>文本中的每个位置t，其中有一个中心词c和上下文(“外部”)单词o</li>
+<li>使用c和o的词向量的相似性来计算给定c的o的概率 (反之亦然)</li>
+<li>不断调整词向量来最大化这个概率</li>
+</ul>
+</li>
+</ul>
+<p>下图为窗口大小为2时的$P\left(w_{t+j} \mid w_t\right)$计算过程，center word分别为into和banking</p>
+<p><img src="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/cs224n_1/1560070410531.png" alt="word2vex"></p>
+<p><img src="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/cs224n_1/1560070494437.png" alt="word2vex"></p>
+<h3 id="Word2vec-objective-function-cost-or-loss-function"><a href="#Word2vec-objective-function-cost-or-loss-function" class="headerlink" title="Word2vec: objective function(cost or loss function)"></a>Word2vec: objective function(cost or loss function)</h3><p>对于每个位置$t=1, \ldots, T$，在大小为m的固定窗口内预测上下文单词，给定中心词$w_t$，这个位置的似然为</p>
+<script type="math/tex; mode=display">
+\text {Likelihood}=L(\theta)=\prod_{\substack{t=1}}^T \prod_{\substack{-m \leq j \leq m \\ j \neq 0}} P\left(w_{t+j} \mid w_t ; \theta\right)</script><p>其中其中，$\theta$为所有需要优化的变量<br>损失函数$J(\theta)$是负的平均对数似然：</p>
+<script type="math/tex; mode=display">
+J(\theta)=-\frac{1}{T} \log L(\theta)=-\frac{1}{T} \sum_{t=1}^T \sum_{\substack{-m \leq j \leq m \\ j \neq 0}} \log P\left(w_{t+j} \mid w_t ; \theta\right)</script><p>最小化损失函数，等同于最大化预测精度</p>
+<p>问题：如何计算$P\left(w_{t+j} \mid w_t ; \theta\right)$？<br>回答：对于每个word都是用两个向量<br>$v_w$，当w是一个centor word<br>$u_w$，当w是一个context word<br>c代表centor word，o代表context word</p>
+<script type="math/tex; mode=display">
+P(o \mid c)=\frac{\exp \left(u_o^T v_c\right)}{\sum_{w \in V} \exp \left(u_w^T v_c\right)}</script><h3 id="Word2vec-prediction-function"><a href="#Word2vec-prediction-function" class="headerlink" title="Word2vec: prediction function"></a>Word2vec: prediction function</h3><script type="math/tex; mode=display">
+P(o \mid c)=\frac{\exp \left(u_o^T v_c\right)}{\sum_{w \in V} \exp \left(u_w^T v_c\right)}</script><p>取幂使任何数都为正<br>点积比较o和c的相似性 ，$u^T v=u·v=\sum_{i=1}^n u_i v_i$点积越大则概率越大<br>分母：对整个词汇表进行标准化，从而给出概率分布</p>
+<p>这是一个softmax function：$\mathbb{R}^n \rightarrow(0,1)$的例子</p>
+<script type="math/tex; mode=display">
+\operatorname{softmax}\left(x_i\right)=\frac{\exp \left(x_i\right)}{\sum_{j=1}^n \exp \left(x_j\right)}=p_i</script><p>softmax将任意值$x_i$映射到概率分布$p_i$</p>
+<p>首先我们随机初始化$u_w \in \mathbb{R}^d$和$v_w \in \mathbb{R}^d$，然后使用梯度下降法更新参数</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\frac{\partial}{\partial v_c} \log P(o \mid c) & =\frac{\partial}{\partial v_c} \log \frac{\exp \left(u_o^T v_c\right)}{\sum_{w \in V} \exp \left(u_w^T v_c\right)} \\
+& =\frac{\partial}{\partial v_c}\left(\log \exp \left(u_o^T v_c\right)-\log \sum_{w \in V} \exp \left(u_w^T v_c\right)\right) \\
+& =\frac{\partial}{\partial v_c}\left(u_o^T v_c-\log \sum_{w \in V} \exp \left(u_w^T v_c\right)\right) \\
+& =u_o-\sum_{w \in V}\frac{\exp \left(u_w^T v_c\right) u_w}{\sum_{w \in V} \exp \left(u_w^T v_c\right)}
+\end{aligned}</script><p>我们可以对上述结果重新排列如下，第一项是真正的上下文单词，第二项是预测的上下文单词。使用梯度下降法，模型的预测上下文将逐步接近真正的上下文。</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\frac{\partial}{\partial v_c} \log P(o \mid c) & =u_o-\frac{\sum_{w \in V} \exp \left(u_w^T v_c\right) u_w}{\sum_{w \in V} \exp \left(u_w^T v_c\right)} \\
+& =u_o-\sum_{w \in V} \frac{\exp \left(u_w^T v_c\right)}{\sum_{w \in V} \exp \left(u_w^T v_c\right)} u_w \\
+& =u_o-\sum_{w \in V} P(w \mid c) u_w
+\end{aligned}</script><p>再对$u<em>o$进行偏微分计算，注意这里的$u_o$是$u</em>{w=o}$的简写，故可知</p>
+<script type="math/tex; mode=display">
+\frac{\partial}{\partial u_o} \sum_{w \in V} u_w^T v_c=\frac{\partial}{\partial u_o} u_o^T v_c=v_c</script><script type="math/tex; mode=display">
+\begin{aligned}
+\frac{\partial}{\partial u_o} \log P(o \mid c) & =\frac{\partial}{\partial u_o} \log \frac{\exp \left(u_o^T v_c\right)}{\sum_{w \in V} \exp \left(u_w^T v_c\right)} \\
+& =\frac{\partial}{\partial u_o}\left(\log \exp \left(u_o^T v_c\right)-\log \sum_{w \in V} \exp \left(u_w^T v_c\right)\right) \\
+& =\frac{\partial}{\partial u_o}\left(u_o^T v_c-\log \sum_{w \in V} \exp \left(u_w^T v_c\right)\right) \\
+& =v_c-\frac{\sum \frac{\partial}{\partial u_o} \exp \left(u_w^T v_c\right)}{\sum_{w \in V} \exp \left(u_w^T v_c\right)} \\
+& =v_c-\frac{\exp \left(u_o^T v_c\right) v_c}{\sum_{w \in V} \exp \left(u_w^T v_c\right)} \\
+& =v_c-\frac{\exp \left(u_o^T v_c\right)}{\sum_{w \in V} \exp \left(u_w^T v_c\right)} v_c \\
+& =v_c-P(o \mid c) v_c \\
+& =(1-P(o \mid c)) v_c
+\end{aligned}</script><p>可以理解，当$P(o \mid c) \rightarrow 1$ ，即通过中心词c我们可以正确预测上下文词o，此时我们不需要调整$u_o$，反之则相应调整$u_o$。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CS224n/" rel="tag"># CS224n</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/11/10/transfer-learning/" rel="prev" title="transfer learning迁移学习">
+      <i class="fa fa-chevron-left"></i> transfer learning迁移学习
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/01/22/CS224N-2/" rel="next" title="Word2vec(CBOW,skip-gram,负采样,分层softmax)">
+      Word2vec(CBOW,skip-gram,负采样,分层softmax) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Human-language-and-word-meaning"><span class="nav-number">1.</span> <span class="nav-text">Human language and word meaning</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#denotational-semantics-%E6%8C%87%E7%A7%B0%E8%AF%AD%E4%B9%89%E5%AD%A6"><span class="nav-number">1.1.</span> <span class="nav-text">denotational semantics 指称语义学</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#WordNet"><span class="nav-number">1.1.1.</span> <span class="nav-text">WordNet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#one-hot-vector"><span class="nav-number">1.1.2.</span> <span class="nav-text">one-hot vector</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Distributional-semantics-%E5%88%86%E5%B8%83%E8%AF%AD%E4%B9%89%E5%AD%A6"><span class="nav-number">1.2.</span> <span class="nav-text">Distributional semantics 分布语义学</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Word2vec"><span class="nav-number">1.3.</span> <span class="nav-text">Word2vec</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Word2vec-objective-function-cost-or-loss-function"><span class="nav-number">1.3.1.</span> <span class="nav-text">Word2vec: objective function(cost or loss function)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Word2vec-prediction-function"><span class="nav-number">1.3.2.</span> <span class="nav-text">Word2vec: prediction function</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">David</p>
+  <div class="site-description" itemprop="description">Blog my daily study on machine learning, mathematics & computer science etc.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">180k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:44</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

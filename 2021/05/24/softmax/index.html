@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"splendid-sun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="参考：https:&#x2F;&#x2F;blog.csdn.net&#x2F;weixin_43217928&#x2F;article&#x2F;details&#x2F;104772424">
+<meta property="og:type" content="article">
+<meta property="og:title" content="softmax反向传播">
+<meta property="og:url" content="https://splendid-sun.github.io/2021/05/24/softmax/index.html">
+<meta property="og:site_name" content="Hello,David!">
+<meta property="og:description" content="参考：https:&#x2F;&#x2F;blog.csdn.net&#x2F;weixin_43217928&#x2F;article&#x2F;details&#x2F;104772424">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-05-24T09:32:04.000Z">
+<meta property="article:modified_time" content="2021-05-24T13:24:58.000Z">
+<meta property="article:author" content="David">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://splendid-sun.github.io/2021/05/24/softmax/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>softmax反向传播 | Hello,David!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello,David!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">There is geometry in the humming of the strings, there is music in the spacing of the spheres.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2021/05/24/softmax/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          softmax反向传播
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-05-24 17:32:04 / 修改时间：21:24:58" itemprop="dateCreated datePublished" datetime="2021-05-24T17:32:04+08:00">2021-05-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">深度学习</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43217928/article/details/104772424">https://blog.csdn.net/weixin_43217928/article/details/104772424</a></p>
+<span id="more"></span>
+<h1 id="softmax的反向传播梯度计算推导"><a href="#softmax的反向传播梯度计算推导" class="headerlink" title="softmax的反向传播梯度计算推导"></a>softmax的反向传播梯度计算推导</h1><p>对于深度学习多分类问题，神经网络最后一层常用softmax处理多项分布（multinomial distribution）。</p>
+<p>假设最后一层有n个神经元，就是n个类别：</p>
+<p><strong>输入</strong> 输出层神经元：$Z=\left[z<em>{1}, z</em>{2}, \ldots, z<em>{n}\right]$<br><strong>分类标签</strong>：$Y=\left[y</em>{1}, y<em>{2}, \ldots, y</em>{n}\right]$ （Y是one-hot标签，只有一个$y<em>{i}$值为1，其他为0）<br><strong>输出</strong>：$\mathrm{A}=\operatorname{softmax}(\mathrm{Z})=\left[\hat{y}</em>{1}, \hat{y}<em>{2}, \ldots, \hat{y}</em>{n}\right]$，$\hat{y}_{i}$为预测的每个类别的概率。</p>
+<p>对于n分类问题，softmax的式子为：</p>
+<script type="math/tex; mode=display">
+\hat{y}_{i}=\frac{e^{z_{i}}}{\sum_{j=1}^{n} e^{z_{j}}}</script><p>损失函数采用交叉熵，交叉熵损失函数式子为：</p>
+<script type="math/tex; mode=display">
+L=-\sum_{i=1}^{n} y_{i} l n \hat{y}_{i}</script><p><strong>交叉熵</strong>：用来衡量在给定真实分布下，使用非真实分布所指定的策略消除系统不确定性所需付出努力的大小。交叉熵越低，预测的分布就与真实分布越接近，最低的交叉熵就是使用了真实分布所计算出来的信息熵，此时$y<em>{i} = \hat{y}</em>{i}$。此时交叉熵等于信息熵，这就是为什么在机器学习分类算法中，总是最小化交叉熵，因为交叉熵越低，算法策略越接近最优策略，算法的非真实分布越接近真实分布。</p>
+<h2 id="反向传播梯度计算推导过程"><a href="#反向传播梯度计算推导过程" class="headerlink" title="反向传播梯度计算推导过程"></a>反向传播梯度计算推导过程</h2><h2 id="结论：向量形式为-frac-partial-L-partial-Z-hat-Y-Y"><a href="#结论：向量形式为-frac-partial-L-partial-Z-hat-Y-Y" class="headerlink" title="结论：向量形式为$\frac{\partial L}{\partial Z}=\hat Y-Y$"></a>结论：向量形式为$\frac{\partial L}{\partial Z}=\hat Y-Y$</h2><p>证明：<br>在这里我们假设，第k个神经元为正确标签，即$Y=\left[y<em>{1}, y</em>{2}, \ldots, y<em>{n}\right]$中$y</em>{k}=1$，其他$y_{i}$都是0。</p>
+<p>首先求L对A的导数</p>
+<script type="math/tex; mode=display">
+\frac{\partial L}{\partial \hat{y}_{i}}=\frac{\partial-\sum_{i=1}^{n} y_{i} l n \hat{y}_{i}}{\partial \hat{y}_{i}}=-\frac{y_{i}}{\hat{y}_{i}}</script><p>再求L对Z的导数：</p>
+<script type="math/tex; mode=display">
+\frac{\partial L}{\partial z_{i}}=\sum_{j=1}^{n} \frac{\partial L}{\partial \hat{y}_{j}} \cdot \frac{\partial \hat{y}_{j}}{\partial z_{i}}=\sum_{j=1}^{n}-\frac{y_{j}}{\hat{y}_{j}} \cdot \frac{\partial \hat{y}_{j}}{\partial z_{i}}</script><p>因为$y<em>{k}=1$, 其他 $y</em>{i}$ 都为0，因此只有$\frac{\partial L}{\partial a_{k}}$不为0，其他都为0。进一步化简：</p>
+<script type="math/tex; mode=display">
+\frac{\partial L}{\partial z_{i}}=\frac{\partial L}{\partial \hat{y}_{k}} \cdot \frac{\partial \hat{y}_{k}}{\partial z_{i}}</script><p>由此可见，接下来我们重点就是求$\frac{\partial \hat{y}<em>{k}}{\partial z</em>{i}}$了。对于$\frac{\partial \hat{y}<em>{k}}{\partial z</em>{i}}$的求解，要分两种情况：<br>若$i=k$</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\frac{\partial \hat{y}_{k}}{\partial z_{i}}=\frac{\partial \hat{y}_{k}}{\partial z_{k}}=\frac{\partial\left(\frac{e^{z_{k}}}{\sum_{j=1}^{n} e^{z_{j}}}\right)}{\partial z_{k}}=& \frac{e^{z_{k}}\left(\sum_{j=1}^{n} e^{z_{j}}\right)-\left(e^{z_{k}}\right)^{2}}{\left(\sum_{j=1}^{n} e^{z_{j}}\right)^{2}}=\frac{e^{z_{k}}}{\sum_{j=1}^{n} e^{z_{j}}}-\left(\frac{e^{z_{k}}}{\sum_{j=1}^{n} e^{z_{j}}}\right)^{2} \\
+&=\hat{y}_{k}-\hat{y}_{k}^{2}=\hat{y}_{k}\left(1-\hat{y}_{k}\right)
+\end{aligned}</script><p>若$i \neq k$</p>
+<script type="math/tex; mode=display">
+\frac{\partial \hat{y}_{k}}{\partial z_{i}}=\frac{\partial\left(\frac{e^{z_{k}}}{\sum_{j=1}^{n} e^{z_{j}}}\right)}{\partial z_{i}}=\frac{-e^{z_{k}} \cdot e^{z_{i}}}{\left(\sum_{j=1}^{n} e^{z_{j}}\right)^{2}}=-\frac{e^{z_{k}}}{\sum_{j=1}^{n} e^{z_{j}}} \cdot \frac{e^{z_{i}}}{\sum_{j=1}^{n} e^{z_{j}}}</script><script type="math/tex; mode=display">
+=-\hat{y}_{k} \hat{y}_{i}</script><p>结合我们求出的$\frac{\partial L}{\partial \hat{y}<em>{i}}$和$\frac{\partial \hat{y}</em>{i}}{\partial z_{j}}$，写出L对整个Z的导数，我们可以得到</p>
+<script type="math/tex; mode=display">
+\frac{\partial L}{\partial Z}=\left[\begin{array}{c}
+\frac{\partial L}{\partial z_{1}} \\
+\cdots \\
+\frac{\partial L}{\partial z_{k}} \\
+\ldots \\
+\frac{\partial L}{\partial z_{n}}
+\end{array}\right]=\left[\begin{array}{cc}
+\sum_{i=1}^{n} \frac{\partial L}{\partial \hat{y}_{i}} \cdot \frac{\partial \hat{y}_{i}}{\partial z_{1}} \\
+\cdots \\
+\sum_{i=1}^{n} \frac{\partial L}{\partial \hat{y}_{i}} \cdot \frac{\partial \hat{y}_{i}}{\partial z_{k}} \\
+\cdots \\
+\sum_{i=1}^{n} \frac{\partial L}{\partial \hat{y}_{i}} \cdot \frac{\partial \hat{y}_{i}}{\partial z_{n}}
+\end{array}\right]=\left[\begin{array}{c}
+\frac{\partial L}{\partial \hat{y}_{k}} \cdot \frac{\partial \hat{y}_{k}}{\partial z_{1}} \\
+\cdots \\
+\frac{\partial L}{\partial \hat{y}_{k}} \cdot \frac{\partial \hat{y}_{k}}{\partial z_{k}} \\
+\ldots \\
+\frac{\partial L}{\partial \hat{y}_{k}} \cdot \frac{\partial \hat{y}_{k}}{\partial z_{n}}
+\end{array}\right]=\left[\begin{array}{c}
+-\frac{1}{\hat{y}_{k}} \cdot\left(-\hat{y}_{k} \hat{y}_{1}\right) \\
+\cdots \\
+-\frac{1}{\hat{y}_{k}} \cdot \hat{y}_{k}\left(1-\hat{y}_{k}\right) \\
+\cdots \\
+-\frac{1}{\hat{y}_{k}} \cdot\left(-\hat{y}_{k} \hat{y}_{n}\right)
+\end{array}\right]=\left[\begin{array}{c}
+\hat{y}_{1} \\
+\ldots \\
+\hat{y}_{k}-1 \\
+\ldots \\
+\hat{y}_{n}
+\end{array}\right]</script><p>我们知道$y<em>{k}=1$, 除了 $y</em>{k}$ 其他 $y_{i}$ 都等于0，因此上式可以进一步写为：</p>
+<script type="math/tex; mode=display">
+\frac{\partial L}{\partial Z}=\left[\begin{array}{c}
+\hat{y}_{1} -y_{1} \\
+\cdots \\
+\hat{y}_{k}-y_{k} \\
+\ldots \\
+\hat{y}_{n}-y_{n}
+\end{array}\right]=\hat Y-Y</script><p>证毕～</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag"># 深度学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/04/26/linear_algebra_16/" rel="prev" title="线性代数（16）：伪逆（pseudoinverse）">
+      <i class="fa fa-chevron-left"></i> 线性代数（16）：伪逆（pseudoinverse）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/12/svm/" rel="next" title="SMO算法">
+      SMO算法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#softmax%E7%9A%84%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E6%A2%AF%E5%BA%A6%E8%AE%A1%E7%AE%97%E6%8E%A8%E5%AF%BC"><span class="nav-number">1.</span> <span class="nav-text">softmax的反向传播梯度计算推导</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD%E6%A2%AF%E5%BA%A6%E8%AE%A1%E7%AE%97%E6%8E%A8%E5%AF%BC%E8%BF%87%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">反向传播梯度计算推导过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA%EF%BC%9A%E5%90%91%E9%87%8F%E5%BD%A2%E5%BC%8F%E4%B8%BA-frac-partial-L-partial-Z-hat-Y-Y"><span class="nav-number">1.2.</span> <span class="nav-text">结论：向量形式为$\frac{\partial L}{\partial Z}&#x3D;\hat Y-Y$</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">David</p>
+  <div class="site-description" itemprop="description">Blog my daily study on machine learning, mathematics & computer science etc.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">180k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:44</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

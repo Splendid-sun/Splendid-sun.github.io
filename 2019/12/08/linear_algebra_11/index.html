@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"splendid-sun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="清华大学线性代数课程第16，17，18讲：行列式及其性质 参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常推荐！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线性代数（11）：方阵的行列式及其性质">
+<meta property="og:url" content="https://splendid-sun.github.io/2019/12/08/linear_algebra_11/index.html">
+<meta property="og:site_name" content="Hello,David!">
+<meta property="og:description" content="清华大学线性代数课程第16，17，18讲：行列式及其性质 参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常推荐！">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-12-08T10:30:46.000Z">
+<meta property="article:modified_time" content="2019-12-27T12:16:51.000Z">
+<meta property="article:author" content="David">
+<meta property="article:tag" content="线性代数">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://splendid-sun.github.io/2019/12/08/linear_algebra_11/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>线性代数（11）：方阵的行列式及其性质 | Hello,David!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello,David!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">There is geometry in the humming of the strings, there is music in the spacing of the spheres.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2019/12/08/linear_algebra_11/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          线性代数（11）：方阵的行列式及其性质
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-12-08 18:30:46" itemprop="dateCreated datePublished" datetime="2019-12-08T18:30:46+08:00">2019-12-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-27 20:16:51" itemprop="dateModified" datetime="2019-12-27T20:16:51+08:00">2019-12-27</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" itemprop="url" rel="index"><span itemprop="name">线性代数</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>清华大学线性代数课程第16，17，18讲：行列式及其性质</p>
+<p>参考资料:<br>清华大学数学科学系-线性代数-马辉<br>《工程数学 <strong>线性代数</strong> 第六版》 同济大学数学系 高等教育出版社<br>Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常<strong>推荐</strong>！</p>
+<span id="more"></span>
+<h2 id="1-行列式的定义"><a href="#1-行列式的定义" class="headerlink" title="1.行列式的定义"></a>1.行列式的定义</h2><p>定义：由n阶方阵<strong>A</strong>的元素所构成的行列式（各元素的位置不变），称为方阵<strong>A</strong>的行列式，记作$\operatorname{det} \mathbf{A}$或$|\mathbf{A}|$。<br>由$\mathbf{A}$确定$|\mathbf{A}|$的这个运算满足下述运算规律（设<strong>A</strong>、<strong>B</strong>为n阶方阵，$\lambda$为数）：<br>（1） $\left|A^{\mathrm{T}}\right|=|A|$ （行列式性质1）；<br>（2） $|\lambda \mathbf{A}|=\lambda^{n}|\mathbf{A}|$；<br>（3） $|A B|=|A||B|$<br>（4） $|A| \neq 0 \Longleftrightarrow A$可逆<br>（5） 若A可逆，则$\operatorname{det}\left(A^{-1}\right)=(\operatorname{det}(A))^{-1}$<br>（6） 若A是一个正交矩阵，则$\operatorname{det} A=\pm 1$<br>（7）$\left|I<em>{n}\right|=\operatorname{det}\left(I</em>{n}\right)=1$<br>注意：$|A+B| \neq|A|+|B|,|k A| \neq k|A|, k \in \mathbb{R}, n \geq 2$，行列式的线性性是针对于行列式某一行某一列的，而不是整个行列式的</p>
+<h2 id="2-行列式的性质"><a href="#2-行列式的性质" class="headerlink" title="2.行列式的性质"></a>2.行列式的性质</h2><p>性质1:行列式与它的转置行列式相等，$\left|A^{\mathrm{T}}\right|=|A|$</p>
+<p>性质2:对换行列式的两行（列），行列式变号<br>推论：如果行列式有两行（列）完全相同，则此行列式等于零<br>证明：设行列式</p>
+<script type="math/tex; mode=display">
+D_{1}=\left|\begin{array}{cccc}{b_{11}} & {b_{12}} & {\cdots} & {b_{1 \mathrm{n}}} \\ {b_{21}} & {b_{22}} & {\cdots} & {b_{2 n}} \\ {\vdots} & {\vdots} & {} & {\vdots} \\ {b_{n 1}} & {b_{n 2}} & {\cdots} & {b_{n n}}\end{array}\right|</script><p>对换任意两行（列），有D = -D，故 D=0。</p>
+<p>性质3：行列式的某一行（列）中所有的元素都乘同一数k，等于用数k乘此行列式<br>推论：行列式中某一行（列）的所有元素的公因子可以提到行列式记号的外面</p>
+<p>性质4: 行列式中如果有两行（列）元素成比例，则此行列式等于零<br>性质5: 若行列式的某一行（列）的元素都是两数之和，例如第i行的元素都是两数之和：</p>
+<script type="math/tex; mode=display">
+D=\left|\begin{array}{cccc}{a_{11}} & {a_{12}} & {\cdots} & {a_{1 n}} \\ {\vdots} & {\vdots} & {} & {\vdots} \\ {a_{i 1}+a_{i 1}^{\prime}} & {a_{i 2}+a_{i 2}^{\prime}} & {\cdots} & {a_{i n}+a_{i n}^{\prime}} \\ {\vdots} & {\vdots} & {} & {\vdots} \\ {a_{n 1}} & {a_{n 2}} & {\cdots} & {a_{n n}}\end{array}\right|</script><p>则D等于下列两个行列式之和：</p>
+<script type="math/tex; mode=display">
+D=\left|\begin{array}{cccc}{a_{11}} & {a_{12}} & {\cdots} & {a_{1 n}} \\ {\vdots} & {\vdots} & {} & {\vdots} \\ {a_{i 1}} & {a_{i 2}} & {\cdots} & {a_{i n}} \\ {\vdots} & {\vdots} & {} & {\vdots} \\ {a_{n 1}} & {a_{n 2}} & {\cdots} & {a_{n n}}\end{array}\right|+\left|\begin{array}{cccc}{a_{11}} & {a_{12}} & {\cdots} & {a_{1 n}} \\ {\vdots} & {\vdots} & {} & {\vdots} \\ {a_{i 1}^{\prime}} & {a_{i 2}^{\prime}} & {\cdots} & {a_{i n}^{\prime}} \\ {\vdots} & {\vdots} & {} & {\vdots} \\ {a_{n 1}} & {a_{n 2}} & {\cdots} & {a_{n n}}\end{array}\right|</script><p>性质6: 把行列式的某一行（列）的各元素乘同一数然后加到另一行（列）对应的元素上面，行列式不变</p>
+<h2 id="3-行列式的几何意义："><a href="#3-行列式的几何意义：" class="headerlink" title="3.行列式的几何意义："></a>3.行列式的几何意义：</h2><p>（1）行列式中的行或列向量所构成的超平行多面体的<strong>有向</strong>面积或体积。<br>（2）坐标系变换下的图形面积或体积的伸缩因子，即变换矩阵A的行列式 detA。</p>
+<h2 id="4-行列式按行（列）展开"><a href="#4-行列式按行（列）展开" class="headerlink" title="4.行列式按行（列）展开"></a>4.行列式按行（列）展开</h2><p><strong>定义1</strong>：在n阶行列式中，把$(i, j)$元$a<em>{i j}$所在的第i行和第j列划去后，留下来的n-1阶行列式叫做$(i, j)$元$a</em>{i j}$的<strong>余子式</strong>（complement minor），记作$M_{i j}$；记</p>
+<script type="math/tex; mode=display">
+A_{i j}=(-1)^{i+j} M_{i j}</script><p>$A<em>{i j}$叫做$(i, j)$元$a</em>{i j}$的<strong>代数余子式</strong>（algebraic complement cofactor）</p>
+<hr>
+<p><strong>定义2</strong>：行列式$|\mathbf{A}|$的各个元素的代数余子式$A_{i j}$所构成的如下矩阵：</p>
+<script type="math/tex; mode=display">
+A^{*}=\left(\begin{array}{cccc}{A_{11}} & {A_{21}} & {\cdots} & {A_{n 1}} \\ {A_{12}} & {A_{22}} & {\cdots} & {A_{n 2}} \\ {\vdots} & {\vdots} & {} & {\vdots} \\ {A_{1 n}} & {A_{2 n}} & {\cdots} & {A_{n n}}\end{array}\right)</script><p>称为矩阵A的<strong>伴随矩阵</strong></p>
+<p>有</p>
+<script type="math/tex; mode=display">
+A A^{*}=A^{*} A=|A| E</script><p>证明：设$A=\left(a<em>{i j}\right)$，记$A A^{*}=\left(b</em>{i j}\right)$，则</p>
+<script type="math/tex; mode=display">
+b_{i j}=a_{i 1} A_{j 1}+a_{i 2} A_{j 2}+\cdots+a_{i n} A_{j n}=\left\{\begin{array}{cc}{|A|,} & {i=j} \\ {0,} & {i \neq j}\end{array}\right.</script><p>故</p>
+<script type="math/tex; mode=display">
+A A^{*}=\left(\begin{array}{cccc}{|A|} & {} & {} & {} \\ {} & {|A|} & {} & {} \\ {} & {} & {\ddots} & {} \\ {} & {} & {} & {|A|}\end{array}\right)=|A| E</script><p>类似有</p>
+<script type="math/tex; mode=display">
+A^{*} A=|A| E</script><p>伴随矩阵的结构讨论：<br>若A是一个n阶矩阵，$A^{*}$ 是$A$的伴随矩阵</p>
+<p>（1）当$r(A) = n$，$A$满秩时，$A$可逆，$A^{-1}=\frac{1}{|A|} A^{*}$，故$A^{*}$可逆，$A^{*}$满秩，$r(A^{*}) = n$<br>（2）当$r(A) = n - 1$时，$A$不满秩，$|A|=0$，$A A^{*}=A^{*} A =|A| E=0$，故$A^{*}$的列属于A的零空间，而$\operatorname{dim} N(A)=1$，且存在$A^{*}_{i j} \neq 0$，故$r(A^{*}) = 1$，$A^{*}$为秩一矩阵，可看做一列向量与一行向量之积。<br>（3）$r(A) \leq n-2$，$A$的任意n-1阶子矩阵不可逆，所以$A^{*}$的所有元素都等于0，$A^{*}$为零矩阵</p>
+<hr>
+<p><strong>定理</strong>：若$|\mathbf{A}| \neq 0$，则矩阵A可逆，且</p>
+<script type="math/tex; mode=display">
+A^{-1}=\frac{1}{|A|} A^{*}</script><p>其中$A^{*}$为矩阵A的伴随矩阵 </p>
+<h2 id="5-行列式的计算"><a href="#5-行列式的计算" class="headerlink" title="5.行列式的计算"></a>5.行列式的计算</h2><p>方法一：</p>
+<p><strong>n阶行列式的定义</strong> 设有$n^{2}$个数，排成n行n列的数表</p>
+<script type="math/tex; mode=display">
+\begin{array}{cccc}{a_{11}} & {a_{12}} & {\cdots} & {a_{1 n}} \\ {a_{21}} & {a_{22}} & {\cdots} & {a_{2 n}} \\ {} & {\cdots} & {\cdots} & {\cdots} \\ {a_{n 1}} & {a_{n 2}} & {\cdots} & {a_{n n}}\end{array}</script><p>作出表中位于不同行不同列的n个数的乘积，并冠以符号$(-1)^{t}$，得到形如</p>
+<script type="math/tex; mode=display">
+(-1)^{t} a_{1 p_{1}} a_{2 p_{2}} \cdots a_{n p_{n}}</script><p>的项，其中$p<em>{1} p</em>{2} \cdots p_{n}$为自然数$1,2, \cdots, n$的一个排列，t为这个排列的逆序数。由于这样的排列共有n！个，因而形如上式的项共有n！项。所有这n！项的代数和</p>
+<script type="math/tex; mode=display">
+\sum(-1)^{t} a_{1 p_{1}} a_{2 p_{2}} \cdots a_{n p_{n}}</script><p>称为<strong>n阶行列式</strong>，记作</p>
+<script type="math/tex; mode=display">
+D=\left|\begin{array}{cccc}{a_{11}} & {a_{12}} & {\cdots} & {a_{1 n}} \\ {a_{21}} & {a_{22}} & {\cdots} & {a_{2 n}} \\ {\vdots} & {\vdots} & {} & {\vdots} \\ {a_{n 1}} & {a_{n 2}} & {\cdots} & {a_{n n}}\end{array}\right|</script><p>简记作$\operatorname{det}\left(a<em>{i j}\right)$，其中数$a</em>{i j}$为行列式D的(i，j)元。</p>
+<p>⚠️n = 1时，一阶行列式$|a|=a$，注意不要和绝对值记号混淆</p>
+<hr>
+<p>方法二：<strong>行列式按行（列）展开法则</strong></p>
+<p><strong>定理</strong> 行列式等于它的任一行（列）的各元素与其对应的代数余子式乘积之和，即</p>
+<script type="math/tex; mode=display">
+D=a_{i 1} A_{i 1}+a_{i 2} A_{i 2}+\cdots+a_{i n} A_{i n} \quad(i=1,2, \cdots, n)</script><p>或</p>
+<script type="math/tex; mode=display">
+D=a_{1 j} A_{1 j}+a_{2 j} A_{2 j}+\cdots+a_{n j} A_{n j} \quad(j=1,2, \cdots, n)</script><p><strong>推论</strong>: 行列式某一行（列）的元素与另一行（列）的对应元素的代数余子式的乘积之和等于零，即</p>
+<script type="math/tex; mode=display">
+\begin{array}{l}{a_{i 1} A_{j 1}+a_{i 2} A_{j 2}+\cdots+a_{i n} A_{j n}=0, \quad i \neq j} \\ {a_{1 i} A_{1 j}+a_{2 i} A_{2 j}+\cdots+a_{n i} A_{n j}=0, \quad i \neq j}\end{array}</script><p>证明：《工程数学 <strong>线性代数</strong> 第六版》 同济大学数学系 高等教育出版社 P19</p>
+<hr>
+<p>典型例题：证明<strong>范德蒙德（Vandermonde）行列式</strong></p>
+<script type="math/tex; mode=display">
+D_{n}=\left|\begin{array}{cccc}{1} & {1} & {\cdots} & {1} \\ {x_{1}} & {x_{2}} & {\cdots} & {x_{n}} \\ {x_{1}^{2}} & {x_{2}^{2}} & {\cdots} & {x_{n}^{2}} \\ {\vdots} & {\vdots} & {} & {\vdots} \\ {x_{1}^{n-1}} & {x_{2}^{n-1}} & {\cdots} & {x_{n}^{n-1}}\end{array}\right|=\prod_{n \geqslant i>j \geqslant 1}\left(x_{i}-x_{j}\right)</script><p>证明：《工程数学 <strong>线性代数</strong> 第六版》 同济大学数学系 高等教育出版社 P18～19</p>
+<p>行列式的计算方法技巧：化上（下）三角形法和降阶法</p>
+<h2 id="6-克拉默法则-Cramer’s-rule"><a href="#6-克拉默法则-Cramer’s-rule" class="headerlink" title="6.克拉默法则 Cramer’s rule"></a>6.克拉默法则 Cramer’s rule</h2><p>用途：解决方程个数与未知数个数相等并且系数行列式不等于零的线性方程组<br>含有n个未知数$x<em>{1}, x</em>{2}, \cdots, x_{n}$的n个线性方程的方程组</p>
+<script type="math/tex; mode=display">
+\left\{\begin{array}{l}{a_{11} x_{1}+a_{12} x_{2}+\cdots+a_{1 n} x_{n}=b_{1}} \\ {a_{21} x_{1}+a_{22} x_{2}+\cdots+a_{2 n} x_{n}=b_{2}} \\ {\cdots \cdots \cdots \cdots} \\ {a_{n 1} x_{1}+a_{n 2} x_{2}+\cdots+a_{n n} x_{n}=b_{n}}\end{array}\right.</script><p>它的解可以用n阶行列式表示，即有</p>
+<p><strong>克拉默法则</strong>：如果以上线性方程组的系数矩阵$A$的行列式不等于零，即</p>
+<script type="math/tex; mode=display">
+|A|=\left|\begin{array}{ccc}{a_{11}} & {\cdots} & {a_{1 n}} \\ {\vdots} & {} & {\vdots} \\ {a_{n 1}} & {\cdots} & {a_{n n}}\end{array}\right| \neq 0</script><p>那么，方程组有唯一解</p>
+<script type="math/tex; mode=display">
+x_{1}=\frac{\left|A_{1}\right|}{|A|}, \quad x_{2}=\frac{\left|A_{2}\right|}{|A|}, \cdots, \quad x_{n}=\frac{\left|A_{n}\right|}{|A|}</script><p>其中$A_{j}(j=1,2, \cdots, n)$是把系数矩阵$A$中第j列的元素用方程组右端的常数项代替后所得到的n阶矩阵，即</p>
+<script type="math/tex; mode=display">
+A_{j}=\left(\begin{array}{ccccccc}{a_{11}} & {\cdots} & {a_{1, j-1}} & {b_{1}} & {a_{1, j+1}} & {\cdots} & {a_{1 n}} \\ {\vdots} & {} & {\vdots} & {\vdots} & {\vdots} & {} & {\vdots} \\ {a_{n 1}} & {\cdots} & {a_{n, j-1}} & {b_{n}} & {a_{n, j+1}} & {\cdots} & {a_{n n}}\end{array}\right)</script><p>证明：《工程数学 <strong>线性代数</strong> 第六版》 同济大学数学系 高等教育出版社 P45</p>
+<h2 id="7-行列式表示向量积和混合积"><a href="#7-行列式表示向量积和混合积" class="headerlink" title="7.行列式表示向量积和混合积"></a>7.行列式表示向量积和混合积</h2><p>下面推导向量积的坐标表示式</p>
+<p>设$a=a<em>{x} i+a</em>{y} j+a<em>{z} k, b=b</em>{x} i+b<em>{y} j+b</em>{z} k$，有</p>
+<script type="math/tex; mode=display">
+\begin{aligned} \mathbf{a} \times \mathbf{b}=&\left(a_{x} \mathbf{i}+a_{y} \mathbf{j}+a_{z} \mathbf{k}\right) \times\left(b_{x} \mathbf{i}+b_{y} \mathbf{j}+b_{z} \mathbf{k}\right) \\=& a_{x} \mathbf{i} \times\left(b_{x} \mathbf{i}+b_{y} \mathbf{j}+b_{z} \mathbf{k}\right)+\\ & a_{y} \mathbf{j} \times\left(b_{x} \mathbf{i}+b_{y} \mathbf{j}+b_{z} \mathbf{k}\right)+a_{z} \mathbf{k} \times\left(b_{x} \mathbf{i}+b_{y} \mathbf{j}+b_{z} \mathbf{k}\right) \\=& a_{x} b_{x}(\mathbf{i} \times \mathbf{i})+a_{x} b_{y}(\mathbf{i} \times \mathbf{j})+a_{x} b_{z}(\mathbf{i} \times \mathbf{k})+\\ & a_{y} b_{x}(\mathbf{j} \times \mathbf{i})+a_{y} b_{y}(\mathbf{j} \times \mathbf{j})+a_{y} b_{z}(\mathbf{j} \times \mathbf{k})+\\ & a_{z} b_{x}(\mathbf{k} \times \mathbf{i})+a_{z} b_{y}(\mathbf{k} \times \mathbf{j})+a_{z} b_{z}(\mathbf{k} \times \mathbf{k}) \end{aligned}</script><p>因为$i \times i=j \times j=k \times k=0, i \times j=k, j \times k=i, k \times i=j, j \times i=-k, k \times j=-i, i \times k=-j$，所以</p>
+<script type="math/tex; mode=display">
+a \times b=\left(a_{y} b_{z}-a_{z} b_{y}\right) i+\left(a_{z} b_{x}-a_{x} b_{z}\right) j+\left(a_{x} b_{y}-a_{y} b_{x}\right) k</script><p>为了帮助记忆，利用三阶行列式，上式写成</p>
+<script type="math/tex; mode=display">
+\mathbf{a} \times \mathbf{b}=\left|\begin{array}{ccc}{\mathbf{i}} & {\mathbf{j}} & {\mathbf{k}} \\ {a_{x}} & {a_{y}} & {a_{z}} \\ {b_{x}} & {b_{y}} & {b_{z}}\end{array}\right|</script><hr>
+<p>下面来推出三向量的混合积的坐标表示式：<br>设$a=\left(a<em>{x}, a</em>{y}, a<em>{z}\right), b=\left(b</em>{x}, b<em>{y}, b</em>{z}\right), c=\left(c<em>{x}, c</em>{y}, c_{z}\right)$，因为</p>
+<script type="math/tex; mode=display">
+\mathbf{a} \times \mathbf{b}=\left|\begin{array}{ccc}{\mathbf{i}} & {\mathbf{j}} & {\mathbf{k}} \\ {a_{x}} & {a_{y}} & {a_{z}} \\ {b_{x}} & {b_{y}} & {b_{z}}\end{array}\right|</script><script type="math/tex; mode=display">
+=\left|\begin{array}{ll}{a_{y}} & {a_{z}} \\ {b_{y}} & {b_{z}}\end{array}\right| \mathbf{i}-\left|\begin{array}{ll}{a_{x}} & {a_{z}} \\ {b_{x}} & {b_{z}}\end{array}\right| \mathbf{j}+\left|\begin{array}{ll}{a_{x}} & {a_{y}} \\ {b_{x}} & {b_{y}}\end{array}\right| \mathbf{k}</script><p>再按两向量的数量积的坐标表示式，便得$(a \times b) \cdot c$</p>
+<script type="math/tex; mode=display">
+=c_{x}\left|\begin{array}{ll}{a_{y}} & {a_{z}} \\ {b_{y}} & {b_{z}}\end{array}\right|-c_{y}\left|\begin{array}{ll}{a_{x}} & {a_{z}} \\ {b_{x}} & {b_{z}}\end{array}\right|+c_{z}\left|\begin{array}{ll}{a_{x}} & {a_{y}} \\ {b_{x}} & {b_{y}}\end{array}\right|</script><script type="math/tex; mode=display">
+=\left|\begin{array}{lll}{a_{x}} & {a_{y}} & {a_{z}} \\ {b_{x}} & {b_{y}} & {b_{z}} \\ {c_{x}} & {c_{y}} & {c_{z}}\end{array}\right|</script><h2 id="8-行列式与QR分解的联系"><a href="#8-行列式与QR分解的联系" class="headerlink" title="8.行列式与QR分解的联系"></a>8.行列式与QR分解的联系</h2><p>定理：$V^{2}=\operatorname{det}\left(A^{T} A\right)$</p>
+<p>V为A的列向量组成的超平行六面体的体积，其中A不一定是方阵，把矩阵A的列向量通过Gram-Schmidt正交化，</p>
+<script type="math/tex; mode=display">
+A=Q R, R=\left(\begin{array}{cccc}{\left\|e_{1}\right\|} & {*} & {\cdots} & {*} \\ {0} & {\left\|e_{2}\right\|} & {\cdots} & {*} \\ {\vdots} & {\vdots} & {} & {\vdots} \\ {0} & {0} & {\cdots} & {\left\|e_{n}\right\|}\end{array}\right)</script><script type="math/tex; mode=display">
+A^{T} A=R^{T}Q^{T} QR=R^{T}R \Longrightarrow \operatorname{det}\left(A^{T} A\right)=\operatorname{det}\left(R^{T} R\right)=[\operatorname{det}(R)]^{2}=\left[\left\|\mathbf{e}_{1}\right\| ……\left\|\mathbf{e}_{n}\right\|\right]^{2}=V^{2}</script><p>个人理解：A如果是方阵，结论就很显然了，因为$\operatorname{det}\left(A^{T} A\right)=[\operatorname{det}(A)]^{2}$，而A的行列式的几何意义就是A的列向量组成的超平行六面体的体积，但是A不一定是方阵，如果A是一个m行n列的矩阵，我们通过证明发现，这个式子依旧是成立的，依旧有$V^{2}=\operatorname{det}\left(A^{T} A\right)$</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" rel="tag"># 线性代数</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/06/linear_algebra_10/" rel="prev" title="线性代数（10）：Gram-Schmidt正交化">
+      <i class="fa fa-chevron-left"></i> 线性代数（10）：Gram-Schmidt正交化
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/15/linear_algebra_12/" rel="next" title="线性代数（12）：方阵的特征值与特征向量，方阵的对角化">
+      线性代数（12）：方阵的特征值与特征向量，方阵的对角化 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%A1%8C%E5%88%97%E5%BC%8F%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">1.行列式的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%A1%8C%E5%88%97%E5%BC%8F%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="nav-number">2.</span> <span class="nav-text">2.行列式的性质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%A1%8C%E5%88%97%E5%BC%8F%E7%9A%84%E5%87%A0%E4%BD%95%E6%84%8F%E4%B9%89%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">3.行列式的几何意义：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E8%A1%8C%E5%88%97%E5%BC%8F%E6%8C%89%E8%A1%8C%EF%BC%88%E5%88%97%EF%BC%89%E5%B1%95%E5%BC%80"><span class="nav-number">4.</span> <span class="nav-text">4.行列式按行（列）展开</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E8%A1%8C%E5%88%97%E5%BC%8F%E7%9A%84%E8%AE%A1%E7%AE%97"><span class="nav-number">5.</span> <span class="nav-text">5.行列式的计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E5%85%8B%E6%8B%89%E9%BB%98%E6%B3%95%E5%88%99-Cramer%E2%80%99s-rule"><span class="nav-number">6.</span> <span class="nav-text">6.克拉默法则 Cramer’s rule</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E8%A1%8C%E5%88%97%E5%BC%8F%E8%A1%A8%E7%A4%BA%E5%90%91%E9%87%8F%E7%A7%AF%E5%92%8C%E6%B7%B7%E5%90%88%E7%A7%AF"><span class="nav-number">7.</span> <span class="nav-text">7.行列式表示向量积和混合积</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E8%A1%8C%E5%88%97%E5%BC%8F%E4%B8%8EQR%E5%88%86%E8%A7%A3%E7%9A%84%E8%81%94%E7%B3%BB"><span class="nav-number">8.</span> <span class="nav-text">8.行列式与QR分解的联系</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">David</p>
+  <div class="site-description" itemprop="description">Blog my daily study on machine learning, mathematics & computer science etc.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">180k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:44</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

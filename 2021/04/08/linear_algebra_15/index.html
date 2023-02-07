@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"splendid-sun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="清华大学线性代数（2）课程第四、五讲：线性变换 参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常推荐！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线性代数（15）：线性空间与线性变换">
+<meta property="og:url" content="https://splendid-sun.github.io/2021/04/08/linear_algebra_15/index.html">
+<meta property="og:site_name" content="Hello,David!">
+<meta property="og:description" content="清华大学线性代数（2）课程第四、五讲：线性变换 参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常推荐！">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-08T02:32:50.000Z">
+<meta property="article:modified_time" content="2021-04-13T16:25:34.000Z">
+<meta property="article:author" content="David">
+<meta property="article:tag" content="线性代数">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://splendid-sun.github.io/2021/04/08/linear_algebra_15/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>线性代数（15）：线性空间与线性变换 | Hello,David!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello,David!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">There is geometry in the humming of the strings, there is music in the spacing of the spheres.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2021/04/08/linear_algebra_15/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          线性代数（15）：线性空间与线性变换
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-08 10:32:50" itemprop="dateCreated datePublished" datetime="2021-04-08T10:32:50+08:00">2021-04-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-14 00:25:34" itemprop="dateModified" datetime="2021-04-14T00:25:34+08:00">2021-04-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" itemprop="url" rel="index"><span itemprop="name">线性代数</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>清华大学线性代数（2）课程第四、五讲：线性变换</p>
+<p>参考资料:<br>清华大学数学科学系-线性代数-马辉<br>《工程数学 <strong>线性代数</strong> 第六版》 同济大学数学系 高等教育出版社<br>Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常<strong>推荐</strong>！</p>
+<span id="more"></span>
+<h1 id="线性空间与线性变换"><a href="#线性空间与线性变换" class="headerlink" title="线性空间与线性变换"></a>线性空间与线性变换</h1><p>向量空间又称线性空间，是线性代数中一个最基本的概念。</p>
+<h2 id="线性空间的定义和性质"><a href="#线性空间的定义和性质" class="headerlink" title="线性空间的定义和性质"></a>线性空间的定义和性质</h2><p><strong>定义1</strong>  设$V$是一个非空集合，$\mathbb{R}$为实数域。如果在$V$中定义了一个<strong>加法</strong>，即对于任意两个元素$\boldsymbol{\alpha}, \boldsymbol{\beta} \in V$，总有惟一的一个元素$\boldsymbol{\gamma} \in V$与之对应，称为$\boldsymbol{\alpha}$与$\boldsymbol{\beta}$的<strong>和</strong>，记作$\boldsymbol{\gamma}=\boldsymbol{\alpha}+\boldsymbol{\beta}$；在$V$中又定义了一个数与元素的乘法（简称<strong>数乘</strong>），即对于任一数$\lambda \in \mathbb{R}$ 与任一元素$\boldsymbol{\alpha} \in V$，总有惟一的一个元素$\boldsymbol{\delta} \in V$与之对应，称为$\lambda$与$\boldsymbol{\alpha}$的<strong>数量乘积</strong>，记作$\boldsymbol{\delta}=\lambda \boldsymbol{\alpha}$，并且这两种运算满足以下八条运算规律 ( 设$\boldsymbol{\alpha}, \boldsymbol{\beta}, \boldsymbol{\gamma} \in V, \lambda, \mu \in \mathbb{R}$）：<br>（i） $\boldsymbol{\alpha}+\boldsymbol{\beta}=\boldsymbol{\beta}+\boldsymbol{\alpha} ;$<br>（ii）$(\boldsymbol{\alpha}+\boldsymbol{\beta})+\boldsymbol{\gamma}=\boldsymbol{\alpha}+(\boldsymbol{\beta}+\boldsymbol{\gamma}) ;$<br>（iii）在 $V$ 中存在<strong>零元素</strong>$\mathbf{0}$,对任何 $\boldsymbol{\alpha} \in V$,都有 $\boldsymbol{\alpha}+\mathbf{0}=\boldsymbol{\alpha} ;$<br>（iv） 对任何 $\boldsymbol{\alpha} \in V$, 都有 $\boldsymbol{\alpha}$ 的<strong>负元素</strong> $\boldsymbol{\beta} \in V,$ 使 $\boldsymbol{\alpha}+\boldsymbol{\beta}=\mathbf{0} ;$<br>（v） $1 \boldsymbol{\alpha}=\boldsymbol{\alpha}$<br>（vi） $\lambda(\mu \boldsymbol{\alpha})=(\lambda \mu) \boldsymbol{\alpha} ;$<br>（vii） $(\lambda+\mu) \boldsymbol{\alpha}=\lambda \boldsymbol{\alpha}+\mu \boldsymbol{\alpha} ;$<br>（viii） $\lambda(\boldsymbol{\alpha}+\boldsymbol{\beta})=\lambda \boldsymbol{\alpha}+\lambda \boldsymbol{\beta},$<br>那么，$V$就称为（实数域$\mathbb{R}$上的）<strong>向量空间</strong>（或<strong>线性空间</strong>），$V$中元素不论其本来的性质如何，统称为 <strong>（实）向量</strong></p>
+<p>简言之，凡满足上述八条规律的加法和数乘运算，就称为<strong>线性运算</strong>；凡定义了线性运算的集合，就称为<strong>向量空间</strong>，其中的元素就称为向量。</p>
+<hr>
+<p>过去我们习惯把有序数组叫做向量，现在我们把向量和向量空间的概念推广，使向量及向量空间的概念更具一般性。当然推广后向量的概念更加抽象化了。</p>
+<ol>
+<li>向量不一定是有序数组</li>
+<li>向量空间中的运算只要求满足上述八条运算规律</li>
+</ol>
+<p>下面举一些不是有序数组的向量空间以及向量的实例：</p>
+<p><strong>例1：</strong> 次数不超过n的多项式的全体，记作$P[x]_{n}$，即</p>
+<script type="math/tex; mode=display">
+P[x]_{n}=\left\{\boldsymbol{p}=a_{n} x^{n}+a_{n-1} x^{n-1}+\cdots+a_{1} x+a_{0} \mid a_{n}, \cdots, a_{1}, a_{0} \in \mathbb{R}\right\}</script><p>对于通常的多项式加法、数乘多项式的乘法构成向量空间。这是因为：通常的多项式加法、数乘多项式的乘法两种运算显然满足线性运算规律</p>
+<p><strong>例2：</strong>  正弦函数的集合</p>
+<script type="math/tex; mode=display">
+S[x]=\{\boldsymbol{s}=A \sin (x+B) \mid A, B \in \mathbb{R}\}</script><p>对于通常的函数加法及数乘函数的乘法构成向量空间。这是因为：通常的函数加法及数乘运算显然满足线性运算规律</p>
+<hr>
+<h3 id="下面讨论线性空间的性质"><a href="#下面讨论线性空间的性质" class="headerlink" title="下面讨论线性空间的性质"></a>下面讨论线性空间的<strong>性质</strong></h3><p>1.零向量是唯一的</p>
+<p>2.任一向量的负向量是唯一的，$\boldsymbol{\alpha}$的负向量记作$-\boldsymbol{\alpha}$</p>
+<p>3.$0 \boldsymbol{\alpha}=\mathbf{0},(-1) \boldsymbol{\alpha}=-\boldsymbol{\alpha}, \lambda \mathbf{0}=\mathbf{0}$</p>
+<p>4.如果$\lambda \boldsymbol{\alpha}=\mathbf{0}$，则$\lambda=0$ 或 $\boldsymbol{\alpha}=\mathbf{0}$</p>
+<hr>
+<p><strong>定义2</strong>  设$V$是一个线性空间，$L$是$V$的一个非空子集，如果$L$对于$V$中所定义的加法和数乘两种运算也构成一个线性空间，则称$L$为$V$的<strong>子空间</strong>。</p>
+<p><strong>定理</strong>   <strong>线性空间$V$的非空子集$L$构成子空间的充分必要条件是:$L$对于$V$中的线性运算封闭。</strong></p>
+<hr>
+<h2 id="线性空间同构的定义"><a href="#线性空间同构的定义" class="headerlink" title="线性空间同构的定义"></a>线性空间<strong>同构</strong>的定义</h2><p>一般地，设$V$与$U$是两个线性空间，如果在它们的向量之间有一一对应关系，且这个对应关系保持线性组合的对应，那么就说线性空间$V$与$U$<strong>同构</strong>。</p>
+<hr>
+<h2 id="基变换与坐标变换"><a href="#基变换与坐标变换" class="headerlink" title="基变换与坐标变换"></a>基变换与坐标变换</h2><p>同一向量在不同的基中有不同的坐标，不同的基与不同的坐标之间有怎样的关系呢?<br>设$\boldsymbol{\alpha}<em>{1}, \cdots, \boldsymbol{\alpha}</em>{n}$及$\boldsymbol{\beta}<em>{1}, \cdots, \boldsymbol{\beta}</em>{n}$是线性空间$V_{n}$中的两个基</p>
+<script type="math/tex; mode=display">
+\left\{\begin{array}{l}
+\boldsymbol{\beta}_{1}=p_{11} \boldsymbol{\alpha}_{1}+p_{21} \boldsymbol{\alpha}_{2}+\cdots+p_{n 1} \boldsymbol{\alpha}_{n}, \\
+\boldsymbol{\beta}_{2}=p_{12} \boldsymbol{\alpha}_{1}+p_{22} \boldsymbol{\alpha}_{2}+\cdots+p_{n 2} \boldsymbol{\alpha}_{n}, \\
+\cdots \cdots \cdots \cdots \\
+\boldsymbol{\beta}_{n}=p_{1 n} \boldsymbol{\alpha}_{1}+p_{2 n} \boldsymbol{\alpha}_{2}+\cdots+p_{n n} \boldsymbol{\alpha}_{n},
+\end{array}\right.</script><p>把$\boldsymbol{\alpha}<em>{1}, \boldsymbol{\alpha}</em>{2}, \cdots, \boldsymbol{\alpha}<em>{n}$这n个有序向量记作$\left(\boldsymbol{\alpha}</em>{1}, \boldsymbol{\alpha}<em>{2}, \cdots, \boldsymbol{\alpha}</em>{n}\right)$，记n阶矩阵$\boldsymbol{P}=\left(p_{i j}\right)$，利用向量和矩阵的形式，上式可表示为</p>
+<script type="math/tex; mode=display">
+\left(\boldsymbol{\beta}_{1}, \boldsymbol{\beta}_{2}, \cdots, \boldsymbol{\beta}_{n}\right)=\left(\boldsymbol{\alpha}_{1}, \boldsymbol{\alpha}_{2}, \cdots, \boldsymbol{\alpha}_{n}\right) \boldsymbol{P}</script><p>上面两式称为<strong>基变换公式</strong>，矩阵$\boldsymbol{P}$称为由基$\boldsymbol{\alpha}<em>{1}, \boldsymbol{\alpha}</em>{2}, \cdots, \boldsymbol{\alpha}<em>{n}$到基$\boldsymbol{\beta}</em>{1}, \boldsymbol{\beta}<em>{2}, \cdots, \boldsymbol{\beta}</em>{n}$的<strong>过渡矩阵</strong>。由于$\boldsymbol{\beta}<em>{1}, \boldsymbol{\beta}</em>{2}, \cdots, \boldsymbol{\beta}_{n}$线性无关，故过渡矩阵$\boldsymbol{P}$可逆。</p>
+<p><strong>定理</strong> 设$V<em>{n}$中的向量$\boldsymbol{\alpha}$在基$\boldsymbol{\alpha}</em>{1}, \boldsymbol{\alpha}<em>{2}, \cdots, \boldsymbol{\alpha}</em>{n}$中的坐标为$\left(x<em>{1}, x</em>{2}, \cdots, x<em>{n}\right)^{\mathrm{T}}$，在基$\boldsymbol{\beta}</em>{1}, \boldsymbol{\beta}<em>{2}, \cdots, \boldsymbol{\beta}</em>{n}$中的坐标为$\left(x<em>{1}^{\prime}, x</em>{2}^{\prime}, \cdots, x_{n}^{\prime}\right)^{\mathrm{T}}$，若两个基满足上面两个关系式，则有<strong>坐标变换公式</strong>：</p>
+<script type="math/tex; mode=display">
+\left(\begin{array}{c}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n}
+\end{array}\right)=\boldsymbol{P}\left(\begin{array}{c}
+x_{1}^{\prime} \\
+x_{2}^{\prime} \\
+\vdots \\
+x_{n}^{\prime}
+\end{array}\right)</script><p>或</p>
+<script type="math/tex; mode=display">
+\left(\begin{array}{c}
+x_{1}^{\prime} \\
+x_{2}^{\prime} \\
+\vdots \\
+x_{n}^{\prime}
+\end{array}\right)=\boldsymbol{P}^{-1}\left(\begin{array}{c}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n}
+\end{array}\right)</script><p>证明：因为</p>
+<script type="math/tex; mode=display">
+\left(\boldsymbol{\alpha}_{1}, \boldsymbol{\alpha}_{2}, \cdots, \boldsymbol{\alpha}_{n}\right)\left(\begin{array}{c}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n}
+\end{array}\right)=\boldsymbol{\alpha}=\left(\boldsymbol{\beta}_{1}, \boldsymbol{\beta}_{2}, \cdots, \boldsymbol{\beta}_{n}\right)\left(\begin{array}{c}
+x_{1}^{\prime} \\
+x_{2}^{\prime} \\
+\vdots \\
+x_{n}^{\prime}
+\end{array}\right)</script><script type="math/tex; mode=display">
+=\left(\boldsymbol{\alpha}_{1}, \boldsymbol{\alpha}_{2}, \cdots, \boldsymbol{\alpha}_{n}\right) \boldsymbol{P}\left(\begin{array}{c}
+x_{1}^{\prime} \\
+x_{2}^{\prime} \\
+\vdots \\
+x_{n}^{\prime}
+\end{array}\right)</script><p>由于$\boldsymbol{\alpha}<em>{1}, \boldsymbol{\alpha}</em>{2}, \cdots, \boldsymbol{\alpha}_{n}$线性无关，证毕。</p>
+<hr>
+<h2 id="线性变换"><a href="#线性变换" class="headerlink" title="线性变换"></a>线性变换</h2><p><strong>定义</strong>  设$V<em>{n}, U</em>{m}$分别是n维和m维线性空间，$T$是一个从$V<em>{n}$到$U</em>{m}$的映射，如果映射$T$满足：<br>（i）任给$\boldsymbol{\alpha}<em>{1}, \boldsymbol{\alpha}</em>{2} \in V<em>{n}$（从而$\boldsymbol{\alpha}</em>{1}+\boldsymbol{\alpha}<em>{2} \in V</em>{n}$）有</p>
+<script type="math/tex; mode=display">
+T\left(\boldsymbol{\alpha}_{1}+\boldsymbol{\alpha}_{2}\right)=T\left(\boldsymbol{\alpha}_{1}\right)+T\left(\boldsymbol{\alpha}_{2}\right)</script><p>（ii）任给$\boldsymbol{\alpha} \in V<em>{n}, \lambda \in \mathbb{R}$（从而$\lambda \boldsymbol{\alpha} \in V</em>{n}$），有</p>
+<script type="math/tex; mode=display">
+T(\lambda \boldsymbol{\alpha})=\lambda T(\boldsymbol{\alpha})</script><p>那么，$T$就称为从$V<em>{n}$到$U</em>{m}$的线性映射，或称为线性变换。简言之，线性映射就是保持线性组合的对应的映射。</p>
+<p>线性变换具有下述基本性质：</p>
+<p>（i）$T \mathbf{0}=\mathbf{0}, T(-\boldsymbol{\alpha})=-T \boldsymbol{a}$<br>（ii）若$\boldsymbol{\beta}=k<em>{1} \boldsymbol{\alpha}</em>{1}+k<em>{2} \boldsymbol{\alpha}</em>{2}+\cdots+k<em>{m} \boldsymbol{\alpha}</em>{m}$，则</p>
+<script type="math/tex; mode=display">
+T \boldsymbol{\beta}=k_{1} T \boldsymbol{\alpha}_{1}+k_{2} T \boldsymbol{\alpha}_{2}+\cdots+k_{m} T \boldsymbol{\alpha}_{m}</script><p>（iii）线性变换$T$的像集$T\left(V_{n}\right)$是一个线性空间，称为线性变换$T$的<strong>像空间</strong>。<br>（iv）使$T \boldsymbol{\alpha}=\mathbf{0}$的$\boldsymbol{\alpha}$的全体</p>
+<script type="math/tex; mode=display">
+N_{T}=\left\{\boldsymbol{\alpha} \mid \boldsymbol{\alpha} \in V_{n}, T \boldsymbol{\alpha}=\mathbf{0}\right\}</script><p>也是一个线性空间，$N_{T}$称为线性变换$T$的<strong>核</strong></p>
+<hr>
+<h2 id="线性变换的矩阵表示"><a href="#线性变换的矩阵表示" class="headerlink" title="线性变换的矩阵表示"></a>线性变换的矩阵表示</h2><p>$\mathbb{R}^{n}$中的线性变换$T$，都能用关系式</p>
+<script type="math/tex; mode=display">
+T(\boldsymbol{x})=\boldsymbol{A} \boldsymbol{x}\left(\boldsymbol{x} \in \mathbb{R}^{n}\right)</script><p>表示，其中$\boldsymbol{A}=\left(T\left(\boldsymbol{e}<em>{1}\right), \cdots, T\left(\boldsymbol{e}</em>{n}\right)\right)$</p>
+<p><strong>定义</strong>  设$T$是线性空间$V<em>{n}$中的线性变换，在$V</em>{n}$中取定一个基$\boldsymbol{\alpha}<em>{1}, \boldsymbol{\alpha}</em>{2}, \cdots,<br>\boldsymbol{\alpha}_{n}$，如果这个基在变换$T$下的像(用这个基线性表示)为</p>
+<script type="math/tex; mode=display">
+\left\{\begin{array}{l}
+T\left(\boldsymbol{\alpha}_{1}\right)=a_{11} \boldsymbol{\alpha}_{1}+a_{21} \boldsymbol{\alpha}_{2}+\cdots+a_{n 1} \boldsymbol{\alpha}_{r}, \\
+T\left(\boldsymbol{\alpha}_{2}\right)=a_{12} \boldsymbol{\alpha}_{1}+a_{22} \boldsymbol{\alpha}_{2}+\cdots+a_{n 2} \boldsymbol{\alpha}_{r}, \\
+\cdots \cdots \cdots \cdots \\
+T\left(\boldsymbol{\alpha}_{n}\right)=a_{1 n} \boldsymbol{\alpha}_{1}+a_{2 n} \boldsymbol{\alpha}_{2}+\cdots+a_{n n} \boldsymbol{\alpha}_{r},
+\end{array}\right.</script><p>记$T\left(\boldsymbol{\alpha}<em>{1}, \boldsymbol{\alpha}</em>{2}, \cdots, \boldsymbol{\alpha}<em>{n}\right)=\left(T\left(\boldsymbol{\alpha}</em>{1}\right), T\left(\boldsymbol{\alpha}<em>{2}\right), \cdots, T\left(\boldsymbol{\alpha}</em>{n}\right)\right)$，上式可以表示为</p>
+<script type="math/tex; mode=display">
+T\left(\boldsymbol{\alpha}_{1}, \boldsymbol{\alpha}_{2}, \cdots, \boldsymbol{\alpha}_{n}\right)=\left(\boldsymbol{\alpha}_{1}, \boldsymbol{\alpha}_{2}, \cdots, \boldsymbol{\alpha}_{n}\right) \boldsymbol{A}</script><p>其中</p>
+<script type="math/tex; mode=display">
+\boldsymbol{A}=\left(\begin{array}{cccc}
+a_{11} & a_{12} & \cdots & a_{1 n} \\
+a_{21} & a_{22} & \cdots & a_{2 n} \\
+\vdots & \vdots & & \vdots \\
+a_{n 1} & a_{n 2} & \cdots & a_{n n}
+\end{array}\right)</script><p>那么，$A$就称为<strong>线性变换$T$在基$\boldsymbol{\alpha}<em>{1}, \boldsymbol{\alpha}</em>{2}, \cdots, \boldsymbol{\alpha}_{n}$下的矩阵.</strong></p>
+<p>显然，矩阵$A$由基的像$T\left(\boldsymbol{\alpha}<em>{1}\right), \cdots, T\left(\boldsymbol{\alpha}</em>{n}\right)$惟一确定。</p>
+<p>如果给出一个矩阵$A$作为线性变换$T$在基$\boldsymbol{\alpha}<em>{1}, \boldsymbol{\alpha}</em>{2}, \cdots, \boldsymbol{\alpha}<em>{n}$下的矩阵，也就是给出了这个基在变换$T$下的像，那么，根据变换$T$保持线性关系的特性，我们来 推导变换$T$必须满足的关系式。<br>$V</em>{n}$中的任意元素记为$\boldsymbol{\alpha}=\sum<em>{i=1}^{n} x</em>{i} \boldsymbol{\alpha}$有</p>
+<script type="math/tex; mode=display">
+T\left(\sum_{i=1}^{n} x_{i} \boldsymbol{\alpha}_{i}\right)=\sum_{i=1}^{n} x_{i} T\left(\boldsymbol{\alpha}_{i}\right)</script><script type="math/tex; mode=display">
+=\left(T\left(\boldsymbol{\alpha}_{1}\right), T\left(\boldsymbol{\alpha}_{2}\right), \cdots, T\left(\boldsymbol{\alpha}_{n}\right)\right)\left(\begin{array}{c}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n}
+\end{array}\right)</script><script type="math/tex; mode=display">
+=\left(\boldsymbol{\alpha}_{1}, \boldsymbol{\alpha}_{2}, \cdots, \boldsymbol{\alpha}_{n}\right) \boldsymbol{A}\left(\begin{array}{c}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n}
+\end{array}\right)</script><p>即</p>
+<script type="math/tex; mode=display">
+T\left[\left(\boldsymbol{\alpha}_{1}, \boldsymbol{\alpha}_{2}, \cdots, \boldsymbol{\alpha}_{n}\right)\left(\begin{array}{c}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n}
+\end{array}\right)\right]=\left(\boldsymbol{\alpha}_{1}, \boldsymbol{\alpha}_{2}, \cdots, \boldsymbol{\alpha}_{n}\right) \boldsymbol{A}\left(\begin{array}{c}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n}
+\end{array}\right) .</script><p>在$V_{n}$中取定一个基以后，由线性变换$T$可惟一地确定一个矩阵$A$，由一个矩阵$A$也可惟一地确定一个线性变换$T$，这样，在线性变换与矩阵之间就有一一对应的关系。</p>
+<p>由上面的关系式，可见$\boldsymbol{\alpha}$与$T(\boldsymbol{\alpha})$在基$\boldsymbol{\alpha}<em>{1}, \boldsymbol{\alpha}</em>{2}, \cdots, \boldsymbol{\alpha}_{n}$下的坐标分别是</p>
+<script type="math/tex; mode=display">
+\boldsymbol{\alpha}=\left(\begin{array}{c}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n}
+\end{array}\right), T(\boldsymbol{\alpha})=\boldsymbol{A}\left(\begin{array}{c}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n}
+\end{array}\right)</script><p>即按坐标表示，有</p>
+<script type="math/tex; mode=display">
+T(\boldsymbol{\alpha})=\boldsymbol{A} \boldsymbol{\alpha}</script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" rel="tag"># 线性代数</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/09/25/probability_2/" rel="prev" title="期望 方差 协方差">
+      <i class="fa fa-chevron-left"></i> 期望 方差 协方差
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/04/26/linear_algebra_16/" rel="next" title="线性代数（16）：伪逆（pseudoinverse）">
+      线性代数（16）：伪逆（pseudoinverse） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E7%A9%BA%E9%97%B4%E4%B8%8E%E7%BA%BF%E6%80%A7%E5%8F%98%E6%8D%A2"><span class="nav-number">1.</span> <span class="nav-text">线性空间与线性变换</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E7%A9%BA%E9%97%B4%E7%9A%84%E5%AE%9A%E4%B9%89%E5%92%8C%E6%80%A7%E8%B4%A8"><span class="nav-number">1.1.</span> <span class="nav-text">线性空间的定义和性质</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E9%9D%A2%E8%AE%A8%E8%AE%BA%E7%BA%BF%E6%80%A7%E7%A9%BA%E9%97%B4%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="nav-number">1.1.1.</span> <span class="nav-text">下面讨论线性空间的性质</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E7%A9%BA%E9%97%B4%E5%90%8C%E6%9E%84%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.2.</span> <span class="nav-text">线性空间同构的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E5%8F%98%E6%8D%A2%E4%B8%8E%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2"><span class="nav-number">1.3.</span> <span class="nav-text">基变换与坐标变换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E5%8F%98%E6%8D%A2"><span class="nav-number">1.4.</span> <span class="nav-text">线性变换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E5%8F%98%E6%8D%A2%E7%9A%84%E7%9F%A9%E9%98%B5%E8%A1%A8%E7%A4%BA"><span class="nav-number">1.5.</span> <span class="nav-text">线性变换的矩阵表示</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">David</p>
+  <div class="site-description" itemprop="description">Blog my daily study on machine learning, mathematics & computer science etc.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">180k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:44</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

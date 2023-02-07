@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"splendid-sun.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="复习线性代数第一章：向量及向量空间的定义 参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常推荐！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线性代数（1）：向量及其运算">
+<meta property="og:url" content="https://splendid-sun.github.io/2019/04/03/linear_algebra_1/index.html">
+<meta property="og:site_name" content="Hello,David!">
+<meta property="og:description" content="复习线性代数第一章：向量及向量空间的定义 参考资料:清华大学数学科学系-线性代数-马辉《工程数学 线性代数 第六版》 同济大学数学系 高等教育出版社Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常推荐！">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/linear-algebra/Cauchy.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/linear-algebra/Schwarz.jpg">
+<meta property="article:published_time" content="2019-04-03T04:39:27.000Z">
+<meta property="article:modified_time" content="2022-09-20T04:38:45.000Z">
+<meta property="article:author" content="David">
+<meta property="article:tag" content="线性代数">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/linear-algebra/Cauchy.jpg">
+
+<link rel="canonical" href="https://splendid-sun.github.io/2019/04/03/linear_algebra_1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>线性代数（1）：向量及其运算 | Hello,David!</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hello,David!</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">There is geometry in the humming of the strings, there is music in the spacing of the spheres.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://splendid-sun.github.io/2019/04/03/linear_algebra_1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="David">
+      <meta itemprop="description" content="Blog my daily study on machine learning, mathematics & computer science etc.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hello,David!">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          线性代数（1）：向量及其运算
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-04-03 12:39:27" itemprop="dateCreated datePublished" datetime="2019-04-03T12:39:27+08:00">2019-04-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-09-20 12:38:45" itemprop="dateModified" datetime="2022-09-20T12:38:45+08:00">2022-09-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" itemprop="url" rel="index"><span itemprop="name">线性代数</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>复习线性代数第一章：向量及向量空间的定义</p>
+<p>参考资料:<br>清华大学数学科学系-线性代数-马辉<br>《工程数学 <strong>线性代数</strong> 第六版》 同济大学数学系 高等教育出版社<br>Linear Algebra by Gilbert Strang MIT麻省理工线性代数公开视频课，非常<strong>推荐</strong>！</p>
+<span id="more"></span>
+<h2 id="1-向量空间的定义"><a href="#1-向量空间的定义" class="headerlink" title="1.向量空间的定义"></a>1.向量空间的定义</h2><p>在由称为“向量”的元素构成的非空集合 V 中，若定义了加法和数乘运算，且对任意向量 $\vec a,\vec b,\vec c$ 及数$k,l \in F$  （F为数域）满足以下<strong>8条性质</strong>：</p>
+<p><strong>加法结合律和加法交换律</strong></p>
+<p>1.$\vec a+(\vec b+\vec c)=(\vec a+\vec b)+\vec c$<br>2.$\vec a+\vec b=\vec b+\vec a$</p>
+<p><strong>存在 零向量 和 负向量</strong></p>
+<p>3.存在<strong>零向量</strong> $\vec 0$，有$\vec a+\vec 0=\vec a$<br>4.对任意向量$\vec a$，存在唯一相反向量 $-\vec a$，使得$\vec a+(-\vec a)=\vec 0$</p>
+<p><strong>数乘规律：满足乘法结合律和分配律</strong></p>
+<p>5.$1·\vec a=\vec a$<br>6.$(kl)\vec a=k(l\vec a)$<br>7.$k(\vec a+\vec b)=k\vec a+k\vec b$<br>8.$(k+l)\vec a=k\vec a+l\vec a$</p>
+<h2 id="2-向量的线性组合"><a href="#2-向量的线性组合" class="headerlink" title="2.向量的线性组合"></a>2.向量的线性组合</h2><p>定义：设$\vec v<em>{1},…,\vec v</em>{m}$ 为m个n维向量，$c<em>{1},…,c</em>{m}\in R$，则称$c<em>{1}\vec v</em>{1}+…+c<em>{m}\vec v</em>{m}$ 为向量$\vec v<em>{1},…,\vec v</em>{m}$ 的一个线性组合。（包含向量的加法和数乘）</p>
+<h2 id="3-向量的点积，长度"><a href="#3-向量的点积，长度" class="headerlink" title="3.向量的点积，长度"></a>3.向量的点积，长度</h2><p>定义：设$\vec v=(v<em>{1},…,v</em>{n}),\vec w=(w<em>{1},…,w</em>{n})$ 是两个n维向量，定义<strong>点积（dot product）</strong>$\vec v·\vec w$为</p>
+<script type="math/tex; mode=display">\vec v·\vec w=v_{1}w_{1}+...+v_{n}w_{n}</script><p>点积又称为<strong>内积(inner product)</strong>或<strong>数量积(scalar product)</strong><br>注意：<strong>两个向量的点积是一个数</strong></p>
+<p>定义：向量$\vec v$的 <strong>长度(length)</strong> 或 <strong>模(norm)</strong> 定义为</p>
+<script type="math/tex; mode=display">||\vec v||=\sqrt{\vec v·\vec v}</script><p>若$\vec v=(v<em>{1},…v</em>{n})$，则$||\vec v||=\sqrt{v<em>{1}^{2}+…+v</em>{n}^{2}}$</p>
+<p>定义：若$||\vec v||=1$，则$\vec v$称为<strong>单位向量(unit vector)</strong><br>向量<strong>单位化</strong>：任给一个非零向量$\vec v$，则$\frac{\vec v}{||\vec v||}$是沿$\vec v$方向的单位向量</p>
+<p>向量点积的性质：<br>1.$\vec v·\vec w=\vec w·\vec v$（对称性）<br>2.$\vec u·(c\vec v+d\vec w)=c\vec u·\vec v+d\vec u·\vec w$（线性性）<br>3.$\vec v·\vec v=||\vec v||^{2}\ge 0$，且当且仅当$\vec v=\vec 0$时等号成立（正定性）</p>
+<h2 id="4-向量的夹角"><a href="#4-向量的夹角" class="headerlink" title="4.向量的夹角"></a>4.向量的夹角</h2><p>定义：若$\vec v·\vec w=0$，则称向量$\vec v$和$\vec w$垂直（perpendicular）或称正交（orthogonal）。记作$\vec v\perp \vec w$或$\vec w\perp \vec v$<br>规定：零向量与任意向量垂直</p>
+<p>命题：两非零向量$\vec v,\vec w$的夹角$\theta$满足$cos\theta=\frac{\vec v·\vec w}{||\vec v||||\vec w||}$</p>
+<h2 id="5-两个重要不等式"><a href="#5-两个重要不等式" class="headerlink" title="5.两个重要不等式"></a>5.两个重要不等式</h2><p>（1）Cauchy-Schwarz不等式：$|\vec v·\vec w|\le ||\vec v||||\vec w||$，等号成立当且仅当一个向量是另一个向量的倍数</p>
+<p>（2）三角不等式（Triangle inequality）$||\vec v+\vec w||\le ||\vec v||+||\vec w||$，等号成立当且仅当$\vec v,\vec w$之一为另一向量的非负倍数。</p>
+<p><img src="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/linear-algebra/Cauchy.jpg" alt="Cauchy"><br><img src="https://raw.githubusercontent.com/Splendid-sun/Hexo-photo/master/linear-algebra/Schwarz.jpg" alt="Schwarz"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/" rel="tag"># 线性代数</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/04/02/Hexo/" rel="prev" title="如何使用Hexo博客框架搭建个人博客">
+      <i class="fa fa-chevron-left"></i> 如何使用Hexo博客框架搭建个人博客
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/04/08/hello-world/" rel="next" title="Hello World格式参考文件">
+      Hello World格式参考文件 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%90%91%E9%87%8F%E7%A9%BA%E9%97%B4%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">1.向量空间的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%90%91%E9%87%8F%E7%9A%84%E7%BA%BF%E6%80%A7%E7%BB%84%E5%90%88"><span class="nav-number">2.</span> <span class="nav-text">2.向量的线性组合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%90%91%E9%87%8F%E7%9A%84%E7%82%B9%E7%A7%AF%EF%BC%8C%E9%95%BF%E5%BA%A6"><span class="nav-number">3.</span> <span class="nav-text">3.向量的点积，长度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%90%91%E9%87%8F%E7%9A%84%E5%A4%B9%E8%A7%92"><span class="nav-number">4.</span> <span class="nav-text">4.向量的夹角</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E4%B8%A4%E4%B8%AA%E9%87%8D%E8%A6%81%E4%B8%8D%E7%AD%89%E5%BC%8F"><span class="nav-number">5.</span> <span class="nav-text">5.两个重要不等式</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">David</p>
+  <div class="site-description" itemprop="description">Blog my daily study on machine learning, mathematics & computer science etc.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">David</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">180k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:44</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
